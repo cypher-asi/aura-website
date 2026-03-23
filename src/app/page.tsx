@@ -1,7 +1,7 @@
 import { Navbar } from '@/components/Navbar/Navbar';
 import { Hero } from '@/components/Hero/Hero';
-import { CommandSnippet } from '@/components/CommandSnippet/CommandSnippet';
 import { TerminalPreview } from '@/components/TerminalPreview/TerminalPreview';
+import { LogoBar } from '@/components/LogoBar/LogoBar';
 
 export default function HomePage(): React.ReactNode {
   return (
@@ -9,8 +9,8 @@ export default function HomePage(): React.ReactNode {
       <Navbar />
       <main>
         <Hero />
-        <CommandSnippet />
         <TerminalPreview />
+        <LogoBar />
       </main>
     </>
   );

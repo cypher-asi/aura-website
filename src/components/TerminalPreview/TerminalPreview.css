@@ -1,19 +1,19 @@
 .terminalWrapper {
   display: flex;
   justify-content: center;
-  padding: 48px 24px 96px;
+  padding: 0 64px 80px;
 }
 
 .terminal {
   width: 100%;
-  max-width: 640px;
+  max-width: 1200px;
   border-radius: 12px;
   overflow: hidden;
   background-color: var(--color-bg-secondary);
   border: 1px solid var(--color-border);
   box-shadow:
-    0 0 80px rgba(var(--color-accent-rgb, 168, 85, 247), 0.08),
-    0 24px 48px rgba(0, 0, 0, 0.4);
+    0 0 120px rgba(var(--color-accent-rgb, 168, 85, 247), 0.06),
+    0 32px 64px rgba(0, 0, 0, 0.5);
 }
 
 .terminalChrome {
@@ -46,7 +46,7 @@
 }
 
 .terminalBody {
-  padding: 20px;
+  padding: 24px 28px;
   font-family: var(--font-mono);
   font-size: 13px;
   line-height: 1.7;
@@ -96,7 +96,7 @@
 
 @media (max-width: 768px) {
   .terminalWrapper {
-    padding: 32px 16px 64px;
+    padding: 0 20px 48px;
   }
 
   .terminalBody {
