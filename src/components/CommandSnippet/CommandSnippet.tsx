@@ -1,6 +1,6 @@
 'use client';
 
-import { ButtonCopy } from '@cypher-asi/zui';
+import { ButtonCopy } from '@/components/ButtonCopy/ButtonCopy';
 import './CommandSnippet.css';
 
 const INSTALL_COMMAND = 'npx aura@latest init';

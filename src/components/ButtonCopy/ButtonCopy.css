@@ -1,0 +1,26 @@
+/* ButtonCopy styles */
+.btnCopyIcon {
+  transition: opacity var(--transition-fast), transform var(--transition-fast);
+}
+
+.btnCopyCopied {
+  color: var(--color-success, #22c55e);
+}
+
+.btnCopyCopied .btnCopyIcon {
+  animation: btnCopyCheckPop 0.2s ease-out;
+}
+
+@keyframes btnCopyCheckPop {
+  0% {
+    transform: scale(0.8);
+    opacity: 0.5;
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}

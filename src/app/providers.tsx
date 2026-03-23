@@ -1,7 +1,7 @@
 'use client';
 
 import { type ReactNode } from 'react';
-import { ThemeProvider } from '@cypher-asi/zui';
+import { ThemeProvider } from '@/components/Theme/ThemeProvider';
 
 interface ProvidersProps {
   readonly children: ReactNode;

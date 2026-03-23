@@ -1,0 +1,206 @@
+/* Button base */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-4);
+  font-size: var(--text-base);
+  font-weight: var(--font-medium);
+  border-radius: var(--radius-md);
+  transition: all var(--transition-fast);
+  min-height: var(--control-height-md);
+  min-width: var(--control-width-default);
+  cursor: pointer;
+  text-decoration: none;
+  border: 1px solid transparent;
+  user-select: none;
+  white-space: nowrap;
+}
+
+.btn svg {
+  width: var(--icon-md);
+  height: var(--icon-md);
+  flex-shrink: 0;
+}
+
+/* Stable size mode */
+.btn.btnStableSize {
+  display: inline-grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr;
+}
+
+.btnMeasurementContainer {
+  grid-column: 1;
+  grid-row: 1;
+  display: contents;
+}
+
+.btnMeasurementItem {
+  grid-column: 1;
+  grid-row: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.btnVisibleContent {
+  grid-column: 1;
+  grid-row: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+}
+
+.btn:focus-visible {
+  box-shadow:
+    0 0 0 2px var(--color-bg),
+    0 0 0 4px var(--color-focus-ring);
+  outline: none;
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn:not(.btnSelected) {
+  opacity: 0.6;
+}
+
+.btn:not(.btnSelected):hover:not(:disabled) {
+  opacity: 1;
+}
+
+/* Variant: primary */
+.btnPrimary {
+  background-color: var(--color-elevated);
+  color: var(--color-text-primary);
+  border-color: var(--color-border);
+}
+
+.btnPrimary:hover:not(:disabled) {
+  background-color: var(--color-border);
+  border-color: var(--color-border-light);
+}
+
+/* Variant: secondary */
+.btnSecondary {
+  background-color: transparent;
+  color: var(--color-text-secondary);
+  border-color: var(--color-border);
+}
+
+.btnSecondary:hover:not(:disabled) {
+  background-color: var(--color-elevated);
+  color: var(--color-text-primary);
+}
+
+/* Variant: ghost */
+.btnGhost {
+  background-color: transparent;
+  color: var(--color-text-secondary);
+  border-color: transparent;
+}
+
+.btnGhost:hover:not(:disabled) {
+  color: var(--color-text-secondary);
+  background-color: var(--color-elevated);
+}
+
+/* Variant: danger */
+.btnDanger {
+  background-color: transparent;
+  color: var(--color-error);
+  border-color: rgba(244, 1, 42, 0.3);
+}
+
+.btnDanger:hover:not(:disabled) {
+  background-color: rgba(244, 1, 42, 0.1);
+}
+
+/* Variant: filled */
+.btnFilled {
+  background-color: var(--color-accent);
+  color: var(--color-accent-contrast);
+  border-color: transparent;
+}
+
+.btnFilled:hover:not(:disabled) {
+  background-color: var(--color-accent-hover);
+}
+
+/* Variant: glass */
+.btnGlass {
+  background-color: var(--color-overlay-light);
+  color: var(--color-text-primary);
+  border-color: transparent;
+}
+
+.btnGlass:hover:not(:disabled) {
+  background-color: var(--color-overlay-heavy);
+  color: var(--color-text-primary);
+}
+
+/* Variant: transparent */
+.btnTransparent {
+  background-color: transparent;
+  color: var(--color-text-secondary);
+  border-color: transparent;
+}
+
+.btnTransparent:hover:not(:disabled) {
+  color: var(--color-text-primary);
+}
+
+/* Size: sm */
+.btnSm {
+  padding: var(--space-1-5) var(--space-3);
+  font-size: var(--text-sm);
+  min-height: var(--control-height-sm);
+}
+
+.btnSm svg {
+  width: var(--icon-sm);
+  height: var(--icon-sm);
+}
+
+/* Icon only */
+.btnIconOnly {
+  padding: var(--space-2);
+  min-width: var(--control-height-md);
+  min-height: var(--control-height-md);
+}
+
+.btnIconOnly.btnSm {
+  min-width: var(--control-height-sm);
+  min-height: var(--control-height-sm);
+}
+
+/* Rounded variants */
+.btnRoundedNone { border-radius: 0; }
+.btnRoundedSm { border-radius: var(--radius-sm); }
+.btnRoundedLg { border-radius: var(--radius-lg); }
+.btnRoundedFull { border-radius: var(--radius-full); }
+
+/* Text case variants */
+.btnCapitalize { text-transform: capitalize; }
+.btnUppercase { text-transform: uppercase; }
+
+/* Selected state */
+.btnSelected {
+  background-color: transparent;
+  color: var(--color-accent);
+  border-color: transparent;
+  opacity: 1;
+  text-shadow: 0 0 8px var(--color-accent-muted);
+}
+
+.btnSelected:hover:not(:disabled) {
+  background-color: transparent;
+}

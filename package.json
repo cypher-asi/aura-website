@@ -10,7 +10,6 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@cypher-asi/zui": "file:../zui",
     "clsx": "^2.1.1",
     "lucide-react": "^0.477.0",
     "next": "^15.3.0",
