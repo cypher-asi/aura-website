@@ -2,7 +2,7 @@
   position: relative;
   display: flex;
   flex-direction: column;
-  padding: 100px 64px 64px;
+  padding: 32px 32px 24px;
   overflow: hidden;
 }
 
@@ -19,11 +19,32 @@
 
 .heroHeadline {
   font-size: clamp(36px, 5vw, 56px);
-  font-weight: 700;
+  font-weight: 300 !important;
   line-height: 1.08;
   letter-spacing: -0.035em;
   color: var(--color-text-primary);
   max-width: 680px;
+}
+
+.heroRotatingWord {
+  display: inline-block;
+  color: rgba(255, 255, 255, 0.45);
+  min-width: 1ch;
+}
+
+.heroTypewriterCursor {
+  display: inline-block;
+  width: 2px;
+  height: 0.85em;
+  background: rgba(255, 255, 255, 0.45);
+  margin-left: 2px;
+  vertical-align: text-bottom;
+  animation: cursorBlink 0.6s step-end infinite;
+}
+
+@keyframes cursorBlink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
 }
 
 .heroSubRow {
@@ -34,10 +55,10 @@
 }
 
 .heroSubtitle {
-  font-size: var(--font-size-base);
+  font-size: 18px;
   line-height: 1.6;
   color: var(--color-text-secondary);
-  max-width: 480px;
+  max-width: 520px;
   margin: 0;
 }
 
@@ -53,7 +74,7 @@
   font-weight: 600;
   color: var(--color-accent);
   padding: 3px 10px;
-  border: 1px solid var(--color-accent);
+  border: none;
   border-radius: 999px;
   letter-spacing: 0.02em;
 }
@@ -72,7 +93,7 @@
 
 @media (max-width: 768px) {
   .hero {
-    padding: 64px 20px 40px;
+    padding: 24px 20px 16px;
   }
 
   .heroSubRow {

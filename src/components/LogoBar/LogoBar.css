@@ -1,7 +1,11 @@
 .logoBar {
-  padding: 0 64px 80px;
+  padding: 40px 64px;
   display: flex;
   justify-content: center;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
 }
 
 .logoBarInner {

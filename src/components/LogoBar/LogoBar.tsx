@@ -1,14 +1,12 @@
 import './LogoBar.css';
 
 const LOGOS = [
-  'ESLint',
-  'Biome',
-  'Oxlint',
-  'TypeScript',
-  'Cursor',
-  'Windsurf',
-  'Claude',
-  'Next.js',
+  'OpenAI',
+  'Anthropic',
+  'DeepSeek',
+  'Google',
+  'Meta',
+  'xAI',
 ] as const;
 
 export function LogoBar(): React.ReactNode {
