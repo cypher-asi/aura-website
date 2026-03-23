@@ -1,0 +1,38 @@
+.commandRow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.commandPill {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px 10px 20px;
+  background-color: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  font-family: var(--font-mono);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-primary);
+  user-select: all;
+}
+
+.commandPrefix {
+  color: var(--color-text-muted);
+  user-select: none;
+}
+
+.docsLink {
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  color: var(--color-accent);
+  cursor: pointer;
+  transition: opacity var(--transition-fast);
+}
+
+.docsLink:hover {
+  opacity: 0.8;
+}
