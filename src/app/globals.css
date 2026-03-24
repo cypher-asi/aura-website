@@ -12,6 +12,7 @@ body {
 body {
   display: flex;
   flex-direction: column;
+  padding-bottom: 34px;
 }
 
 html[data-theme][data-accent] {

@@ -1,3 +1,5 @@
+'use client';
+
 import { useCallback, useRef, useState } from 'react';
 import { Download } from 'lucide-react';
 import { NavDropdown } from '../NavDropdown/NavDropdown';

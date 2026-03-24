@@ -3,6 +3,7 @@ import { Hero } from '@/components/Hero/Hero';
 import { TerminalPreview } from '@/components/TerminalPreview/TerminalPreview';
 import { LogoBar } from '@/components/LogoBar/LogoBar';
 import { SocialLinks } from '@/components/SocialLinks/SocialLinks';
+import { Taskbar } from '@/components/Taskbar/Taskbar';
 
 export default function HomePage(): React.ReactNode {
   return (
@@ -16,6 +17,7 @@ export default function HomePage(): React.ReactNode {
         <LogoBar />
       </footer>
       <SocialLinks />
+      <Taskbar />
     </>
   );
 }
