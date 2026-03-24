@@ -1,7 +1,8 @@
 'use client';
 
 import { useCallback, useRef, useState } from 'react';
-import { Download } from 'lucide-react';
+
+import { ButtonFUI } from '../ButtonFUI/ButtonFUI';
 import { NavDropdown } from '../NavDropdown/NavDropdown';
 import './Navbar.css';
 
@@ -9,7 +10,7 @@ const NAV_LINKS = [
   { label: 'Products', href: '#products', hasDropdown: true },
   { label: 'Agents', href: '#agents', hasDropdown: false },
   { label: 'Network', href: '#network', hasDropdown: false },
-  { label: 'Pricing', href: '#pricing', hasDropdown: false },
+  { label: 'Resources', href: '#resources', hasDropdown: false },
 ] as const;
 
 const HOVER_CLOSE_DELAY = 150;
@@ -55,11 +56,9 @@ export function Navbar(): React.ReactNode {
           ))}
         </ul>
         <div className="navActions">
-          <a href="#docs" className="docsLink">Docs</a>
-          <button type="button" className="downloadButton">
+          <ButtonFUI>
             Download
-            <Download size={14} strokeWidth={2.5} />
-          </button>
+          </ButtonFUI>
         </div>
       </nav>
     </header>

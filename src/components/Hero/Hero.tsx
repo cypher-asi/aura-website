@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback, useRef } from 'react';
+import { ButtonAction } from '@/components/ButtonAction/ButtonAction';
 import './Hero.css';
 
 const ROTATING_WORDS = [
@@ -8,6 +9,7 @@ const ROTATING_WORDS = [
   'team',
   'swarm',
   'network',
+  'fleet',
   'company',
   'project',
   'startup',
@@ -65,15 +67,15 @@ export function Hero(): React.ReactNode {
           of agents in minutes.
         </h1>
         <div className="heroSubRow">
-          <p className="heroSubtitle">
-            A workforce network for super-intelligence machines.
-          </p>
-          <div className="heroBadges">
-            <span className="heroBadge">New</span>
-            <a href="#docs" className="heroBadgeLink">
-              Read the docs &rarr;
-            </a>
-          </div>
+          <ButtonAction
+            icon={
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                <path d="M8 1v9m0 0L4.5 6.5M8 10l3.5-3.5M2 13h12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            }
+          >
+            Download for Windows
+          </ButtonAction>
         </div>
       </div>
     </section>
