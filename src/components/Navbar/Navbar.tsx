@@ -1,22 +1,54 @@
+import { useCallback, useRef, useState } from 'react';
 import { Download } from 'lucide-react';
+import { NavDropdown } from '../NavDropdown/NavDropdown';
 import './Navbar.css';
 
 const NAV_LINKS = [
-  { label: 'Products', href: '#products' },
-  { label: 'Agents', href: '#agents' },
-  { label: 'Network', href: '#network' },
-  { label: 'Pricing', href: '#pricing' },
+  { label: 'Products', href: '#products', hasDropdown: true },
+  { label: 'Agents', href: '#agents', hasDropdown: false },
+  { label: 'Network', href: '#network', hasDropdown: false },
+  { label: 'Pricing', href: '#pricing', hasDropdown: false },
 ] as const;
 
+const HOVER_CLOSE_DELAY = 150;
+
 export function Navbar(): React.ReactNode {
+  const [productsOpen, setProductsOpen] = useState(false);
+  const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const handleEnter = useCallback((): void => {
+    if (closeTimer.current) {
+      clearTimeout(closeTimer.current);
+      closeTimer.current = null;
+    }
+    setProductsOpen(true);
+  }, []);
+
+  const handleLeave = useCallback((): void => {
+    closeTimer.current = setTimeout(() => {
+      setProductsOpen(false);
+      closeTimer.current = null;
+    }, HOVER_CLOSE_DELAY);
+  }, []);
+
   return (
     <header className="navbar">
       <nav className="navbarInner">
         <img src="/aura-logo.png" alt="AURA" className="titleLogo" />
         <ul className="navLinks">
-          {NAV_LINKS.map(({ label, href }) => (
-            <li key={label}>
+          {NAV_LINKS.map(({ label, href, hasDropdown }) => (
+            <li
+              key={label}
+              className={hasDropdown ? 'navLinkWithDropdown' : undefined}
+              onMouseEnter={hasDropdown ? handleEnter : undefined}
+              onMouseLeave={hasDropdown ? handleLeave : undefined}
+            >
               <a href={href} className="navLink">{label}</a>
+              {hasDropdown && (
+                <div className={`navDropdownWrapper ${productsOpen ? 'navDropdownVisible' : ''}`}>
+                  <NavDropdown />
+                </div>
+              )}
             </li>
           ))}
         </ul>
