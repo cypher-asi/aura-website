@@ -34,7 +34,7 @@ export function Taskbar(): React.ReactNode {
 
   return (
     <div className="taskbar">
-      <span className="taskbarLabel">/CYPHER</span>
+      <span className="taskbarLabel"><span className="taskbarSlash">/</span>CYPHER</span>
       <div className="taskbarRight">
         <span className="taskbarNetworkIcon"><IconNetwork /></span>
         <span className="taskbarClock">{time}</span>

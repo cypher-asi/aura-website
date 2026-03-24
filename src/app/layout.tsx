@@ -13,6 +13,9 @@ const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
 export const metadata = {
   title: 'AURA',
   description: 'A production-grade, zero-configuration preset for your tools.',
+  icons: {
+    icon: '/favicon.ico',
+  },
 };
 
 interface RootLayoutProps {

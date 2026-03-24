@@ -3,7 +3,7 @@
   display: flex;
   justify-content: center;
   position: fixed;
-  bottom: 0;
+  bottom: 36px;
   left: 0;
   right: 0;
 }
