@@ -1,0 +1,66 @@
+.sciFiButton {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  line-height: 1;
+  background-color: #ffffff;
+  color: #000;
+  border: none;
+  border-radius: 0;
+  font-size: var(--font-size-sm, 14px);
+  font-weight: 450;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  isolation: isolate;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background-color var(--transition-fast, 150ms ease);
+}
+
+.sciFiButton:hover {
+  background-color: #e0e0e0;
+}
+
+/* Sci-fi corner brackets */
+.sciFiButton::before {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  pointer-events: none;
+  background:
+    linear-gradient(rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.35)) 0 0 / 10px 1px no-repeat,
+    linear-gradient(rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.35)) 0 0 / 1px 10px no-repeat,
+    linear-gradient(rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.35)) 100% 0 / 10px 1px no-repeat,
+    linear-gradient(rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.35)) 100% 0 / 1px 10px no-repeat,
+    linear-gradient(rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.35)) 0 100% / 10px 1px no-repeat,
+    linear-gradient(rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.35)) 0 100% / 1px 10px no-repeat,
+    linear-gradient(rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.35)) 100% 100% / 10px 1px no-repeat,
+    linear-gradient(rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.35)) 100% 100% / 1px 10px no-repeat;
+}
+
+.sciFiButton:hover::before {
+  background:
+    linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)) 0 0 / 10px 1px no-repeat,
+    linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)) 0 0 / 1px 10px no-repeat,
+    linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)) 100% 0 / 10px 1px no-repeat,
+    linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)) 100% 0 / 1px 10px no-repeat,
+    linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)) 0 100% / 10px 1px no-repeat,
+    linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)) 0 100% / 1px 10px no-repeat,
+    linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)) 100% 100% / 10px 1px no-repeat,
+    linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)) 100% 100% / 1px 10px no-repeat;
+}
+
+/* Size: sm (navbar) */
+.sciFiButtonSm {
+  padding: 6px 14px;
+  gap: 6px;
+}
+
+/* Size: md (hero) */
+.sciFiButtonMd {
+  padding: 10px 24px;
+  font-weight: 500;
+}
