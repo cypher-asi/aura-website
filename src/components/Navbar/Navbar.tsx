@@ -1,6 +1,7 @@
 'use client';
 
 import { useCallback, useRef, useState } from 'react';
+import Link from 'next/link';
 
 import { ButtonFUI } from '../ButtonFUI/ButtonFUI';
 import { NavDropdown } from '../NavDropdown/NavDropdown';
@@ -37,7 +38,9 @@ export function Navbar(): React.ReactNode {
   return (
     <header className="navbar">
       <nav className="navbarInner">
-        <img src="/aura-logo.png" alt="AURA" className="titleLogo" />
+        <Link href="/">
+          <img src="/aura-logo.png" alt="AURA" className="titleLogo" />
+        </Link>
         <ul className="navLinks">
           {NAV_LINKS.map(({ label, href, hasDropdown }) => (
             <li

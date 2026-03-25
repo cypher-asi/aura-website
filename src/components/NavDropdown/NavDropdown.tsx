@@ -1,12 +1,9 @@
 import './NavDropdown.css';
 
 const NAV_PRODUCTS = [
-  { label: 'Intake', description: 'Make your product operations self-driving', href: '#intake' },
-  { label: 'Build', description: 'Move work forward across teams and agents', href: '#build' },
-  { label: 'Monitor', description: 'Understand progress at scale', href: '#monitor' },
-  { label: 'Plan', description: 'Plan and navigate from idea to launch', href: '#plan' },
-  { label: 'Diffs', description: 'Make code review effortless', href: '#diffs' },
-  { label: 'Integrations', description: 'Collaborate across tools', href: '#integrations' },
+  { label: 'AURA OS', description: 'A modern agent orchestration system', href: '#aura-os' },
+  { label: 'AURA 3D', description: 'A generative system for building 3D assets', href: '#aura-3d' },
+  { label: 'ORBIT', description: 'A light-weight source code repository for agents', href: '#orbit' },
 ] as const;
 
 export function NavDropdown(): React.ReactNode {
