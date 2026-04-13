@@ -2,9 +2,10 @@
   position: relative;
   display: flex;
   flex-direction: column;
-  min-height: clamp(480px, 82vh, 780px);
-  padding: 32px 32px 8px;
-  overflow: hidden;
+  min-height: clamp(420px, calc(100vh - var(--home-main-top-space) - var(--main-bottom-space) - var(--navbar-height)), 720px);
+  min-height: clamp(420px, calc(100dvh - var(--home-main-top-space) - var(--main-bottom-space) - var(--navbar-height)), 720px);
+  padding: 32px 32px 20px;
+  overflow: visible;
 }
 
 .heroContent {
@@ -17,7 +18,7 @@
   max-width: 1200px;
   width: 100%;
   margin: 0 auto;
-  gap: 28px;
+  gap: 24px;
 }
 
 .heroHeadline {
@@ -56,34 +57,55 @@
   flex-wrap: wrap;
   gap: 32px;
   max-width: 100%;
+  padding-bottom: 4px;
+}
+
+@media (max-height: 820px) and (min-width: 769px) {
+  .hero {
+    min-height: clamp(380px, calc(100vh - var(--home-main-top-space) - var(--main-bottom-space) - var(--navbar-height)), 640px);
+    min-height: clamp(380px, calc(100dvh - var(--home-main-top-space) - var(--main-bottom-space) - var(--navbar-height)), 640px);
+    padding: 24px 32px;
+  }
+
+  .heroContent {
+    gap: 20px;
+  }
+
+  .heroSubRow {
+    padding-bottom: 6px;
+  }
 }
 
 @media (max-width: 768px) {
   .hero {
-    min-height: clamp(400px, 74vh, 640px);
-    padding: 24px 20px 8px;
+    min-height: clamp(420px, 72vh, 620px);
+    padding: 24px 16px 16px;
   }
 
   .heroContent {
     gap: 24px;
   }
 
+  .heroHeadline {
+    font-size: clamp(40px, 8.5vw, 50px);
+  }
+
   .heroSubRow {
-    gap: 16px;
+    gap: 18px;
   }
 }
 
 @media (max-width: 480px) {
   .hero {
-    min-height: clamp(360px, 68vh, 520px);
-    padding: 20px 16px 6px;
+    min-height: clamp(390px, 68vh, 520px);
+    padding: 20px 12px 14px;
   }
 
   .heroHeadline {
-    font-size: clamp(32px, 11vw, 40px);
+    font-size: clamp(37px, 12vw, 46px);
   }
 
   .heroSubRow {
-    gap: 12px;
+    gap: 14px;
   }
 }

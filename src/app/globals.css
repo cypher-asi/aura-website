@@ -1,6 +1,9 @@
 :root {
   --taskbar-height: 36px;
   --taskbar-safe-offset: calc(var(--taskbar-height) + env(safe-area-inset-bottom, 0px));
+  --navbar-height: calc(var(--control-height-md, 40px) * 2);
+  --main-bottom-space: calc(var(--taskbar-safe-offset) + 24px);
+  --home-main-top-space: clamp(72px, 10vh, 128px);
 }
 
 html {
@@ -46,7 +49,7 @@ main {
   flex-direction: column;
   flex: 1;
   min-height: 0;
-  padding-bottom: calc(var(--taskbar-safe-offset) + 24px);
+  padding-bottom: var(--main-bottom-space);
 }
 
 .homePage {
@@ -59,7 +62,13 @@ main {
 
 .homeMain {
   margin-top: auto;
-  padding-top: clamp(88px, 15vh, 160px);
+  padding-top: var(--home-main-top-space);
+}
+
+@media (max-height: 820px) and (min-width: 769px) {
+  :root {
+    --home-main-top-space: clamp(56px, 8vh, 84px);
+  }
 }
 
 footer {
@@ -73,17 +82,29 @@ a {
 }
 
 @media (max-width: 768px) {
-  main {
-    padding-bottom: calc(var(--taskbar-safe-offset) + 20px);
+  :root {
+    --text-xs: 14px;
+    --text-sm: 15px;
+    --text-base: 16px;
+    --text-lg: 18px;
+    --text-xl: 21px;
+    --font-size-xs: 13px;
+    --font-size-sm: 15px;
+    --control-height-md: 41px;
+    --control-height-lg: 50px;
+    --icon-sm: 18px;
+    --icon-md: 20px;
+    --main-bottom-space: calc(var(--taskbar-safe-offset) + 20px);
+    --home-main-top-space: 104px;
   }
 
-  .homeMain {
-    padding-top: 104px;
+  main {
+    padding-bottom: var(--main-bottom-space);
   }
 }
 
 @media (max-width: 480px) {
-  .homeMain {
-    padding-top: 88px;
+  :root {
+    --home-main-top-space: 88px;
   }
 }

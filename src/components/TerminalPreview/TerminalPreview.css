@@ -478,11 +478,11 @@
 
 @media (max-width: 768px) {
   .terminalWrapper {
-    padding: 0 20px 16px;
+    padding: 0 16px 18px;
   }
 
   .appLayout {
-    min-height: 400px;
+    min-height: 460px;
   }
 
   .convPanel {
@@ -490,17 +490,47 @@
   }
 
   .iconSidebar {
-    width: 36px;
+    width: 40px;
+  }
+
+  .chatEmptyIcon svg {
+    width: 54px;
+    height: 54px;
+  }
+
+  .chatEmptyText {
+    font-size: 15px;
   }
 
   .chatInput {
-    padding: 0 14px 12px;
+    padding: 0 16px 14px;
+  }
+
+  .chatInputRow {
+    padding: 10px 14px;
+  }
+
+  .chatInputPlaceholder {
+    font-size: 13px;
+  }
+
+  .chatModel,
+  .chatModelSep,
+  .chatModelCmd,
+  .statusOrg,
+  .statusChevron,
+  .statusCredits {
+    font-size: 12px;
+  }
+
+  .statusBar {
+    padding: 8px 14px;
   }
 }
 
 @media (max-width: 480px) {
   .terminalWrapper {
-    padding: 0 16px 12px;
+    padding: 0 12px 14px;
   }
 
   .iconSidebar {
@@ -508,24 +538,28 @@
   }
 
   .appLayout {
-    min-height: 340px;
+    min-height: 390px;
   }
 
   .chatEmpty {
-    padding: 20px 12px;
+    padding: 22px 14px;
   }
 
   .chatEmptyIcon svg {
-    width: 40px;
-    height: 40px;
+    width: 48px;
+    height: 48px;
+  }
+
+  .chatEmptyText {
+    font-size: 14px;
   }
 
   .chatInput {
-    padding: 0 12px 12px;
+    padding: 0 14px 14px;
   }
 
   .chatInputRow {
-    padding: 8px 10px;
+    padding: 10px 12px;
   }
 
   .statusBar {
@@ -533,8 +567,22 @@
   }
 }
 
-@media (max-height: 760px) {
+@media (max-height: 820px) and (min-width: 769px) {
+  .terminalWrapper {
+    padding: 12px 32px 20px;
+  }
+
   .appLayout {
-    min-height: 400px;
+    min-height: clamp(320px, 52vh, 420px);
+  }
+}
+
+@media (max-height: 760px) and (min-width: 769px) {
+  .terminalWrapper {
+    padding-top: 8px;
+  }
+
+  .appLayout {
+    min-height: clamp(280px, 46vh, 360px);
   }
 }
