@@ -53,6 +53,40 @@
     linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)) 100% 100% / 1px 10px no-repeat;
 }
 
+/* Variant: dark */
+.sciFiButtonDark {
+  background-color: #000;
+  color: #fff;
+}
+
+.sciFiButtonDark:hover {
+  background-color: #1a1a1a;
+}
+
+.sciFiButtonDark::before {
+  background:
+    linear-gradient(rgba(255, 255, 255, 0.25), rgba(255, 255, 255, 0.25)) 0 0 / 10px 1px no-repeat,
+    linear-gradient(rgba(255, 255, 255, 0.25), rgba(255, 255, 255, 0.25)) 0 0 / 1px 10px no-repeat,
+    linear-gradient(rgba(255, 255, 255, 0.25), rgba(255, 255, 255, 0.25)) 100% 0 / 10px 1px no-repeat,
+    linear-gradient(rgba(255, 255, 255, 0.25), rgba(255, 255, 255, 0.25)) 100% 0 / 1px 10px no-repeat,
+    linear-gradient(rgba(255, 255, 255, 0.25), rgba(255, 255, 255, 0.25)) 0 100% / 10px 1px no-repeat,
+    linear-gradient(rgba(255, 255, 255, 0.25), rgba(255, 255, 255, 0.25)) 0 100% / 1px 10px no-repeat,
+    linear-gradient(rgba(255, 255, 255, 0.25), rgba(255, 255, 255, 0.25)) 100% 100% / 10px 1px no-repeat,
+    linear-gradient(rgba(255, 255, 255, 0.25), rgba(255, 255, 255, 0.25)) 100% 100% / 1px 10px no-repeat;
+}
+
+.sciFiButtonDark:hover::before {
+  background:
+    linear-gradient(rgba(255, 255, 255, 0.45), rgba(255, 255, 255, 0.45)) 0 0 / 10px 1px no-repeat,
+    linear-gradient(rgba(255, 255, 255, 0.45), rgba(255, 255, 255, 0.45)) 0 0 / 1px 10px no-repeat,
+    linear-gradient(rgba(255, 255, 255, 0.45), rgba(255, 255, 255, 0.45)) 100% 0 / 10px 1px no-repeat,
+    linear-gradient(rgba(255, 255, 255, 0.45), rgba(255, 255, 255, 0.45)) 100% 0 / 1px 10px no-repeat,
+    linear-gradient(rgba(255, 255, 255, 0.45), rgba(255, 255, 255, 0.45)) 0 100% / 10px 1px no-repeat,
+    linear-gradient(rgba(255, 255, 255, 0.45), rgba(255, 255, 255, 0.45)) 0 100% / 1px 10px no-repeat,
+    linear-gradient(rgba(255, 255, 255, 0.45), rgba(255, 255, 255, 0.45)) 100% 100% / 10px 1px no-repeat,
+    linear-gradient(rgba(255, 255, 255, 0.45), rgba(255, 255, 255, 0.45)) 100% 100% / 1px 10px no-repeat;
+}
+
 /* Size: sm (navbar) */
 .sciFiButtonSm {
   padding: 6px 14px;
