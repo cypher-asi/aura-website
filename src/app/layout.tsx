@@ -1,7 +1,7 @@
 import { type ReactNode } from 'react';
 import { Inter } from 'next/font/google';
 import { Providers } from './providers';
-import { VideoBackground } from '@/components/VideoBackground/VideoBackground';
+
 import '@/styles/tokens.css';
 import '@/styles/themes.css';
 import '@/styles/reset.css';
@@ -32,7 +32,6 @@ export default function RootLayout({ children }: RootLayoutProps): ReactNode {
       </head>
       <body>
         <Providers>
-          <VideoBackground />
           {children}
         </Providers>
       </body>

@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { ChevronDown, ChevronUp, Menu, X } from 'lucide-react';
 
+import { getDownloadPath } from '@/config/downloadTargets';
 import { ENABLE_TOP_NAV } from '@/config/features';
 import { ButtonFUI } from '../ButtonFUI/ButtonFUI';
 import { NavDropdown } from '../NavDropdown/NavDropdown';
@@ -111,7 +112,7 @@ export function Navbar(): React.ReactNode {
           </ul>
         )}
         <div className="navActions">
-          <ButtonFUI>
+          <ButtonFUI href={getDownloadPath()}>
             Download
           </ButtonFUI>
           {ENABLE_TOP_NAV && (

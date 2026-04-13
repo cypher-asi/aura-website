@@ -8,6 +8,7 @@ interface PageHeroProps {
   readonly description: string;
   readonly ctaText: string;
   readonly ctaIcon?: ReactNode;
+  readonly ctaHref?: string;
   readonly onCtaClick?: () => void;
   readonly preview?: ReactNode;
 }
@@ -18,6 +19,7 @@ export function PageHero({
   description,
   ctaText,
   ctaIcon,
+  ctaHref,
   onCtaClick,
   preview,
 }: PageHeroProps): ReactNode {
@@ -28,7 +30,7 @@ export function PageHero({
         <h1 className="pageHeroHeadline">{headline}</h1>
         <p className="pageHeroDescription">{description}</p>
         <div className="pageHeroActions">
-          <ButtonAction icon={ctaIcon} onClick={onCtaClick}>
+          <ButtonAction href={ctaHref} icon={ctaIcon} onClick={onCtaClick}>
             {ctaText}
           </ButtonAction>
         </div>

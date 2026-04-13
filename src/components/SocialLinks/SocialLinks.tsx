@@ -12,10 +12,10 @@ function XIcon(): React.ReactNode {
 export function SocialLinks(): React.ReactNode {
   return (
     <div className="socialLinks">
-      <a href="https://x.com" target="_blank" rel="noopener noreferrer" className="socialLink" aria-label="X">
+      <a href="https://x.com/aura_asi" target="_blank" rel="noopener noreferrer" className="socialLink" aria-label="X">
         <XIcon />
       </a>
-      <a href="https://github.com" target="_blank" rel="noopener noreferrer" className="socialLink" aria-label="GitHub">
+      <a href="https://github.com/cypher-asi/" target="_blank" rel="noopener noreferrer" className="socialLink" aria-label="GitHub">
         <Github size={16} />
       </a>
     </div>

@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { ButtonAction } from '@/components/ButtonAction/ButtonAction';
+import { getDownloadPath, type DownloadTarget } from '@/config/downloadTargets';
 import './Hero.css';
 
 const ROTATING_WORDS = [
@@ -22,7 +23,7 @@ const PAUSE_BEFORE_DELETE = 2000;
 const PAUSE_BEFORE_TYPE = 300;
 const DOWNLOAD_ICON_SIZE = 16;
 
-type DownloadPlatform = 'windows' | 'mac' | 'linux' | 'unknown';
+type DownloadPlatform = DownloadTarget | 'unknown';
 
 function detectDownloadPlatform(): DownloadPlatform {
   if (typeof window === 'undefined') {
@@ -98,6 +99,7 @@ export function Hero(): React.ReactNode {
   const [downloadPlatform, setDownloadPlatform] = useState<DownloadPlatform>('unknown');
   const indexRef = useRef(0);
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+  const downloadHref = getDownloadPath(downloadPlatform);
 
   const typeWord = useCallback((word: string, charIndex: number) => {
     if (charIndex <= word.length) {
@@ -147,6 +149,7 @@ export function Hero(): React.ReactNode {
         <div className="heroSubRow">
           <ButtonAction
             className="sciFiButtonDark"
+            href={downloadHref}
             icon={<DownloadPlatformIcon platform={downloadPlatform} />}
           >
             Download

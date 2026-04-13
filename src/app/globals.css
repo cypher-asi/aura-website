@@ -49,6 +49,14 @@ main {
   padding-bottom: calc(var(--taskbar-safe-offset) + 24px);
 }
 
+.homePage {
+  position: relative;
+  display: flex;
+  flex: 1 0 auto;
+  flex-direction: column;
+  min-height: 100%;
+}
+
 .homeMain {
   margin-top: auto;
   padding-top: clamp(88px, 15vh, 160px);
