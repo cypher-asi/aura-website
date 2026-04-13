@@ -1,7 +1,8 @@
 'use client';
 
-import { useCallback, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
+import { ChevronDown, ChevronUp, Menu, X } from 'lucide-react';
 
 import { ENABLE_TOP_NAV } from '@/config/features';
 import { ButtonFUI } from '../ButtonFUI/ButtonFUI';
@@ -34,9 +35,12 @@ const DROPDOWN_ITEMS: Record<DropdownKey, readonly { readonly label: string; rea
 };
 
 const HOVER_CLOSE_DELAY = 150;
+const MOBILE_NAV_ID = 'site-mobile-nav';
 
 export function Navbar(): React.ReactNode {
   const [openDropdown, setOpenDropdown] = useState<DropdownKey | null>(null);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [mobileExpandedSection, setMobileExpandedSection] = useState<DropdownKey | null>(null);
   const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const handleEnter = useCallback((key: DropdownKey): void => {
@@ -54,9 +58,36 @@ export function Navbar(): React.ReactNode {
     }, HOVER_CLOSE_DELAY);
   }, []);
 
+  const closeMobileMenu = useCallback((): void => {
+    setMobileMenuOpen(false);
+    setMobileExpandedSection(null);
+  }, []);
+
+  const toggleMobileMenu = useCallback((): void => {
+    setMobileMenuOpen((current) => !current);
+  }, []);
+
+  const toggleMobileSection = useCallback((key: DropdownKey): void => {
+    setMobileExpandedSection((current) => (current === key ? null : key));
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      if (closeTimer.current) {
+        clearTimeout(closeTimer.current);
+      }
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!mobileMenuOpen) {
+      setMobileExpandedSection(null);
+    }
+  }, [mobileMenuOpen]);
+
   return (
     <header className="navbar">
-      <nav className="navbarInner">
+      <nav className="navbarInner" aria-label="Primary">
         <Link href="/">
           <img src="/aura-logo.png" alt="AURA" className="titleLogo" />
         </Link>
@@ -83,8 +114,84 @@ export function Navbar(): React.ReactNode {
           <ButtonFUI>
             Download
           </ButtonFUI>
+          {ENABLE_TOP_NAV && (
+            <button
+              type="button"
+              className="mobileMenuToggle"
+              aria-expanded={mobileMenuOpen}
+              aria-controls={MOBILE_NAV_ID}
+              aria-label={mobileMenuOpen ? 'Close site navigation' : 'Open site navigation'}
+              onClick={toggleMobileMenu}
+            >
+              {mobileMenuOpen ? <X size={18} strokeWidth={1.8} /> : <Menu size={18} strokeWidth={1.8} />}
+            </button>
+          )}
         </div>
       </nav>
+      {ENABLE_TOP_NAV && (
+        <div
+          id={MOBILE_NAV_ID}
+          className={`mobileNavPanel ${mobileMenuOpen ? 'mobileNavPanelOpen' : ''}`}
+          aria-hidden={!mobileMenuOpen}
+        >
+          <div className="mobileNavPanelInner">
+            {NAV_LINKS.map(({ label, href, dropdownKey }) =>
+              dropdownKey ? (
+                <div key={label} className="mobileNavSection">
+                  <button
+                    type="button"
+                    className="mobileNavSectionToggle"
+                    aria-expanded={mobileExpandedSection === dropdownKey}
+                    onClick={() => toggleMobileSection(dropdownKey)}
+                  >
+                    <span>{label}</span>
+                    {mobileExpandedSection === dropdownKey ? (
+                      <ChevronUp size={16} strokeWidth={1.8} className="mobileNavSectionIcon" />
+                    ) : (
+                      <ChevronDown size={16} strokeWidth={1.8} className="mobileNavSectionIcon" />
+                    )}
+                  </button>
+                  <div
+                    className={`mobileNavSectionLinks ${
+                      mobileExpandedSection === dropdownKey ? 'mobileNavSectionLinksOpen' : ''
+                    }`}
+                  >
+                    {DROPDOWN_ITEMS[dropdownKey].map(({ label: itemLabel, description, href: itemHref, external }) =>
+                      external ? (
+                        <a
+                          key={itemLabel}
+                          href={itemHref}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="mobileNavSublink"
+                          onClick={closeMobileMenu}
+                        >
+                          <span className="mobileNavSublinkLabel">{itemLabel}</span>
+                          <span className="mobileNavSublinkDescription">{description}</span>
+                        </a>
+                      ) : (
+                        <Link
+                          key={itemLabel}
+                          href={itemHref}
+                          className="mobileNavSublink"
+                          onClick={closeMobileMenu}
+                        >
+                          <span className="mobileNavSublinkLabel">{itemLabel}</span>
+                          <span className="mobileNavSublinkDescription">{description}</span>
+                        </Link>
+                      ),
+                    )}
+                  </div>
+                </div>
+              ) : (
+                <Link key={label} href={href} className="mobileNavLink" onClick={closeMobileMenu}>
+                  {label}
+                </Link>
+              ),
+            )}
+          </div>
+        </div>
+      )}
     </header>
   );
 }

@@ -17,6 +17,7 @@
   border-radius: 3px;
   padding: 12px 8px;
   min-width: 320px;
+  max-width: min(360px, calc(100vw - 32px));
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
 }
 
@@ -46,4 +47,10 @@
   font-weight: var(--font-normal, 400);
   color: var(--color-text-secondary);
   line-height: var(--leading-tight, 1.25);
+}
+
+@media (max-width: 768px) {
+  .navDropdownGrid {
+    min-width: min(320px, calc(100vw - 32px));
+  }
 }

@@ -64,7 +64,7 @@
 .appLayout {
   display: flex;
   flex: 1;
-  min-height: 580px;
+  min-height: clamp(420px, 68vh, 580px);
 }
 
 /* ── Icon sidebar ── */
@@ -224,6 +224,8 @@
   align-items: center;
   justify-content: center;
   gap: 12px;
+  padding: 24px 16px;
+  text-align: center;
 }
 
 .chatEmptyIcon {
@@ -242,13 +244,16 @@
   display: flex;
   flex-direction: column;
   gap: 6px;
+  min-width: 0;
 }
 
 .chatInputRow {
   display: flex;
   align-items: center;
+  gap: 12px;
   border: 1px solid var(--color-border);
   padding: 8px 12px;
+  min-width: 0;
 }
 
 .chatInputPlaceholder {
@@ -256,6 +261,7 @@
   font-size: 12px;
   color: var(--color-text-muted);
   opacity: 0.6;
+  min-width: 0;
 }
 
 .chatSendBtn {
@@ -271,6 +277,7 @@
 .chatInputMeta {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
   gap: 6px;
   padding-left: 4px;
 }
@@ -475,7 +482,7 @@
   }
 
   .appLayout {
-    min-height: 420px;
+    min-height: 400px;
   }
 
   .convPanel {
@@ -485,14 +492,49 @@
   .iconSidebar {
     width: 36px;
   }
+
+  .chatInput {
+    padding: 0 14px 12px;
+  }
 }
 
 @media (max-width: 480px) {
+  .terminalWrapper {
+    padding: 0 16px 12px;
+  }
+
   .iconSidebar {
     display: none;
   }
 
+  .appLayout {
+    min-height: 340px;
+  }
+
+  .chatEmpty {
+    padding: 20px 12px;
+  }
+
+  .chatEmptyIcon svg {
+    width: 40px;
+    height: 40px;
+  }
+
+  .chatInput {
+    padding: 0 12px 12px;
+  }
+
+  .chatInputRow {
+    padding: 8px 10px;
+  }
+
   .statusBar {
     display: none;
+  }
+}
+
+@media (max-height: 760px) {
+  .appLayout {
+    min-height: 400px;
   }
 }

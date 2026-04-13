@@ -14,3 +14,19 @@
   height: 100%;
   object-fit: cover;
 }
+
+@media (max-width: 768px) {
+  .videoBackground {
+    inset: 0;
+    top: 12%;
+    border-radius: 0;
+    mask-image: radial-gradient(ellipse at center, black 40%, transparent 76%);
+    -webkit-mask-image: radial-gradient(ellipse at center, black 40%, transparent 76%);
+  }
+}
+
+@media (max-width: 480px) {
+  .videoBackground {
+    top: 18%;
+  }
+}

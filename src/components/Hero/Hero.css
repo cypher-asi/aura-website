@@ -50,11 +50,35 @@
 .heroSubRow {
   display: flex;
   align-items: flex-start;
+  flex-wrap: wrap;
   gap: 32px;
+  max-width: 100%;
 }
 
 @media (max-width: 768px) {
   .hero {
     padding: 24px 20px 16px;
+  }
+
+  .heroContent {
+    gap: 24px;
+  }
+
+  .heroSubRow {
+    gap: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero {
+    padding: 20px 16px 12px;
+  }
+
+  .heroHeadline {
+    font-size: clamp(32px, 11vw, 40px);
+  }
+
+  .heroSubRow {
+    gap: 12px;
   }
 }
