@@ -5,17 +5,17 @@ import {
   detectDownloadTargetFromRequest,
   getDirectDownloadRedirectUrl,
   getDownloadEnvKeys,
-  getFallbackDownloadUrl,
+  getFallbackDownloadUrlResolved,
 } from '@/server/downloadUrls';
 
-export function GET(request: Request): Response {
+export async function GET(request: Request): Promise<Response> {
   const target = detectDownloadTargetFromRequest(request);
 
   if (target === 'mac') {
     return NextResponse.redirect(new URL(getDownloadPath('mac'), request.url));
   }
 
-  const destination = target ? getDirectDownloadRedirectUrl(target) : getFallbackDownloadUrl();
+  const destination = target ? await getDirectDownloadRedirectUrl(target) : await getFallbackDownloadUrlResolved();
 
   if (!destination) {
     return NextResponse.json(

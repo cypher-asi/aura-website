@@ -2,8 +2,8 @@ import { NextResponse } from 'next/server';
 
 import { getDirectDownloadRedirectUrl } from '@/server/downloadUrls';
 
-export function GET(request: Request): Response {
-  const destination = getDirectDownloadRedirectUrl('windows');
+export async function GET(request: Request): Promise<Response> {
+  const destination = await getDirectDownloadRedirectUrl('windows');
 
   if (!destination) {
     return NextResponse.json(

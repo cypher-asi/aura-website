@@ -24,7 +24,7 @@ export async function GET(request: Request, context: MacDownloadVariantRouteCont
     );
   }
 
-  const destination = getMacDownloadRedirectUrl(normalizedVariant);
+  const destination = await getMacDownloadRedirectUrl(normalizedVariant);
 
   if (!destination) {
     return NextResponse.json(
