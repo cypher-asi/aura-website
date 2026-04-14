@@ -7,6 +7,7 @@ import {
   getDownloadEnvKeys,
   getFallbackDownloadUrlResolved,
 } from '@/server/downloadUrls';
+import { resolveRedirectUrl } from '@/server/redirectUrl';
 
 export async function GET(request: Request): Promise<Response> {
   const requestUrl = new URL(request.url);
@@ -14,7 +15,7 @@ export async function GET(request: Request): Promise<Response> {
   const detectedTarget = explicitTarget ?? detectDownloadTargetFromRequest(request);
 
   if (detectedTarget === 'mac') {
-    return NextResponse.redirect(new URL(getDownloadPath('mac'), request.url));
+    return NextResponse.redirect(resolveRedirectUrl(request, getDownloadPath('mac')));
   }
 
   const destination = detectedTarget
@@ -31,5 +32,5 @@ export async function GET(request: Request): Promise<Response> {
     );
   }
 
-  return NextResponse.redirect(new URL(destination, request.url));
+  return NextResponse.redirect(resolveRedirectUrl(request, destination));
 }
