@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 
-import { getDownloadPath } from '@/config/downloadTargets';
+import { getDownloadPath, normalizeDownloadTarget } from '@/config/downloadTargets';
 import {
   detectDownloadTargetFromRequest,
   getDirectDownloadRedirectUrl,
@@ -9,19 +9,23 @@ import {
 } from '@/server/downloadUrls';
 
 export async function GET(request: Request): Promise<Response> {
-  const target = detectDownloadTargetFromRequest(request);
+  const requestUrl = new URL(request.url);
+  const explicitTarget = normalizeDownloadTarget(requestUrl.searchParams.get('target'));
+  const detectedTarget = explicitTarget ?? detectDownloadTargetFromRequest(request);
 
-  if (target === 'mac') {
+  if (detectedTarget === 'mac') {
     return NextResponse.redirect(new URL(getDownloadPath('mac'), request.url));
   }
 
-  const destination = target ? await getDirectDownloadRedirectUrl(target) : await getFallbackDownloadUrlResolved();
+  const destination = detectedTarget
+    ? await getDirectDownloadRedirectUrl(detectedTarget)
+    : await getFallbackDownloadUrlResolved();
 
   if (!destination) {
     return NextResponse.json(
       {
         error: 'Download URL is not configured.',
-        expectedEnv: getDownloadEnvKeys(target),
+        expectedEnv: getDownloadEnvKeys(detectedTarget),
       },
       { status: 503 },
     );

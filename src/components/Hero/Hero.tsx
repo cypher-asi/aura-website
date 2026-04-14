@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { ButtonAction } from '@/components/ButtonAction/ButtonAction';
-import { getDownloadPath, type DownloadTarget } from '@/config/downloadTargets';
+import { getAutoDownloadPath, type DownloadTarget } from '@/config/downloadTargets';
 import './Hero.css';
 
 const ROTATING_WORDS = [
@@ -99,7 +99,7 @@ export function Hero(): React.ReactNode {
   const [downloadPlatform, setDownloadPlatform] = useState<DownloadPlatform>('unknown');
   const indexRef = useRef(0);
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
-  const downloadHref = getDownloadPath(downloadPlatform);
+  const downloadHref = getAutoDownloadPath(downloadPlatform);
 
   const typeWord = useCallback((word: string, charIndex: number) => {
     if (charIndex <= word.length) {
