@@ -12,7 +12,8 @@ const DOWNLOAD_CARDS = [
     description: 'Native build for M1, M2, M3, and M4 Macs.',
     href: getMacDownloadPath('apple-silicon'),
     cta: 'Download',
-    meta: 'Recommended for newer Macs',
+    meta: 'Recommended for most Macs',
+    recommended: true,
   },
   {
     eyebrow: 'macOS',
@@ -20,7 +21,8 @@ const DOWNLOAD_CARDS = [
     description: 'Desktop build for x86-based Macs and older MacBook Pro and iMac hardware.',
     href: getMacDownloadPath('intel'),
     cta: 'Download',
-    meta: 'For pre-Apple Silicon Macs',
+    meta: 'Only for pre-Apple Silicon Macs',
+    recommended: false,
   },
   {
     eyebrow: 'Windows',
@@ -29,6 +31,7 @@ const DOWNLOAD_CARDS = [
     href: '/download/windows',
     cta: 'Download',
     meta: 'x64 installer',
+    recommended: false,
   },
   {
     eyebrow: 'Linux',
@@ -37,6 +40,7 @@ const DOWNLOAD_CARDS = [
     href: '/download/linux',
     cta: 'Download',
     meta: 'x86_64 AppImage',
+    recommended: false,
   },
 ] as const;
 
@@ -59,10 +63,16 @@ export default function DownloadPage(): React.ReactNode {
             </p>
             <div className="downloadGrid">
               {DOWNLOAD_CARDS.map((card) => (
-                <article key={card.title} className="downloadCard">
+                <article
+                  key={card.title}
+                  className={`downloadCard${card.recommended ? ' downloadCardRecommended' : ''}`}
+                >
                   <div className="downloadCardHeader">
                     <span className="downloadCardEyebrow">{card.eyebrow}</span>
-                    <h2 className="downloadCardTitle">{card.title}</h2>
+                    <div className="downloadCardTitleRow">
+                      <h2 className="downloadCardTitle">{card.title}</h2>
+                      {card.recommended && <span className="downloadCardBadge">Recommended</span>}
+                    </div>
                     <p className="downloadCardDescription">{card.description}</p>
                   </div>
                   <div className="downloadCardActions">

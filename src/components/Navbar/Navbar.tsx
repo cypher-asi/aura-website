@@ -113,7 +113,7 @@ export function Navbar(): React.ReactNode {
         )}
         <div className="navActions">
           <ButtonFUI href={getDownloadPath()}>
-            Download
+            Downloads
           </ButtonFUI>
           {ENABLE_TOP_NAV && (
             <button

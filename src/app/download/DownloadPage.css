@@ -71,6 +71,11 @@
   overflow: hidden;
 }
 
+.downloadCardRecommended {
+  border-color: rgba(255, 255, 255, 0.2);
+  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.22);
+}
+
 .downloadCard::before {
   content: '';
   position: absolute;
@@ -106,6 +111,27 @@
   font-size: clamp(26px, 3vw, 34px);
   font-weight: 400;
   letter-spacing: -0.03em;
+}
+
+.downloadCardTitleRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+.downloadCardBadge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-text-primary);
+  background: rgba(255, 255, 255, 0.07);
 }
 
 .downloadCardDescription {
