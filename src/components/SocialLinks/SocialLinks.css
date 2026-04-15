@@ -1,36 +1,43 @@
 .socialLinks {
-  position: fixed;
-  bottom: calc(var(--taskbar-safe-offset) + 20px);
-  right: max(20px, calc(16px + env(safe-area-inset-right, 0px)));
-  z-index: 10;
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 14px;
+}
+
+.socialLinksNavbar {
+  position: static;
 }
 
 .socialLink {
-  color: var(--color-text-muted);
-  opacity: 0.6;
-  transition: opacity var(--transition-fast, 150ms ease);
+  color: var(--color-text-secondary);
+  opacity: 0.72;
+  transition:
+    opacity var(--transition-fast, 150ms ease),
+    color var(--transition-fast, 150ms ease);
   display: flex;
   align-items: center;
+  justify-content: center;
 }
 
 .socialLink:hover {
   opacity: 1;
+  color: var(--color-text-primary);
 }
 
 @media (max-width: 768px) {
-  .socialLinks {
-    bottom: calc(var(--taskbar-safe-offset) + 16px);
-    right: max(16px, calc(12px + env(safe-area-inset-right, 0px)));
-    gap: 14px;
+  .socialLinksNavbar {
+    gap: 12px;
+  }
+
+  .socialLink svg {
+    width: 18px;
+    height: 18px;
   }
 }
 
 @media (max-width: 480px) {
-  .socialLinks {
-    gap: 12px;
+  .socialLinksNavbar {
+    gap: 10px;
   }
 
   .socialLink {

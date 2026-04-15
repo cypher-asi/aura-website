@@ -19,6 +19,7 @@
   width: 100%;
   margin: 0 auto;
   gap: 24px;
+  padding-bottom: clamp(16px, 3vh, 32px);
 }
 
 .heroHeadline {
@@ -69,6 +70,7 @@
 
   .heroContent {
     gap: 20px;
+    padding-bottom: 12px;
   }
 
   .heroSubRow {
@@ -84,10 +86,11 @@
 
   .heroContent {
     gap: 24px;
+    padding-bottom: 10px;
   }
 
   .heroHeadline {
-    font-size: clamp(40px, 8.5vw, 50px);
+    font-size: clamp(27px, 5.7vw, 33px);
   }
 
   .heroSubRow {
@@ -102,7 +105,11 @@
   }
 
   .heroHeadline {
-    font-size: clamp(37px, 12vw, 46px);
+    font-size: clamp(25px, 8vw, 31px);
+  }
+
+  .heroContent {
+    padding-bottom: 8px;
   }
 
   .heroSubRow {

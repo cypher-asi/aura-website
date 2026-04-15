@@ -1,6 +1,12 @@
 import { Github } from 'lucide-react';
 import './SocialLinks.css';
 
+type SocialLinksVariant = 'hidden' | 'navbar';
+
+interface SocialLinksProps {
+  readonly variant?: SocialLinksVariant;
+}
+
 function XIcon(): React.ReactNode {
   return (
     <svg width={16} height={16} viewBox="0 0 24 24" fill="currentColor">
@@ -9,9 +15,13 @@ function XIcon(): React.ReactNode {
   );
 }
 
-export function SocialLinks(): React.ReactNode {
+export function SocialLinks({ variant = 'hidden' }: SocialLinksProps): React.ReactNode {
+  if (variant === 'hidden') {
+    return null;
+  }
+
   return (
-    <div className="socialLinks">
+    <div className={`socialLinks socialLinks${variant[0].toUpperCase()}${variant.slice(1)}`}>
       <a href="https://x.com/aura_asi" target="_blank" rel="noopener noreferrer" className="socialLink" aria-label="X">
         <XIcon />
       </a>

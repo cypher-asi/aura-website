@@ -8,6 +8,7 @@ import { getDownloadPath } from '@/config/downloadTargets';
 import { ENABLE_TOP_NAV } from '@/config/features';
 import { ButtonFUI } from '../ButtonFUI/ButtonFUI';
 import { NavDropdown } from '../NavDropdown/NavDropdown';
+import { SocialLinks } from '../SocialLinks/SocialLinks';
 import './Navbar.css';
 
 const PRODUCT_ITEMS = [
@@ -112,6 +113,7 @@ export function Navbar(): React.ReactNode {
           </ul>
         )}
         <div className="navActions">
+          <SocialLinks variant="navbar" />
           <ButtonFUI href={getDownloadPath()}>
             Download
           </ButtonFUI>

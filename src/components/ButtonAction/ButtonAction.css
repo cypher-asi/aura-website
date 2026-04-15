@@ -98,3 +98,28 @@
   padding: 10px 24px;
   font-weight: 500;
 }
+
+@media (max-width: 768px) {
+  .sciFiButton {
+    gap: 10px;
+  }
+
+  .sciFiButton svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .sciFiButtonSm {
+    padding: 8px 16px;
+  }
+
+  .sciFiButtonMd {
+    padding: 12px 28px;
+  }
+}
+
+@media (max-width: 480px) {
+  .sciFiButtonMd {
+    padding: 11px 24px;
+  }
+}

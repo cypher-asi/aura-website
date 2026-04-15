@@ -50,7 +50,7 @@
 .navActions {
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 16px;
 }
 
 .mobileMenuToggle,
@@ -94,14 +94,18 @@
 
 @media (max-width: 768px) {
   .navbar {
-    padding: 0 16px;
+    padding: 0 12px;
+  }
+
+  .titleLogo {
+    height: 18px;
   }
 
   .navbarInner {
     height: auto;
     min-height: calc(var(--control-height-md, 40px) * 2);
-    gap: 12px;
-    padding: 16px 0;
+    gap: 14px;
+    padding: 18px 0;
   }
 
   .navLinks {
@@ -114,16 +118,15 @@
   }
 
   .navActions .buttonFUI {
-    padding: 8px 10px;
-    font-size: 12px;
+    display: none;
   }
 
   .mobileMenuToggle {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 40px;
-    height: 40px;
+    width: 46px;
+    height: 46px;
     padding: 0;
     color: var(--color-text-primary);
     background: transparent;
@@ -163,13 +166,13 @@
   .mobileNavPanelInner {
     display: flex;
     flex-direction: column;
-    gap: 4px;
-    padding: 12px;
+    gap: 6px;
+    padding: 14px;
     border: 1px solid var(--color-border);
     background: rgba(var(--color-bg-rgb, 9, 9, 11), 0.92);
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
-    max-height: calc(70vh - 16px);
+    max-height: calc(72vh - 14px);
     overflow-y: auto;
   }
 
@@ -178,8 +181,8 @@
   .mobileNavSublink {
     width: 100%;
     display: flex;
-    gap: 12px;
-    padding: 12px 8px;
+    gap: 14px;
+    padding: 14px 10px;
     color: var(--color-text-primary);
     text-decoration: none;
   }
@@ -188,7 +191,7 @@
   .mobileNavSectionToggle {
     align-items: center;
     justify-content: space-between;
-    min-height: 44px;
+    min-height: 50px;
     font-size: var(--font-size-sm, 14px);
     font-weight: 500;
   }
@@ -208,8 +211,8 @@
   .mobileNavSectionLinks {
     display: none;
     flex-direction: column;
-    gap: 4px;
-    padding: 4px 0 8px 12px;
+    gap: 6px;
+    padding: 6px 0 10px 14px;
   }
 
   .mobileNavSectionLinksOpen {
@@ -229,7 +232,7 @@
   }
 
   .mobileNavSublinkLabel {
-    font-size: var(--font-size-sm, 13px);
+    font-size: 14px;
     font-weight: 500;
     color: var(--color-text-primary);
   }
@@ -243,11 +246,11 @@
 
 @media (max-width: 480px) {
   .navbar {
-    padding: 0 12px;
+    padding: 0 10px;
   }
 
   .navbarInner {
-    padding: 14px 0;
+    padding: 16px 0;
   }
 
   .navActions {
@@ -259,6 +262,6 @@
   }
 
   .mobileNavPanelInner {
-    padding: 10px;
+    padding: 12px;
   }
 }
