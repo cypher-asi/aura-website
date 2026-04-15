@@ -43,6 +43,11 @@
   white-space: nowrap;
 }
 
+.navLinkStandalone {
+  display: inline-flex;
+  align-items: center;
+}
+
 .navLink:hover {
   color: var(--color-text-primary);
 }
@@ -111,6 +116,10 @@
   .navActions {
     margin-left: auto;
     gap: 12px;
+  }
+
+  .navLinkStandalone {
+    display: none;
   }
 
   .navActions .buttonFUI {

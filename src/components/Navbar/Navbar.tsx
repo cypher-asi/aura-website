@@ -113,6 +113,9 @@ export function Navbar(): React.ReactNode {
           </ul>
         )}
         <div className="navActions">
+          <Link href="/changelog" className="navLink navLinkStandalone">
+            Changelog
+          </Link>
           <ButtonFUI href={getDownloadPath()}>
             Downloads
           </ButtonFUI>
