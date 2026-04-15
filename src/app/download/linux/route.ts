@@ -1,9 +1,10 @@
 import { NextResponse } from 'next/server';
 
 import { getDirectDownloadRedirectUrl } from '@/server/downloadUrls';
+import { resolveRedirectUrl } from '@/server/redirectUrl';
 
-export function GET(request: Request): Response {
-  const destination = getDirectDownloadRedirectUrl('linux');
+export async function GET(request: Request): Promise<Response> {
+  const destination = await getDirectDownloadRedirectUrl('linux');
 
   if (!destination) {
     return NextResponse.json(
@@ -15,5 +16,5 @@ export function GET(request: Request): Response {
     );
   }
 
-  return NextResponse.redirect(new URL(destination, request.url));
+  return NextResponse.redirect(resolveRedirectUrl(request, destination));
 }

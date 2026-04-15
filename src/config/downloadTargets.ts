@@ -23,6 +23,11 @@ export function getDownloadPath(target?: DownloadTarget | 'unknown'): string {
   return normalizedTarget ? `/download/${normalizedTarget}` : '/download';
 }
 
+export function getAutoDownloadPath(target?: DownloadTarget | 'unknown'): string {
+  const normalizedTarget = normalizeDownloadTarget(target);
+  return normalizedTarget ? `/download/auto?target=${normalizedTarget}` : '/download/auto';
+}
+
 export function normalizeMacDownloadVariant(variant: string | null | undefined): MacDownloadVariant | undefined {
   if (!variant) {
     return undefined;

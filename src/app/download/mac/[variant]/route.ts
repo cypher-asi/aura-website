@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 
 import { normalizeMacDownloadVariant } from '@/config/downloadTargets';
 import { getMacDownloadEnvKeys, getMacDownloadRedirectUrl } from '@/server/downloadUrls';
+import { resolveRedirectUrl } from '@/server/redirectUrl';
 
 interface MacDownloadVariantRouteContext {
   readonly params: Promise<{
@@ -24,7 +25,7 @@ export async function GET(request: Request, context: MacDownloadVariantRouteCont
     );
   }
 
-  const destination = getMacDownloadRedirectUrl(normalizedVariant);
+  const destination = await getMacDownloadRedirectUrl(normalizedVariant);
 
   if (!destination) {
     return NextResponse.json(
@@ -37,5 +38,5 @@ export async function GET(request: Request, context: MacDownloadVariantRouteCont
     );
   }
 
-  return NextResponse.redirect(new URL(destination, request.url));
+  return NextResponse.redirect(resolveRedirectUrl(request, destination));
 }

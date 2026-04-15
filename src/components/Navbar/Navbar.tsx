@@ -19,6 +19,7 @@ const PRODUCT_ITEMS = [
 
 const RESOURCE_ITEMS = [
   { label: 'Pricing', description: 'Token-based and subscription', href: '/resources/pricing' },
+  { label: 'Changelog', description: 'Daily shipped updates and release notes', href: '/changelog' },
   { label: 'Docs', description: 'Machine and human docs', href: 'https://docs.aura.ai', external: true },
 ] as const;
 
@@ -114,6 +115,9 @@ export function Navbar(): React.ReactNode {
         )}
         <div className="navActions">
           <SocialLinks variant="navbar" />
+          <Link href="/changelog" className="navLink navLinkStandalone">
+            Changelog
+          </Link>
           <ButtonFUI href={getDownloadPath()}>
             Download
           </ButtonFUI>

@@ -43,6 +43,11 @@
   white-space: nowrap;
 }
 
+.navLinkStandalone {
+  display: inline-flex;
+  align-items: center;
+}
+
 .navLink:hover {
   color: var(--color-text-primary);
 }
@@ -117,6 +122,10 @@
     gap: 12px;
   }
 
+  .navLinkStandalone {
+    display: none;
+  }
+
   .navActions .buttonFUI {
     display: none;
   }
@@ -173,7 +182,7 @@
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
     max-height: calc(72vh - 14px);
-    overflow-y: auto;
+    overflow: hidden;
   }
 
   .mobileNavLink,
