@@ -28,6 +28,10 @@ function formatShortDate(value: string): { month: string; day: string; year: str
   };
 }
 
+function getCommitUrl(repo: string, sha: string): string {
+  return `https://github.com/cypher-asi/${repo}/commit/${sha}`;
+}
+
 export const metadata = {
   title: 'AURA Changelog',
   description: 'Daily release notes and product updates for Aura.',
@@ -98,7 +102,16 @@ export default async function ChangelogPage(): Promise<React.ReactNode> {
                                     {item.commit_shas.length > 0 && (
                                       <span className="changelogSectionShas">
                                         {item.commit_shas.map((sha) => (
-                                          <code key={sha}>{sha.slice(0, 7)}</code>
+                                          <a
+                                            key={sha}
+                                            href={getCommitUrl(entry.repo, sha)}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="changelogCommitLink"
+                                            aria-label={`View commit ${sha.slice(0, 7)} on GitHub`}
+                                          >
+                                            <code>{sha.slice(0, 7)}</code>
+                                          </a>
                                         ))}
                                       </span>
                                     )}
@@ -137,4 +150,3 @@ export default async function ChangelogPage(): Promise<React.ReactNode> {
     </>
   );
 }
-

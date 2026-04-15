@@ -30,6 +30,7 @@ interface ChangelogRendered {
 }
 
 export interface ChangelogEntry {
+  readonly repo: string;
   readonly date: string;
   readonly channel: string;
   readonly version: string | null;
@@ -85,4 +86,3 @@ export async function getChangelogEntries(): Promise<readonly ChangelogEntry[]> 
 
   return resolved.filter((entry): entry is ChangelogEntry => Boolean(entry));
 }
-
