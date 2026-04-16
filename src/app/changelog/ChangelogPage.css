@@ -185,6 +185,7 @@
   justify-content: flex-start;
   align-items: center;
   min-height: 24px;
+  padding-top: 18px;
   z-index: 1;
 }
 
@@ -393,6 +394,7 @@
   }
 
   .changelogSectionRail {
+    padding-top: 0;
     padding-left: 34px;
   }
 
