@@ -1,5 +1,8 @@
-import { type AnchorHTMLAttributes, type ButtonHTMLAttributes, type ReactNode } from 'react';
+'use client';
+
+import { type AnchorHTMLAttributes, type ButtonHTMLAttributes, type MouseEvent, type ReactNode } from 'react';
 import clsx from 'clsx';
+import { beginRouteTransition, shouldHandleClientNavigation } from '@/components/RouteTransition/RouteTransitionManager';
 import './ButtonAction.css';
 
 interface ButtonActionBaseProps {
@@ -44,11 +47,31 @@ export function ButtonAction(props: ButtonActionProps): ReactNode {
       className: _className,
       children: _children,
       href,
+      onClick,
+      target,
       ...anchorProps
     } = linkPropsSource;
 
+    const handleClick = (event: MouseEvent<HTMLAnchorElement>): void => {
+      onClick?.(event);
+
+      if (event.defaultPrevented) {
+        return;
+      }
+
+      if (target && target !== '_self') {
+        return;
+      }
+
+      if (!shouldHandleClientNavigation(event)) {
+        return;
+      }
+
+      beginRouteTransition(href);
+    };
+
     return (
-      <a href={href} className={buttonClassName} {...anchorProps}>
+      <a href={href} className={buttonClassName} onClick={handleClick} target={target} {...anchorProps}>
         {children}
         {icon}
       </a>

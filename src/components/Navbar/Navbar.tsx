@@ -1,19 +1,22 @@
 'use client';
 
 import { useCallback, useEffect, useState } from 'react';
-import Link from 'next/link';
 import { Menu, X } from 'lucide-react';
 
+import { AppLink } from '@/components/AppLink/AppLink';
 import { getDownloadPath } from '@/config/downloadTargets';
+import { ENABLE_PRODUCT_PAGE } from '@/config/features';
 import { ButtonFUI } from '../ButtonFUI/ButtonFUI';
 import { SocialLinks } from '../SocialLinks/SocialLinks';
 import './Navbar.css';
 
-const NAV_LINKS = [
-  { label: 'Product', href: '/products/aura-os' },
-  { label: 'Changelog', href: '/changelog' },
-  { label: 'Pricing', href: '/pricing' },
+const ALL_NAV_LINKS = [
+  { label: 'Product', href: '/product', flag: ENABLE_PRODUCT_PAGE },
+  { label: 'Changelog', href: '/changelog', flag: true },
+  { label: 'Pricing', href: '/pricing', flag: true },
 ] as const;
+
+const NAV_LINKS = ALL_NAV_LINKS.filter(({ flag }) => flag);
 
 const MOBILE_NAV_ID = 'site-mobile-nav';
 
@@ -52,27 +55,35 @@ export function Navbar(): React.ReactNode {
 
   useEffect(() => {
     const updateScrollState = (): void => {
-      setHasScrolled(window.scrollY > 12);
+      const scrollTop = Math.max(
+        window.scrollY,
+        document.documentElement.scrollTop,
+        document.body.scrollTop,
+      );
+
+      setHasScrolled(scrollTop > 12);
     };
 
     updateScrollState();
     window.addEventListener('scroll', updateScrollState, { passive: true });
+    document.addEventListener('scroll', updateScrollState, { capture: true, passive: true });
 
     return () => {
       window.removeEventListener('scroll', updateScrollState);
+      document.removeEventListener('scroll', updateScrollState, true);
     };
   }, []);
 
   return (
-    <header className={`navbar ${hasScrolled ? 'navbarScrolled' : ''}`}>
+    <header className={`navbar ${hasScrolled && !mobileMenuOpen ? 'navbarScrolled' : ''} ${mobileMenuOpen ? 'navbarMenuOpen' : ''}`}>
       <nav className="navbarInner" aria-label="Primary">
-        <Link href="/" className="logoLink">
+        <AppLink href="/" className="logoLink">
           <img src="/aura-logo.png" alt="AURA" className="titleLogo" />
-        </Link>
+        </AppLink>
         <ul className="navLinks">
           {NAV_LINKS.map(({ label, href }) => (
             <li key={label}>
-              <Link href={href} className="navLink">{label}</Link>
+              <AppLink href={href} className="navLink">{label}</AppLink>
             </li>
           ))}
         </ul>
@@ -100,11 +111,19 @@ export function Navbar(): React.ReactNode {
         role="dialog"
         aria-modal="true"
       >
+        <button
+          type="button"
+          className="mobileNavClose"
+          aria-label="Close navigation"
+          onClick={closeMobileMenu}
+        >
+          <X size={20} strokeWidth={1.8} />
+        </button>
         <div className="mobileNavPanelInner">
           {NAV_LINKS.map(({ label, href }) => (
-            <Link key={label} href={href} className="mobileNavLink" onClick={closeMobileMenu}>
+            <AppLink key={label} href={href} className="mobileNavLink" onClick={closeMobileMenu}>
               {label}
-            </Link>
+            </AppLink>
           ))}
         </div>
       </div>

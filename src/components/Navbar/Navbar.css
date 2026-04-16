@@ -30,6 +30,10 @@
   opacity: 1;
 }
 
+.navbarMenuOpen::before {
+  opacity: 0;
+}
+
 .navbarInner {
   position: relative;
   z-index: 1;
@@ -98,7 +102,8 @@
 }
 
 .mobileMenuToggle,
-.mobileNavPanel {
+.mobileNavPanel,
+.mobileNavClose {
   display: none;
 }
 
@@ -189,6 +194,28 @@ body.mobileMenuOpen {
       visibility 0s linear 150ms;
   }
 
+  .mobileNavClose {
+    position: absolute;
+    top: 20px;
+    right: 24px;
+    z-index: 2;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 46px;
+    height: 46px;
+    padding: 0;
+    color: var(--color-text-primary);
+    background: transparent;
+    border: 1px solid var(--color-border);
+    border-radius: 0;
+    cursor: pointer;
+  }
+
+  .mobileNavClose:hover {
+    background: var(--color-overlay-light);
+  }
+
   .mobileNavPanelOpen {
     opacity: 1;
     visibility: visible;
@@ -258,5 +285,9 @@ body.mobileMenuOpen {
 
   .mobileNavPanelInner {
     padding: 104px 16px 20px;
+  }
+
+  .mobileNavClose {
+    right: 20px;
   }
 }

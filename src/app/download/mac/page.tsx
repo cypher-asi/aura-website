@@ -5,6 +5,10 @@ import { Taskbar } from '@/components/Taskbar/Taskbar';
 import { getMacDownloadPath } from '@/config/downloadTargets';
 import './MacDownloadPage.css';
 
+export const metadata = {
+  title: 'Mac Download',
+};
+
 export default function MacDownloadPage(): React.ReactNode {
   return (
     <>

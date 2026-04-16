@@ -1,4 +1,4 @@
-import Link from 'next/link';
+import { AppLink } from '@/components/AppLink/AppLink';
 import './NavDropdown.css';
 
 interface NavDropdownItem {
@@ -23,10 +23,10 @@ export function NavDropdown({ items }: NavDropdownProps): React.ReactNode {
               <span className="navDropdownDescription">{description}</span>
             </a>
           ) : (
-            <Link key={label} href={href} className="navDropdownItem">
+            <AppLink key={label} href={href} className="navDropdownItem">
               <span className="navDropdownLabel">{label}</span>
               <span className="navDropdownDescription">{description}</span>
-            </Link>
+            </AppLink>
           ),
         )}
       </div>

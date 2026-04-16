@@ -3,14 +3,14 @@ import { ButtonAction } from '@/components/ButtonAction/ButtonAction';
 import './PageHero.css';
 
 interface PageHeroProps {
-  readonly label: string;
+  readonly label?: string;
   readonly headline: ReactNode;
   readonly description: string;
-  readonly ctaText: string;
+  readonly ctaText?: string;
   readonly ctaIcon?: ReactNode;
   readonly ctaHref?: string;
   readonly onCtaClick?: () => void;
-  readonly preview?: ReactNode;
+  readonly preview?: ReactNode | null;
 }
 
 export function PageHero({
@@ -23,21 +23,27 @@ export function PageHero({
   onCtaClick,
   preview,
 }: PageHeroProps): ReactNode {
+  const pageHeroClassName = preview === null ? 'pageHero pageHeroNoPreview' : 'pageHero';
+
   return (
-    <section className="pageHero">
+    <section className={pageHeroClassName}>
       <div className="pageHeroContent">
-        <span className="pageHeroLabel">{label}</span>
+        {label ? <span className="pageHeroLabel">{label}</span> : null}
         <h1 className="pageHeroHeadline">{headline}</h1>
         <p className="pageHeroDescription">{description}</p>
-        <div className="pageHeroActions">
-          <ButtonAction href={ctaHref} icon={ctaIcon} onClick={onCtaClick}>
-            {ctaText}
-          </ButtonAction>
+        {ctaText ? (
+          <div className="pageHeroActions">
+            <ButtonAction href={ctaHref} icon={ctaIcon} onClick={onCtaClick}>
+              {ctaText}
+            </ButtonAction>
+          </div>
+        ) : null}
+      </div>
+      {preview !== null ? (
+        <div className="pageHeroPreview">
+          {preview ?? <div className="pageHeroPreviewPlaceholder" />}
         </div>
-      </div>
-      <div className="pageHeroPreview">
-        {preview ?? <div className="pageHeroPreviewPlaceholder" />}
-      </div>
+      ) : null}
     </section>
   );
 }

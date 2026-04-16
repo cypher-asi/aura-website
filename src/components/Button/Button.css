@@ -7,7 +7,7 @@
   padding: var(--space-2) var(--space-4);
   font-size: var(--text-base);
   font-weight: var(--font-medium);
-  border-radius: var(--radius-md);
+  border-radius: 0;
   transition: all var(--transition-fast);
   min-height: var(--control-height-md);
   min-width: var(--control-width-default);
@@ -184,9 +184,9 @@
 
 /* Rounded variants */
 .btnRoundedNone { border-radius: 0; }
-.btnRoundedSm { border-radius: var(--radius-sm); }
-.btnRoundedLg { border-radius: var(--radius-lg); }
-.btnRoundedFull { border-radius: var(--radius-full); }
+.btnRoundedSm { border-radius: 0; }
+.btnRoundedLg { border-radius: 0; }
+.btnRoundedFull { border-radius: 0; }
 
 /* Text case variants */
 .btnCapitalize { text-transform: capitalize; }

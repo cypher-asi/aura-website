@@ -7,12 +7,14 @@ import { VideoBackground } from '@/components/VideoBackground/VideoBackground';
 import { ENABLE_MAIN_IMAGE } from '@/config/features';
 
 export default function HomePage(): React.ReactNode {
+  const homeMainClassName = ENABLE_MAIN_IMAGE ? 'homeMain' : 'homeMain homeMainHeroOnly';
+
   return (
     <>
       <div className="homePage">
         <VideoBackground />
         <Navbar />
-        <main className="homeMain">
+        <main className={homeMainClassName}>
           <Hero />
           {ENABLE_MAIN_IMAGE && <TerminalPreview />}
         </main>

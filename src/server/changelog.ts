@@ -83,5 +83,14 @@ export async function getChangelogEntries(): Promise<readonly ChangelogEntry[]> 
     }),
   );
 
-  return resolved.filter((entry): entry is ChangelogEntry => Boolean(entry));
+  return resolved
+    .filter((entry): entry is ChangelogEntry => Boolean(entry))
+    .sort((left, right) => {
+      const dateDiff = new Date(right.date).getTime() - new Date(left.date).getTime();
+      if (dateDiff !== 0) {
+        return dateDiff;
+      }
+
+      return new Date(right.generatedAt).getTime() - new Date(left.generatedAt).getTime();
+    });
 }

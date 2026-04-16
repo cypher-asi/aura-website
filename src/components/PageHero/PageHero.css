@@ -9,6 +9,11 @@
   min-height: calc(100dvh - var(--taskbar-safe-offset));
 }
 
+.pageHeroNoPreview {
+  min-height: 0;
+  padding-bottom: 32px;
+}
+
 .pageHeroContent {
   position: relative;
   z-index: 1;
@@ -77,7 +82,11 @@
 
 @media (max-width: 768px) {
   .pageHero {
-    padding: 96px 16px 0;
+    padding: 96px 24px 0;
+  }
+
+  .pageHeroNoPreview {
+    padding-bottom: 24px;
   }
 
   .pageHeroContent {
@@ -104,7 +113,11 @@
 
 @media (max-width: 480px) {
   .pageHero {
-    padding: 84px 12px 0;
+    padding: 84px 20px 0;
+  }
+
+  .pageHeroNoPreview {
+    padding-bottom: 20px;
   }
 
   .pageHeroHeadline {

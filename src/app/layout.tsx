@@ -1,6 +1,8 @@
 import { type ReactNode } from 'react';
 import { Inter } from 'next/font/google';
+import { type Metadata, type Viewport } from 'next';
 import { Providers } from './providers';
+import { RouteTransitionManager } from '@/components/RouteTransition/RouteTransitionManager';
 
 import '@/styles/tokens.css';
 import '@/styles/themes.css';
@@ -10,12 +12,20 @@ import './globals.css';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
 
-export const metadata = {
-  title: 'AURA',
+export const metadata: Metadata = {
+  title: {
+    default: 'AURA',
+    template: 'AURA - %s',
+  },
   description: 'A production-grade, zero-configuration preset for your tools.',
   icons: {
     icon: '/favicon.ico',
   },
+};
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
 };
 
 interface RootLayoutProps {
@@ -32,6 +42,7 @@ export default function RootLayout({ children }: RootLayoutProps): ReactNode {
       </head>
       <body>
         <Providers>
+          <RouteTransitionManager />
           {children}
         </Providers>
       </body>

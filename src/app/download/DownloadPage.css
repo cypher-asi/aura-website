@@ -1,159 +1,179 @@
 .downloadPage {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  min-height: calc(100vh - var(--taskbar-safe-offset));
-  min-height: calc(100dvh - var(--taskbar-safe-offset));
   padding: 120px 32px 0;
-  background:
-    radial-gradient(circle at top left, rgba(255, 255, 255, 0.08), transparent 34%),
-    radial-gradient(circle at 80% 10%, rgba(255, 255, 255, 0.05), transparent 28%),
-    linear-gradient(180deg, #020202 0%, #000 50%, #040404 100%);
+  background: #000;
 }
 
 .downloadPageContent {
   width: 100%;
-  max-width: 1200px;
+  max-width: 960px;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
   gap: 28px;
-}
-
-.downloadPageLabel {
-  font-size: var(--text-xs);
-  font-weight: var(--font-medium);
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--color-text-secondary);
+  padding: 0 0 32px;
 }
 
 .downloadPageHeadline {
-  max-width: 820px;
-  font-size: clamp(40px, 5.4vw, 64px);
+  font-size: clamp(36px, 5vw, 56px);
   font-weight: 300;
-  line-height: 1.02;
-  letter-spacing: -0.04em;
+  line-height: 1.08;
+  letter-spacing: -0.035em;
   color: var(--color-text-primary);
-}
-
-.downloadPageHeadlineMuted {
-  color: var(--color-text-secondary);
-}
-
-.downloadPageDescription {
-  max-width: 660px;
-  font-size: var(--text-lg);
-  line-height: var(--leading-relaxed);
-  color: var(--color-text-secondary);
+  max-width: 680px;
+  margin: 0;
 }
 
 .downloadGrid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 18px;
+  gap: 8px;
   padding-top: 8px;
 }
 
 .downloadCard {
-  position: relative;
-  min-height: 220px;
-  padding: 24px;
+  min-height: 292px;
+  padding: 14px 12px 12px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  gap: 20px;
+  gap: 18px;
   color: var(--color-text-primary);
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.015)),
-    rgba(0, 0, 0, 0.72);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  overflow: hidden;
+  background: rgba(255, 255, 255, 0.025);
+  border: 1px solid rgba(255, 255, 255, 0.03);
+  transition: background-color var(--transition-fast, 150ms ease);
+}
+
+.downloadCard:hover {
+  background: rgba(255, 255, 255, 0.04);
 }
 
 .downloadCardRecommended {
-  border-color: rgba(255, 255, 255, 0.2);
-  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.22);
+  background: rgba(255, 255, 255, 0.03);
+  animation: recommendedFadeIn 0.8s ease-out 0.3s both;
 }
 
-.downloadCard::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background:
-    linear-gradient(135deg, rgba(255, 255, 255, 0.14), transparent 32%),
-    linear-gradient(315deg, rgba(255, 255, 255, 0.08), transparent 26%);
-  opacity: 0.9;
+@keyframes recommendedFadeIn {
+  from {
+    background: rgba(255, 255, 255, 0.025);
+    border-color: rgba(255, 255, 255, 0.03);
+    box-shadow: none;
+  }
+  to {
+    background: rgba(255, 255, 255, 0.07);
+    border-color: rgba(255, 255, 255, 0.12);
+    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.06), 0 2px 24px rgba(255, 255, 255, 0.03);
+  }
 }
 
-.downloadCardHeader,
-.downloadCardActions {
-  position: relative;
-  z-index: 1;
-}
-
-.downloadCardHeader {
+.downloadCardBody {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 16px;
 }
 
-.downloadCardEyebrow {
-  font-size: var(--text-xs);
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: var(--color-text-muted);
-}
-
-.downloadCardTitle {
-  margin: 0;
-  font-size: clamp(26px, 3vw, 34px);
-  font-weight: 400;
-  letter-spacing: -0.03em;
+.downloadCardHeading {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
 .downloadCardTitleRow {
   display: flex;
+  align-items: baseline;
+  gap: 8px;
   flex-wrap: wrap;
-  align-items: center;
-  gap: 10px;
 }
 
-.downloadCardBadge {
-  display: inline-flex;
-  align-items: center;
-  padding: 4px 10px;
-  border: 1px solid rgba(255, 255, 255, 0.16);
-  border-radius: 999px;
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--color-text-primary);
-  background: rgba(255, 255, 255, 0.07);
+.downloadCardTitle {
+  margin: 0;
+  font-size: 21px;
+  font-weight: 500;
+  letter-spacing: -0.03em;
+  color: #f2f0ec;
+}
+
+.downloadCardRecommended .downloadCardTitle {
+  animation: titleBrighten 0.6s ease-out 0.4s both;
+}
+
+@keyframes titleBrighten {
+  from {
+    color: #f2f0ec;
+  }
+  to {
+    color: #ffffff;
+  }
+}
+
+.downloadCardEyebrow {
+  font-size: 13px;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.56);
 }
 
 .downloadCardDescription {
   margin: 0;
-  max-width: 28rem;
-  font-size: var(--text-sm);
-  line-height: 1.7;
-  color: var(--color-text-secondary);
+  font-size: 13px;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.56);
 }
 
-.downloadCardActions {
+.downloadCardFooter {
   display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.downloadCardButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  align-self: flex-start;
+  min-width: 88px;
+  min-height: 34px;
+  padding: 0 18px;
+  border-radius: 0;
+  background: rgba(255, 255, 255, 0.06);
+  color: rgba(255, 255, 255, 0.92);
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1;
+  user-select: none;
+  transition:
+    background-color var(--transition-fast, 150ms ease),
+    color var(--transition-fast, 150ms ease);
+}
+
+.downloadCardButton:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.downloadCardButtonPrimary {
+  background: #f6f3ee;
+  color: #16120f;
+  animation: primaryButtonFadeIn 0.6s ease-out 0.5s both;
+}
+
+@keyframes primaryButtonFadeIn {
+  from {
+    background: rgba(255, 255, 255, 0.06);
+    color: rgba(255, 255, 255, 0.92);
+  }
+  to {
+    background: #f6f3ee;
+    color: #16120f;
+  }
+}
+
+.downloadCardButtonPrimary:hover {
+  background: #ffffff;
+  color: #0e0b08;
 }
 
 .downloadCardMeta {
   margin: 0;
-  font-size: var(--text-xs);
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  color: var(--color-text-muted);
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.4);
 }
 
 .downloadPageFootnote {
@@ -171,30 +191,28 @@
 
 @media (max-width: 768px) {
   .downloadPage {
-    padding: 88px 20px 0;
+    padding: 96px 24px 0;
   }
 
   .downloadPageHeadline {
-    font-size: clamp(34px, 10vw, 48px);
+    font-size: clamp(36px, 11vw, 50px);
   }
 
-  .downloadPageDescription {
-    font-size: var(--text-base);
+  .downloadCard {
+    min-height: 0;
   }
 }
 
 @media (max-width: 480px) {
   .downloadPage {
-    padding: 76px 16px 0;
+    padding: 84px 20px 0;
+  }
+
+  .downloadPageHeadline {
+    font-size: clamp(34px, 12vw, 46px);
   }
 
   .downloadCard {
-    min-height: 0;
-    padding: 20px;
-  }
-
-  .downloadCardActions {
-    flex-direction: column;
-    align-items: flex-start;
+    padding: 18px 20px 16px;
   }
 }

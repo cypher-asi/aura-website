@@ -1,11 +1,17 @@
 import { Navbar } from '@/components/Navbar/Navbar';
 import { PageHero } from '@/components/PageHero/PageHero';
+import { ScrollClassToggle } from '@/components/ScrollClassToggle/ScrollClassToggle';
 import { SocialLinks } from '@/components/SocialLinks/SocialLinks';
 import { Taskbar } from '@/components/Taskbar/Taskbar';
+
+export const metadata = {
+  title: 'AURA 3D',
+};
 
 export default function Aura3dPage(): React.ReactNode {
   return (
     <>
+      <ScrollClassToggle className="productPageScrollEnabled" />
       <Navbar />
       <main>
         <PageHero

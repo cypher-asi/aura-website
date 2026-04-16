@@ -3,6 +3,10 @@ import { PageHero } from '@/components/PageHero/PageHero';
 import { SocialLinks } from '@/components/SocialLinks/SocialLinks';
 import { Taskbar } from '@/components/Taskbar/Taskbar';
 
+export const metadata = {
+  title: 'Network',
+};
+
 export default function NetworkPage(): React.ReactNode {
   return (
     <>

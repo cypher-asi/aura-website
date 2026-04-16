@@ -1,0 +1,85 @@
+.productCtaSection {
+  background: #000;
+  padding: 0 32px 120px;
+}
+
+.productCtaPanel {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 1200px;
+  min-height: 460px;
+  margin: 0 auto;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 0;
+  background: url('/product-cta-bg.png') center / cover no-repeat;
+}
+
+.productCtaButton {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: min(52vw, 360px);
+  min-height: 104px;
+  padding: 24px 40px;
+  border-radius: 0;
+  background: #fff;
+  color: #111;
+  font-size: clamp(22px, 2.8vw, 34px);
+  font-weight: 400;
+  letter-spacing: -0.03em;
+  text-decoration: none;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.35);
+  transition:
+    transform 180ms ease,
+    box-shadow 180ms ease,
+    background-color 180ms ease;
+}
+
+.productCtaButton:hover {
+  background: #f4f4f4;
+  transform: translateY(-1px);
+  box-shadow: 0 34px 90px rgba(0, 0, 0, 0.42);
+}
+
+@media (max-width: 768px) {
+  .productCtaSection {
+    padding: 0 24px 96px;
+  }
+
+  .productCtaPanel {
+    min-height: 320px;
+  }
+
+  .productCtaButton {
+    min-width: min(72vw, 320px);
+    min-height: 84px;
+    padding: 20px 30px;
+    border-radius: 22px;
+    font-size: clamp(20px, 5.6vw, 30px);
+  }
+}
+
+@media (max-width: 480px) {
+  .productCtaSection {
+    padding: 0 20px 84px;
+  }
+
+  .productCtaPanel {
+    min-height: 260px;
+    border-radius: 0;
+  }
+
+  .productCtaButton {
+    min-width: min(78vw, 280px);
+    min-height: 70px;
+    padding: 18px 24px;
+    border-radius: 0;
+    font-size: clamp(18px, 6vw, 24px);
+  }
+}

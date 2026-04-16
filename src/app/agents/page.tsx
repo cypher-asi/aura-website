@@ -3,6 +3,10 @@ import { PageHero } from '@/components/PageHero/PageHero';
 import { SocialLinks } from '@/components/SocialLinks/SocialLinks';
 import { Taskbar } from '@/components/Taskbar/Taskbar';
 
+export const metadata = {
+  title: 'Agents',
+};
+
 export default function AgentsPage(): React.ReactNode {
   return (
     <>
