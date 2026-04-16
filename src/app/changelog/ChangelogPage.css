@@ -2,12 +2,15 @@
   min-height: calc(100vh - var(--taskbar-safe-offset));
   min-height: calc(100dvh - var(--taskbar-safe-offset));
   padding: 120px 32px 0;
-  background: #000;
+  background:
+    radial-gradient(circle at 12% 0%, rgba(255, 255, 255, 0.05), transparent 34%),
+    radial-gradient(circle at 88% 8%, rgba(255, 255, 255, 0.03), transparent 24%),
+    linear-gradient(180deg, #020202 0%, #000 52%, #050505 100%);
 }
 
 .changelogPageShell {
   width: 100%;
-  max-width: 720px;
+  max-width: 980px;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
@@ -19,24 +22,48 @@
 }
 
 .changelogEntries {
+  position: relative;
   display: flex;
   flex-direction: column;
   gap: 56px;
 }
 
+.changelogEntries::before {
+  content: '';
+  position: absolute;
+  top: 18px;
+  bottom: 18px;
+  left: 172px;
+  width: 1px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.03));
+}
+
 .changelogEntry {
+  position: relative;
   display: flex;
   align-items: flex-start;
   gap: 28px;
-  padding-bottom: 56px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 0 0 56px;
   scroll-margin-top: 110px;
 }
 
 .changelogEntryDateColumn {
+  position: relative;
   width: 140px;
   flex: 0 0 140px;
-  padding-top: 4px;
+  padding-top: 10px;
+}
+
+.changelogEntryDateColumn::after {
+  content: '';
+  position: absolute;
+  top: 42px;
+  right: -14px;
+  width: 12px;
+  height: 12px;
+  background: #fff;
+  border: 3px solid rgba(0, 0, 0, 0.92);
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.14);
 }
 
 .changelogEntryBody {
@@ -45,15 +72,48 @@
   display: flex;
   flex-direction: column;
   gap: 28px;
+  padding: 26px 28px 30px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.045), rgba(255, 255, 255, 0.018)),
+    rgba(0, 0, 0, 0.72);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
 }
 
-.changelogEntryDate {
-  margin: 0;
-  font-size: 13px;
+.changelogDateBadge {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 78px;
+  padding: 10px 12px;
+  gap: 2px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.changelogDateMonth,
+.changelogDateYear {
+  font-size: 11px;
   font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.58);
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.changelogDateDay {
+  font-size: 30px;
+  line-height: 1;
+  font-weight: 500;
+  color: #fff;
+}
+
+.changelogEntryDate {
+  margin: 12px 0 0;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.42);
 }
 
 .changelogEntryMetaRow {
@@ -95,12 +155,24 @@
 }
 
 .changelogSections {
+  position: relative;
   display: flex;
   flex-direction: column;
-  gap: 22px;
+  gap: 28px;
+}
+
+.changelogSections::before {
+  content: '';
+  position: absolute;
+  top: 10px;
+  bottom: 10px;
+  left: 95px;
+  width: 1px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.13), rgba(255, 255, 255, 0.03));
 }
 
 .changelogSection {
+  position: relative;
   display: grid;
   grid-template-columns: 84px minmax(0, 1fr);
   gap: 18px;
@@ -108,15 +180,31 @@
 }
 
 .changelogSectionRail {
+  position: relative;
   display: flex;
   justify-content: flex-start;
-  padding-top: 2px;
+  padding-top: 4px;
+  z-index: 1;
+}
+
+.changelogSectionNode {
+  position: absolute;
+  top: 12px;
+  right: -17px;
+  width: 10px;
+  height: 10px;
+  background: #fff;
+  border: 2px solid rgba(0, 0, 0, 0.92);
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.12);
 }
 
 .changelogSectionContent {
   display: flex;
   flex-direction: column;
   gap: 14px;
+  padding: 18px 18px 20px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.02);
 }
 
 .changelogSectionHeader {
@@ -134,7 +222,7 @@
   border: 1px solid rgba(255, 255, 255, 0.12);
   color: rgba(255, 255, 255, 0.48);
   background: rgba(255, 255, 255, 0.03);
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -142,46 +230,79 @@
 
 .changelogSectionTitle {
   margin: 0;
-  font-size: 13px;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.62);
+  font-size: clamp(24px, 3vw, 30px);
+  line-height: 1.06;
+  letter-spacing: -0.04em;
+  font-weight: 400;
+  color: #fff;
 }
 
 .changelogSectionSummary {
   margin: 0;
-  color: #e7e9ea;
+  color: rgba(255, 255, 255, 0.76);
   line-height: 1.75;
 }
 
 .changelogSectionList {
-  display: block;
+  display: flex;
+  flex-direction: column;
   gap: 14px;
-  padding-left: 22px;
+  padding: 0;
   margin: 0;
-  list-style: disc;
+  list-style: none;
 }
 
 .changelogSectionItem {
-  display: list-item;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
   color: #e7e9ea;
   line-height: 1.75;
-  margin-top: 14px;
 }
 
-.changelogSectionItem:first-child {
-  margin-top: 0;
+.changelogSectionItemText {
+  margin: 0;
+}
+
+.changelogSectionSources {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+.changelogSectionSourcesLabel {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.34);
+}
+
+.changelogSectionSourcesLinks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
 }
 
 .changelogSectionCommitLink {
-  color: rgba(255, 255, 255, 0.72);
-  text-decoration: underline;
-  text-underline-offset: 0.16em;
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
+  padding: 0 8px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.03);
+  color: rgba(255, 255, 255, 0.58);
+  text-decoration: none;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
 }
 
 .changelogSectionCommitLink:hover {
   color: #fff;
+  border-color: rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.06);
 }
 
 .changelogHighlights {
@@ -231,6 +352,10 @@
     gap: 40px;
   }
 
+  .changelogEntries::before {
+    display: none;
+  }
+
   .changelogEntries {
     gap: 40px;
   }
@@ -247,13 +372,31 @@
     padding-top: 0;
   }
 
+  .changelogEntryDateColumn::after {
+    display: none;
+  }
+
   .changelogEntryBody {
     gap: 22px;
+    padding: 22px;
+  }
+
+  .changelogSections::before {
+    left: 18px;
   }
 
   .changelogSection {
     grid-template-columns: 1fr;
     gap: 10px;
+  }
+
+  .changelogSectionRail {
+    padding-left: 34px;
+  }
+
+  .changelogSectionNode {
+    left: 14px;
+    right: auto;
   }
 }
 

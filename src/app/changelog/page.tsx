@@ -13,6 +13,21 @@ function formatDateLabel(value: string): string {
   }).format(parsed);
 }
 
+function formatShortDate(value: string): { month: string; day: string; year: string } {
+  const parsed = new Date(`${value}T12:00:00Z`);
+  const parts = new Intl.DateTimeFormat('en-US', {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
+  }).formatToParts(parsed);
+
+  return {
+    month: parts.find((part) => part.type === 'month')?.value.toUpperCase() || '',
+    day: parts.find((part) => part.type === 'day')?.value || '',
+    year: parts.find((part) => part.type === 'year')?.value || '',
+  };
+}
+
 function getCommitUrl(repo: string, sha: string): string {
   return `https://github.com/cypher-asi/${repo}/commit/${sha}`;
 }
@@ -46,9 +61,16 @@ export default async function ChangelogPage(): Promise<React.ReactNode> {
             {entries.length > 0 ? (
               <div className="changelogPageContent">
                 <div className="changelogEntries" aria-label="Aura changelog entries">
-                  {entries.map((entry) => (
+                  {entries.map((entry) => {
+                    const date = formatShortDate(entry.date);
+                    return (
                     <article key={`${entry.date}-${entry.version ?? entry.generatedAt}`} className="changelogEntry">
                       <div className="changelogEntryDateColumn">
+                        <div className="changelogDateBadge">
+                          <span className="changelogDateMonth">{date.month}</span>
+                          <span className="changelogDateDay">{date.day}</span>
+                          <span className="changelogDateYear">{date.year}</span>
+                        </div>
                         <p className="changelogEntryDate">{formatDateLabel(entry.date)}</p>
                       </div>
 
@@ -70,6 +92,7 @@ export default async function ChangelogPage(): Promise<React.ReactNode> {
                                 <span className="changelogSectionTime">
                                   {formatTimelineTime(timelineEntry.started_at, timelineEntry.time_label)}
                                 </span>
+                                <span className="changelogSectionNode" aria-hidden="true" />
                               </div>
                               <div className="changelogSectionContent">
                                 <div className="changelogSectionHeader">
@@ -80,24 +103,25 @@ export default async function ChangelogPage(): Promise<React.ReactNode> {
                                   <ul className="changelogSectionList">
                                     {timelineEntry.items.map((item) => (
                                       <li key={`${timelineEntry.title}-${item.text}`} className="changelogSectionItem">
-                                        <span>
-                                          {item.text}
-                                          {item.commit_shas.length > 0 && ' '}
-                                          {item.commit_shas.map((sha, index) => (
-                                            <span key={sha}>
-                                              {index === 0 ? '(' : ', '}
-                                              <a
-                                                href={getCommitUrl(entry.repo, sha)}
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                                className="changelogSectionCommitLink"
-                                              >
-                                                {sha.slice(0, 7)}
-                                              </a>
-                                              {index === item.commit_shas.length - 1 ? ')' : ''}
+                                        <p className="changelogSectionItemText">{item.text}</p>
+                                        {item.commit_shas.length > 0 && (
+                                          <div className="changelogSectionSources">
+                                            <span className="changelogSectionSourcesLabel">Sources</span>
+                                            <span className="changelogSectionSourcesLinks">
+                                              {item.commit_shas.map((sha) => (
+                                                <a
+                                                  key={sha}
+                                                  href={getCommitUrl(entry.repo, sha)}
+                                                  target="_blank"
+                                                  rel="noopener noreferrer"
+                                                  className="changelogSectionCommitLink"
+                                                >
+                                                  {sha.slice(0, 7)}
+                                                </a>
+                                              ))}
                                             </span>
-                                          ))}
-                                        </span>
+                                          </div>
+                                        )}
                                       </li>
                                     ))}
                                   </ul>
@@ -118,7 +142,7 @@ export default async function ChangelogPage(): Promise<React.ReactNode> {
                         )}
                       </div>
                     </article>
-                  ))}
+                  )})}
                 </div>
               </div>
             ) : (
