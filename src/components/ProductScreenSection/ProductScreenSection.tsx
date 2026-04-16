@@ -1,6 +1,15 @@
 'use client';
 
-import { type CSSProperties, type MouseEvent, type ReactNode, useEffect, useRef, useState } from 'react';
+import {
+  type CSSProperties,
+  type MouseEvent,
+  type ReactNode,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from 'react';
+import { createPortal } from 'react-dom';
 import './ProductScreenSection.css';
 
 type LightboxPhase = 'closed' | 'opening' | 'open' | 'closing';
@@ -12,7 +21,15 @@ interface ImageRect {
   readonly height: number;
 }
 
-const LIGHTBOX_TRANSITION_MS = 320;
+interface ProductScreenSectionProps {
+  readonly headline: ReactNode;
+  readonly placeholderLabel?: string;
+  readonly imageSrc?: string;
+  readonly imageAlt?: string;
+}
+
+const IMAGE_ANIMATION_MS = 420;
+const BACKDROP_ANIMATION_MS = 220;
 const DESKTOP_LIGHTBOX_PADDING = 24;
 const MOBILE_LIGHTBOX_PADDING = 16;
 
@@ -71,11 +88,13 @@ function getRectStyle(rect: ImageRect | null): CSSProperties | undefined {
   };
 }
 
-interface ProductScreenSectionProps {
-  readonly headline: ReactNode;
-  readonly placeholderLabel?: string;
-  readonly imageSrc?: string;
-  readonly imageAlt?: string;
+function buildTransform(originRect: ImageRect, targetRect: ImageRect): string {
+  const translateX = originRect.left - targetRect.left;
+  const translateY = originRect.top - targetRect.top;
+  const scaleX = originRect.width / targetRect.width;
+  const scaleY = originRect.height / targetRect.height;
+
+  return `translate(${translateX}px, ${translateY}px) scale(${scaleX}, ${scaleY})`;
 }
 
 export function ProductScreenSection({
@@ -84,36 +103,146 @@ export function ProductScreenSection({
   imageSrc,
   imageAlt,
 }: ProductScreenSectionProps): ReactNode {
-  const imageRef = useRef<HTMLImageElement | null>(null);
-  const animationFrameRef = useRef<number | null>(null);
-  const transitionTimeoutRef = useRef<number | null>(null);
-  const [lightboxPhase, setLightboxPhase] = useState<LightboxPhase>('closed');
+  const inlineImageRef = useRef<HTMLImageElement | null>(null);
+  const animatedImageShellRef = useRef<HTMLDivElement | null>(null);
+  const backdropRef = useRef<HTMLDivElement | null>(null);
+  const closeButtonRef = useRef<HTMLButtonElement | null>(null);
+  const activeAnimationsRef = useRef<Animation[]>([]);
+  const [phase, setPhase] = useState<LightboxPhase>('closed');
   const [originRect, setOriginRect] = useState<ImageRect | null>(null);
-  const [lightboxRect, setLightboxRect] = useState<ImageRect | null>(null);
+  const [targetRect, setTargetRect] = useState<ImageRect | null>(null);
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
 
-  const clearPendingAnimation = (): void => {
-    if (animationFrameRef.current !== null) {
-      window.cancelAnimationFrame(animationFrameRef.current);
-      animationFrameRef.current = null;
-    }
+  const isLightboxVisible = phase !== 'closed';
 
-    if (transitionTimeoutRef.current !== null) {
-      window.clearTimeout(transitionTimeoutRef.current);
-      transitionTimeoutRef.current = null;
-    }
+  const cancelAnimations = (): void => {
+    activeAnimationsRef.current.forEach((animation) => {
+      animation.cancel();
+    });
+    activeAnimationsRef.current = [];
   };
 
-  const finishLightboxTransition = (nextPhase: LightboxPhase): void => {
-    clearPendingAnimation();
-    transitionTimeoutRef.current = window.setTimeout(() => {
-      setLightboxPhase(nextPhase);
-      transitionTimeoutRef.current = null;
-    }, LIGHTBOX_TRANSITION_MS);
+  const runOpenAnimation = (): void => {
+    if (!animatedImageShellRef.current || !backdropRef.current || !originRect || !targetRect) {
+      setPhase('open');
+      return;
+    }
+
+    cancelAnimations();
+
+    const imageAnimation = animatedImageShellRef.current.animate(
+      [
+        {
+          transform: 'scale(0.92)',
+          opacity: 0,
+        },
+        {
+          transform: 'scale(1)',
+          opacity: 1,
+        },
+      ],
+      {
+        duration: IMAGE_ANIMATION_MS,
+        easing: 'cubic-bezier(0.16, 1, 0.3, 1)',
+        fill: 'forwards',
+      },
+    );
+
+    const backdropAnimation = backdropRef.current.animate(
+      [{ opacity: 0 }, { opacity: 1 }],
+      {
+        duration: BACKDROP_ANIMATION_MS,
+        easing: 'ease-out',
+        fill: 'forwards',
+      },
+    );
+
+    const closeAnimation = closeButtonRef.current?.animate(
+      [
+        { opacity: 0, transform: 'translateY(-8px)' },
+        { opacity: 1, transform: 'translateY(0px)' },
+      ],
+      {
+        duration: 180,
+        easing: 'ease-out',
+        fill: 'forwards',
+        delay: 100,
+      },
+    );
+
+    activeAnimationsRef.current = [imageAnimation, backdropAnimation, closeAnimation].filter(
+      (animation): animation is Animation => Boolean(animation),
+    );
+
+    imageAnimation.addEventListener(
+      'finish',
+      () => {
+        activeAnimationsRef.current = [];
+        setPhase('open');
+      },
+      { once: true },
+    );
   };
 
-  const updateOpenRect = (): void => {
-    setLightboxRect(getFullscreenRect(imageRef.current));
+  const runCloseAnimation = (): void => {
+    if (!animatedImageShellRef.current || !backdropRef.current || !originRect || !targetRect) {
+      setPhase('closed');
+      return;
+    }
+
+    cancelAnimations();
+
+    const imageAnimation = animatedImageShellRef.current.animate(
+      [
+        {
+          transform: 'scale(1)',
+          opacity: 1,
+        },
+        {
+          transform: 'scale(0.92)',
+          opacity: 0,
+        },
+      ],
+      {
+        duration: 340,
+        easing: 'cubic-bezier(0.7, 0, 0.84, 0)',
+        fill: 'forwards',
+      },
+    );
+
+    const backdropAnimation = backdropRef.current.animate(
+      [{ opacity: 1 }, { opacity: 0 }],
+      {
+        duration: 180,
+        easing: 'ease-out',
+        fill: 'forwards',
+      },
+    );
+
+    const closeAnimation = closeButtonRef.current?.animate(
+      [
+        { opacity: 1, transform: 'translateY(0px)' },
+        { opacity: 0, transform: 'translateY(-8px)' },
+      ],
+      {
+        duration: 120,
+        easing: 'ease-in',
+        fill: 'forwards',
+      },
+    );
+
+    activeAnimationsRef.current = [imageAnimation, backdropAnimation, closeAnimation].filter(
+      (animation): animation is Animation => Boolean(animation),
+    );
+
+    imageAnimation.addEventListener(
+      'finish',
+      () => {
+        activeAnimationsRef.current = [];
+        setPhase('closed');
+      },
+      { once: true },
+    );
   };
 
   useEffect(() => {
@@ -132,7 +261,7 @@ export function ProductScreenSection({
   }, []);
 
   useEffect(() => {
-    if (lightboxPhase === 'closed') {
+    if (!isLightboxVisible) {
       return undefined;
     }
 
@@ -151,15 +280,15 @@ export function ProductScreenSection({
       document.body.style.overflow = previousOverflow;
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, [lightboxPhase]);
+  }, [isLightboxVisible]);
 
   useEffect(() => {
-    if (lightboxPhase !== 'open' && lightboxPhase !== 'opening') {
+    if (phase !== 'open') {
       return undefined;
     }
 
     const handleResize = (): void => {
-      updateOpenRect();
+      setTargetRect(getFullscreenRect(inlineImageRef.current));
     };
 
     window.addEventListener('resize', handleResize);
@@ -167,82 +296,118 @@ export function ProductScreenSection({
     return () => {
       window.removeEventListener('resize', handleResize);
     };
-  }, [lightboxPhase]);
+  }, [phase]);
+
+  useLayoutEffect(() => {
+    if (prefersReducedMotion) {
+      if (phase === 'opening') {
+        setPhase('open');
+      }
+
+      if (phase === 'closing') {
+        setPhase('closed');
+      }
+
+      return;
+    }
+
+    if (phase === 'opening') {
+      runOpenAnimation();
+    }
+
+    if (phase === 'closing') {
+      runCloseAnimation();
+    }
+  }, [phase, prefersReducedMotion, originRect, targetRect]);
 
   useEffect(() => {
-    if (lightboxPhase !== 'closed') {
+    if (phase !== 'closed') {
       return undefined;
     }
 
-    setLightboxRect(null);
+    cancelAnimations();
     setOriginRect(null);
-    clearPendingAnimation();
+    setTargetRect(null);
 
     return undefined;
-  }, [lightboxPhase]);
+  }, [phase]);
 
   useEffect(() => {
     return () => {
-      clearPendingAnimation();
+      cancelAnimations();
     };
   }, []);
 
   const openFullscreen = (): void => {
-    if (!imageRef.current) {
+    if (!inlineImageRef.current) {
       return;
     }
 
-    const nextOriginRect = imageRef.current.getBoundingClientRect();
-    const nextOpenRect = getFullscreenRect(imageRef.current);
-
-    clearPendingAnimation();
-    setOriginRect(nextOriginRect);
+    setOriginRect(inlineImageRef.current.getBoundingClientRect());
+    setTargetRect(getFullscreenRect(inlineImageRef.current));
 
     if (prefersReducedMotion) {
-      setLightboxRect(nextOpenRect);
-      setLightboxPhase('open');
+      setPhase('open');
       return;
     }
 
-    setLightboxRect(nextOriginRect);
-    setLightboxPhase('opening');
-
-    animationFrameRef.current = window.requestAnimationFrame(() => {
-      animationFrameRef.current = window.requestAnimationFrame(() => {
-        setLightboxRect(nextOpenRect);
-        finishLightboxTransition('open');
-      });
-    });
+    setPhase('opening');
   };
 
   const closeFullscreen = (): void => {
-    if (lightboxPhase === 'closed' || lightboxPhase === 'closing') {
+    if (phase === 'closed' || phase === 'closing') {
       return;
     }
-
-    clearPendingAnimation();
 
     if (prefersReducedMotion) {
-      setLightboxPhase('closed');
+      setPhase('closed');
       return;
     }
 
-    const nextOriginRect = imageRef.current?.getBoundingClientRect() ?? originRect;
-
-    if (!nextOriginRect) {
-      setLightboxPhase('closed');
-      return;
-    }
-
-    setOriginRect(nextOriginRect);
-    setLightboxRect(nextOriginRect);
-    setLightboxPhase('closing');
-    finishLightboxTransition('closed');
+    setOriginRect(inlineImageRef.current?.getBoundingClientRect() ?? originRect);
+    setPhase('closing');
   };
 
   const stopLightboxClose = (event: MouseEvent<HTMLDivElement>): void => {
     event.stopPropagation();
   };
+
+  const lightbox =
+    isLightboxVisible && targetRect && typeof document !== 'undefined'
+      ? createPortal(
+          <div
+            className="productScreenSectionLightbox"
+            role="dialog"
+            aria-modal="true"
+            aria-label={imageAlt ?? placeholderLabel}
+            onClick={closeFullscreen}
+          >
+            <div ref={backdropRef} className="productScreenSectionLightboxBackdrop" />
+            <button
+              ref={closeButtonRef}
+              type="button"
+              className="productScreenSectionLightboxClose"
+              onClick={closeFullscreen}
+              aria-label="Close fullscreen image"
+            >
+              Close
+            </button>
+            <div
+              ref={animatedImageShellRef}
+              className="productScreenSectionLightboxImageShell"
+              style={getRectStyle(targetRect)}
+              onClick={stopLightboxClose}
+            >
+              <img
+                src={imageSrc}
+                alt={imageAlt ?? placeholderLabel}
+                className="productScreenSectionLightboxImage"
+              />
+            </div>
+          </div>,
+          document.body,
+        )
+      : null;
 
   return (
     <section className="productScreenSection">
@@ -256,48 +421,20 @@ export function ProductScreenSection({
               onClick={openFullscreen}
               aria-label={`Open fullscreen image: ${imageAlt ?? placeholderLabel}`}
             >
-              <div className="productScreenSectionImageFrame">
+              <div
+                className={`productScreenSectionImageFrame ${
+                  isLightboxVisible ? 'productScreenSectionImageFrameHidden' : ''
+                }`}
+              >
                 <img
-                  ref={imageRef}
+                  ref={inlineImageRef}
                   src={imageSrc}
                   alt={imageAlt ?? placeholderLabel}
                   className="productScreenSectionImage"
                 />
               </div>
             </button>
-            {lightboxPhase !== 'closed' ? (
-              <div
-                className={`productScreenSectionLightbox ${
-                  lightboxPhase === 'opening' || lightboxPhase === 'open'
-                    ? 'productScreenSectionLightboxVisible'
-                    : ''
-                }`}
-                role="dialog"
-                aria-modal="true"
-                aria-label={imageAlt ?? placeholderLabel}
-                onClick={closeFullscreen}
-              >
-                <button
-                  type="button"
-                  className="productScreenSectionLightboxClose"
-                  onClick={closeFullscreen}
-                  aria-label="Close fullscreen image"
-                >
-                  Close
-                </button>
-                <div
-                  className="productScreenSectionLightboxImageShell"
-                  style={getRectStyle(lightboxRect)}
-                  onClick={stopLightboxClose}
-                >
-                  <img
-                    src={imageSrc}
-                    alt={imageAlt ?? placeholderLabel}
-                    className="productScreenSectionLightboxImage"
-                  />
-                </div>
-              </div>
-            ) : null}
+            {lightbox}
           </>
         ) : (
           <div className="productScreenSectionPlaceholder" aria-label={placeholderLabel} role="img">
