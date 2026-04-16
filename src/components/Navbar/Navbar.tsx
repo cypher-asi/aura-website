@@ -1,5 +1,6 @@
 'use client';
 
+import { usePathname } from 'next/navigation';
 import { useCallback, useEffect, useState } from 'react';
 import { Menu, X } from 'lucide-react';
 
@@ -21,16 +22,32 @@ const NAV_LINKS = ALL_NAV_LINKS.filter(({ flag }) => flag);
 const MOBILE_NAV_ID = 'site-mobile-nav';
 
 export function Navbar(): React.ReactNode {
+  const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [pendingMobileMenuClosePath, setPendingMobileMenuClosePath] = useState<string | null>(null);
   const [hasScrolled, setHasScrolled] = useState(false);
 
   const closeMobileMenu = useCallback((): void => {
+    setPendingMobileMenuClosePath(null);
     setMobileMenuOpen(false);
   }, []);
 
+  const closeMobileMenuAfterNavigation = useCallback((href: string): void => {
+    setPendingMobileMenuClosePath(href);
+  }, []);
+
   const toggleMobileMenu = useCallback((): void => {
+    setPendingMobileMenuClosePath(null);
     setMobileMenuOpen((current) => !current);
   }, []);
+
+  useEffect(() => {
+    if (!pendingMobileMenuClosePath || pathname !== pendingMobileMenuClosePath) {
+      return;
+    }
+
+    closeMobileMenu();
+  }, [closeMobileMenu, pathname, pendingMobileMenuClosePath]);
 
   useEffect(() => {
     if (!mobileMenuOpen) {
@@ -40,7 +57,7 @@ export function Navbar(): React.ReactNode {
 
     const handleKeyDown = (event: KeyboardEvent): void => {
       if (event.key === 'Escape') {
-        setMobileMenuOpen(false);
+        closeMobileMenu();
       }
     };
 
@@ -51,7 +68,7 @@ export function Navbar(): React.ReactNode {
       document.body.classList.remove('mobileMenuOpen');
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, [mobileMenuOpen]);
+  }, [closeMobileMenu, mobileMenuOpen]);
 
   useEffect(() => {
     const updateScrollState = (): void => {
@@ -121,7 +138,7 @@ export function Navbar(): React.ReactNode {
         </button>
         <div className="mobileNavPanelInner">
           {NAV_LINKS.map(({ label, href }) => (
-            <AppLink key={label} href={href} className="mobileNavLink" onClick={closeMobileMenu}>
+            <AppLink key={label} href={href} className="mobileNavLink" onClick={() => closeMobileMenuAfterNavigation(href)}>
               {label}
             </AppLink>
           ))}

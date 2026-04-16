@@ -1,6 +1,5 @@
 import { Navbar } from '@/components/Navbar/Navbar';
 import { PageHero } from '@/components/PageHero/PageHero';
-import { ScrollClassToggle } from '@/components/ScrollClassToggle/ScrollClassToggle';
 import { SocialLinks } from '@/components/SocialLinks/SocialLinks';
 import { Taskbar } from '@/components/Taskbar/Taskbar';
 
@@ -11,9 +10,8 @@ export const metadata = {
 export default function OrbitPage(): React.ReactNode {
   return (
     <>
-      <ScrollClassToggle className="productPageScrollEnabled" />
       <Navbar />
-      <main>
+      <main className="scrollPageMain">
         <PageHero
           label="Products"
           headline={

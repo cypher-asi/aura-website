@@ -2,7 +2,6 @@ import { Navbar } from '@/components/Navbar/Navbar';
 import { ProductCallToAction } from '@/components/ProductCallToAction/ProductCallToAction';
 import { PageHero } from '@/components/PageHero/PageHero';
 import { ProductScreenSection } from '@/components/ProductScreenSection/ProductScreenSection';
-import { ScrollClassToggle } from '@/components/ScrollClassToggle/ScrollClassToggle';
 import { StandardFooter } from '@/components/StandardFooter/StandardFooter';
 
 export const metadata = {
@@ -12,9 +11,8 @@ export const metadata = {
 export default function ProductPage(): React.ReactNode {
   return (
     <>
-      <ScrollClassToggle className="productPageScrollEnabled" />
       <Navbar />
-      <main>
+      <main className="scrollPageMain">
         <PageHero
           headline="A modern agent orchestration system"
           description="Deploy, manage, and scale autonomous agents with a unified operating layer built for production workloads."

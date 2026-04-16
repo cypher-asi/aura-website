@@ -1,11 +1,8 @@
 import { Navbar } from '@/components/Navbar/Navbar';
-import { ScrollClassToggle } from '@/components/ScrollClassToggle/ScrollClassToggle';
 import { SocialLinks } from '@/components/SocialLinks/SocialLinks';
 import { Taskbar } from '@/components/Taskbar/Taskbar';
 import { getChangelogEntries } from '@/server/changelog';
 import './ChangelogPage.css';
-
-const GITHUB_COMMIT_URL_BASE = 'https://github.com/cypher-asi/aura-os/commit/';
 
 function formatDateLabel(value: string): string {
   const parsed = new Date(`${value}T12:00:00Z`);
@@ -16,8 +13,8 @@ function formatDateLabel(value: string): string {
   }).format(parsed);
 }
 
-function getCommitUrl(sha: string): string {
-  return `${GITHUB_COMMIT_URL_BASE}${sha}`;
+function getCommitUrl(repo: string, sha: string): string {
+  return `https://github.com/cypher-asi/${repo}/commit/${sha}`;
 }
 
 export const metadata = {
@@ -30,9 +27,8 @@ export default async function ChangelogPage(): Promise<React.ReactNode> {
 
   return (
     <>
-      <ScrollClassToggle className="changelogPageScrollEnabled" />
       <Navbar />
-      <main>
+      <main className="scrollPageMain">
         <section className="changelogPage">
           <div className="changelogPageShell">
             {entries.length > 0 ? (
@@ -67,24 +63,23 @@ export default async function ChangelogPage(): Promise<React.ReactNode> {
                               <ul className="changelogSectionList">
                                 {section.items.map((item) => (
                                   <li key={`${section.title}-${item.text}`} className="changelogSectionItem">
-                                    <span>
-                                      {item.text}
-                                      {item.commit_shas.length > 0 && ' '}
-                                      {item.commit_shas.map((sha, index) => (
-                                        <span key={sha}>
-                                          {index === 0 ? '(' : ', '}
+                                    <span>{item.text}</span>
+                                    {item.commit_shas.length > 0 && (
+                                      <span className="changelogSectionShas">
+                                        {item.commit_shas.map((sha) => (
                                           <a
-                                            href={getCommitUrl(sha)}
+                                            key={sha}
+                                            href={getCommitUrl(entry.repo, sha)}
                                             target="_blank"
                                             rel="noopener noreferrer"
-                                            className="changelogSectionCommitLink"
+                                            className="changelogCommitLink"
+                                            aria-label={`View commit ${sha.slice(0, 7)} on GitHub`}
                                           >
-                                            {sha.slice(0, 7)}
+                                            <code>{sha.slice(0, 7)}</code>
                                           </a>
-                                          {index === item.commit_shas.length - 1 ? ')' : ''}
-                                        </span>
-                                      ))}
-                                    </span>
+                                        ))}
+                                      </span>
+                                    )}
                                   </li>
                                 ))}
                               </ul>

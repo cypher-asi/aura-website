@@ -5,7 +5,6 @@ import { Check } from 'lucide-react';
 
 import { AppLink } from '@/components/AppLink/AppLink';
 import { Navbar } from '@/components/Navbar/Navbar';
-import { ScrollClassToggle } from '@/components/ScrollClassToggle/ScrollClassToggle';
 import { SocialLinks } from '@/components/SocialLinks/SocialLinks';
 import { Taskbar } from '@/components/Taskbar/Taskbar';
 import '../resources/pricing/PricingPage.css';
@@ -82,9 +81,8 @@ export default function PricingPage(): ReactNode {
 
   return (
     <>
-      <ScrollClassToggle className="pricingPageScrollEnabled" />
       <Navbar />
-      <main>
+      <main className="scrollPageMain">
         <section className="pricingPage">
           <div className="pricingPageContent">
             <header className="pricingPageHeader">

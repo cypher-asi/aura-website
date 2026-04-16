@@ -30,6 +30,7 @@ interface ChangelogRendered {
 }
 
 export interface ChangelogEntry {
+  readonly repo: string;
   readonly date: string;
   readonly channel: string;
   readonly version: string | null;

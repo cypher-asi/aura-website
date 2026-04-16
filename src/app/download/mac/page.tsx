@@ -13,7 +13,7 @@ export default function MacDownloadPage(): React.ReactNode {
   return (
     <>
       <Navbar />
-      <main>
+      <main className="scrollPageMain">
         <section className="macDownloadPage">
           <div className="macDownloadContent">
             <span className="macDownloadLabel">Download</span>

@@ -4,7 +4,6 @@ import { getDownloadPath, normalizeDownloadTarget } from '@/config/downloadTarge
 import {
   detectDownloadTargetFromRequest,
   getDirectDownloadRedirectUrl,
-  getDownloadEnvKeys,
   getFallbackDownloadUrlResolved,
 } from '@/server/downloadUrls';
 import { resolveRedirectUrl } from '@/server/redirectUrl';
@@ -13,6 +12,7 @@ export async function GET(request: Request): Promise<Response> {
   const requestUrl = new URL(request.url);
   const explicitTarget = normalizeDownloadTarget(requestUrl.searchParams.get('target'));
   const detectedTarget = explicitTarget ?? detectDownloadTargetFromRequest(request);
+  const downloadPagePath = detectedTarget === 'mac' ? getDownloadPath('mac') : getDownloadPath();
 
   if (detectedTarget === 'mac') {
     return NextResponse.redirect(resolveRedirectUrl(request, getDownloadPath('mac')));
@@ -23,13 +23,7 @@ export async function GET(request: Request): Promise<Response> {
     : await getFallbackDownloadUrlResolved();
 
   if (!destination) {
-    return NextResponse.json(
-      {
-        error: 'Download URL is not configured.',
-        expectedEnv: getDownloadEnvKeys(detectedTarget),
-      },
-      { status: 503 },
-    );
+    return NextResponse.redirect(resolveRedirectUrl(request, downloadPagePath));
   }
 
   return NextResponse.redirect(resolveRedirectUrl(request, destination));

@@ -12,7 +12,7 @@ export default function DownloadPage(): React.ReactNode {
   return (
     <>
       <Navbar />
-      <main>
+      <main className="scrollPageMain">
         <section className="downloadPage">
           <div className="downloadPageContent">
             <h1 className="downloadPageHeadline">Download AURA for every major desktop platform.</h1>
