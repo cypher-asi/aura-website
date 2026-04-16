@@ -44,6 +44,18 @@ interface ChangelogRendered {
   readonly highlights: readonly string[];
   readonly sections?: readonly ChangelogSection[];
   readonly entries?: readonly ChangelogTimelineEntry[];
+  readonly raw_commit_count?: number;
+}
+
+interface ChangelogSourceEntry {
+  readonly repo: string;
+  readonly date: string;
+  readonly channel: string;
+  readonly version: string | null;
+  readonly generatedAt: string;
+  readonly releaseUrl: string | null;
+  readonly rawCommitCount: number;
+  readonly rendered: ChangelogRendered;
 }
 
 export interface ChangelogEntry {
@@ -54,6 +66,7 @@ export interface ChangelogEntry {
   readonly generatedAt: string;
   readonly releaseUrl: string | null;
   readonly rawCommitCount: number;
+  readonly filteredCommitCount: number | null;
   readonly rendered: {
     readonly title: string;
     readonly intro: string;
@@ -91,7 +104,10 @@ function toEntryUrl(indexUrl: string, entryPath: string): string {
   return new URL(entryPath, indexUrl).toString();
 }
 
-function normalizeEntry(entry: ChangelogEntry & { rendered: ChangelogRendered }): ChangelogEntry {
+function normalizeEntry(
+  entry: ChangelogSourceEntry,
+  fallbackFilteredCommitCount?: number,
+): ChangelogEntry {
   const timelineEntries = Array.isArray(entry.rendered.entries) && entry.rendered.entries.length > 0
     ? entry.rendered.entries
     : (entry.rendered.sections || []).map((section, index) => ({
@@ -105,6 +121,7 @@ function normalizeEntry(entry: ChangelogEntry & { rendered: ChangelogRendered })
 
   return {
     ...entry,
+    filteredCommitCount: entry.rendered.raw_commit_count ?? fallbackFilteredCommitCount ?? null,
     rendered: {
       title: entry.rendered.title,
       intro: entry.rendered.intro,
@@ -125,13 +142,14 @@ export async function getChangelogEntries(): Promise<readonly ChangelogEntry[]> 
   const resolved = await Promise.all(
     index.map(async (item) => {
       const url = toEntryUrl(indexUrl, item.path);
-      return fetchJson<ChangelogEntry>(url);
+      const entry = await fetchJson<ChangelogSourceEntry>(url);
+      return entry ? { entry, indexItem: item } : undefined;
     }),
   );
 
   return resolved
-    .filter((entry): entry is ChangelogEntry & { rendered: ChangelogRendered } => Boolean(entry))
-    .map(normalizeEntry)
+    .filter((result): result is { entry: ChangelogSourceEntry; indexItem: ChangelogIndexEntry } => Boolean(result))
+    .map(({ entry, indexItem }) => normalizeEntry(entry, indexItem.entryCount))
     .sort((left, right) => {
       const dateDiff = new Date(right.date).getTime() - new Date(left.date).getTime();
       if (dateDiff !== 0) {

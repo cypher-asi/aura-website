@@ -13,35 +13,8 @@ function formatDateLabel(value: string): string {
   }).format(parsed);
 }
 
-function formatShortDate(value: string): { month: string; day: string; year: string } {
-  const parsed = new Date(`${value}T12:00:00Z`);
-  const parts = new Intl.DateTimeFormat('en-US', {
-    month: 'short',
-    day: 'numeric',
-    year: 'numeric',
-  }).formatToParts(parsed);
-
-  return {
-    month: parts.find((part) => part.type === 'month')?.value.toUpperCase() || '',
-    day: parts.find((part) => part.type === 'day')?.value || '',
-    year: parts.find((part) => part.type === 'year')?.value || '',
-  };
-}
-
 function getCommitUrl(repo: string, sha: string): string {
   return `https://github.com/cypher-asi/${repo}/commit/${sha}`;
-}
-
-function formatTimelineTime(value: string, fallbackLabel: string): string {
-  const parsed = new Date(value);
-  if (Number.isNaN(parsed.getTime())) {
-    return fallbackLabel;
-  }
-
-  return new Intl.DateTimeFormat('en-US', {
-    hour: 'numeric',
-    minute: '2-digit',
-  }).format(parsed);
 }
 
 export const metadata = {
@@ -57,90 +30,64 @@ export default async function ChangelogPage(): Promise<React.ReactNode> {
       <Navbar />
       <main className="scrollPageMain">
         <section className="changelogPage">
-          <div className="changelogPageContent">
-            <header className="changelogHero">
-              <span className="changelogHeroLabel">Changelog</span>
-              <h1 className="changelogHeroHeadline">
-                Daily product updates,
-                <br />
-                <span className="changelogHeroHeadlineMuted">shipped as a living timeline.</span>
-              </h1>
-              <p className="changelogHeroDescription">
-                Every entry is generated from the day&apos;s release commits, diff context, and shipped artifacts so the
-                notes stay closer to what actually changed.
-              </p>
-            </header>
-
+          <div className="changelogPageShell">
             {entries.length > 0 ? (
-              <div className="changelogTimeline" aria-label="Aura changelog timeline">
-                {entries.map((entry) => {
-                  const date = formatShortDate(entry.date);
-                  return (
+              <div className="changelogPageContent">
+                <div className="changelogEntries" aria-label="Aura changelog entries">
+                  {entries.map((entry) => (
                     <article key={`${entry.date}-${entry.version ?? entry.generatedAt}`} className="changelogEntry">
-                      <div className="changelogDateRail">
-                        <div className="changelogDateBadge">
-                          <span className="changelogDateMonth">{date.month}</span>
-                          <span className="changelogDateDay">{date.day}</span>
-                          <span className="changelogDateYear">{date.year}</span>
-                        </div>
+                      <div className="changelogEntryDateColumn">
+                        <p className="changelogEntryDate">{formatDateLabel(entry.date)}</p>
                       </div>
-                      <div className="changelogCard">
-                        <div className="changelogCardHeader">
-                          <div className="changelogCardMeta">
-                            <span className="changelogChannel">{entry.channel}</span>
-                            {entry.version && <span className="changelogVersion">{entry.version}</span>}
-                            <span className="changelogCommitCount">{entry.rawCommitCount} commits</span>
-                          </div>
-                          <div className="changelogCardSubmeta">
-                            <span>{formatDateLabel(entry.date)}</span>
+
+                      <div className="changelogEntryBody">
+                        <header className="changelogEntryHeader">
+                          <h2 className="changelogEntryTitle">{entry.rendered.title}</h2>
+                          <p className="changelogEntryIntro">{entry.rendered.intro}</p>
+                          <div className="changelogEntryMeta">
+                            <span className="changelogMetaItem">{entry.channel}</span>
+                            {entry.version && <span className="changelogMetaItem">{entry.version}</span>}
+                            <span className="changelogMetaItem">{entry.filteredCommitCount ?? entry.rawCommitCount} commits</span>
                             {entry.releaseUrl && (
                               <a href={entry.releaseUrl} target="_blank" rel="noopener noreferrer" className="changelogReleaseLink">
                                 View release
                               </a>
                             )}
                           </div>
-                        </div>
+                        </header>
 
-                        <div className="changelogEntryTimeline">
+                        <div className="changelogSections">
                           {entry.rendered.entries.map((timelineEntry) => (
-                            <section
-                              key={`${entry.date}-${timelineEntry.started_at}-${timelineEntry.title}`}
-                              className="changelogTimelineEntry"
-                            >
-                              <div className="changelogTimelineEntryRail">
-                                <span className="changelogTimelineTime">
-                                  {formatTimelineTime(timelineEntry.started_at, timelineEntry.time_label)}
-                                </span>
-                              </div>
-                              <div className="changelogTimelineEntryCard">
-                                <div className="changelogTimelineEntryHeader">
-                                  <h2 className="changelogTimelineEntryTitle">{timelineEntry.title}</h2>
-                                  <p className="changelogTimelineEntrySummary">{timelineEntry.summary}</p>
-                                </div>
+                            <section key={`${entry.date}-${timelineEntry.started_at}-${timelineEntry.title}`} className="changelogSection">
+                              <h3 className="changelogSectionTitle">{timelineEntry.title}</h3>
+                              {timelineEntry.items.length > 0 ? (
                                 <ul className="changelogSectionList">
                                   {timelineEntry.items.map((item) => (
                                     <li key={`${timelineEntry.title}-${item.text}`} className="changelogSectionItem">
-                                      <span>{item.text}</span>
-                                      {item.commit_shas.length > 0 && (
-                                        <span className="changelogSectionShas">
-                                          {item.commit_shas.map((sha) => (
+                                      <span>
+                                        {item.text}
+                                        {item.commit_shas.length > 0 && ' '}
+                                        {item.commit_shas.map((sha, index) => (
+                                          <span key={sha}>
+                                            {index === 0 ? '(' : ', '}
                                             <a
-                                              key={sha}
                                               href={getCommitUrl(entry.repo, sha)}
                                               target="_blank"
                                               rel="noopener noreferrer"
-                                              className="changelogCommitLink"
-                                              aria-label={`View commit ${sha.slice(0, 7)} on GitHub`}
+                                              className="changelogSectionCommitLink"
                                             >
-                                              <code>{sha.slice(0, 7)}</code>
+                                              {sha.slice(0, 7)}
                                             </a>
-                                          ))}
-                                        </span>
-                                      )}
+                                            {index === item.commit_shas.length - 1 ? ')' : ''}
+                                          </span>
+                                        ))}
+                                      </span>
                                     </li>
                                   ))}
                                 </ul>
-                              </div>
+                              ) : (
+                                <p className="changelogSectionSummary">{timelineEntry.summary}</p>
+                              )}
                             </section>
                           ))}
                         </div>
@@ -156,8 +103,8 @@ export default async function ChangelogPage(): Promise<React.ReactNode> {
                         )}
                       </div>
                     </article>
-                  );
-                })}
+                  ))}
+                </div>
               </div>
             ) : (
               <div className="changelogEmptyState">
