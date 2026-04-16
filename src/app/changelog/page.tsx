@@ -13,21 +13,6 @@ function formatDateLabel(value: string): string {
   }).format(parsed);
 }
 
-function formatShortDate(value: string): { month: string; day: string; year: string } {
-  const parsed = new Date(`${value}T12:00:00Z`);
-  const parts = new Intl.DateTimeFormat('en-US', {
-    month: 'short',
-    day: 'numeric',
-    year: 'numeric',
-  }).formatToParts(parsed);
-
-  return {
-    month: parts.find((part) => part.type === 'month')?.value.toUpperCase() || '',
-    day: parts.find((part) => part.type === 'day')?.value || '',
-    year: parts.find((part) => part.type === 'year')?.value || '',
-  };
-}
-
 function getCommitUrl(repo: string, sha: string): string {
   return `https://github.com/cypher-asi/${repo}/commit/${sha}`;
 }
@@ -61,16 +46,9 @@ export default async function ChangelogPage(): Promise<React.ReactNode> {
             {entries.length > 0 ? (
               <div className="changelogPageContent">
                 <div className="changelogEntries" aria-label="Aura changelog entries">
-                  {entries.map((entry) => {
-                    const date = formatShortDate(entry.date);
-                    return (
+                  {entries.map((entry) => (
                     <article key={`${entry.date}-${entry.version ?? entry.generatedAt}`} className="changelogEntry">
                       <div className="changelogEntryDateColumn">
-                        <div className="changelogDateBadge">
-                          <span className="changelogDateMonth">{date.month}</span>
-                          <span className="changelogDateDay">{date.day}</span>
-                          <span className="changelogDateYear">{date.year}</span>
-                        </div>
                         <p className="changelogEntryDate">{formatDateLabel(entry.date)}</p>
                       </div>
 
@@ -88,12 +66,9 @@ export default async function ChangelogPage(): Promise<React.ReactNode> {
                         <div className="changelogSections">
                           {entry.rendered.entries.map((timelineEntry) => (
                             <section key={`${entry.date}-${timelineEntry.started_at}-${timelineEntry.title}`} className="changelogSection">
-                              <div className="changelogSectionRail">
-                                <span className="changelogSectionTime">
-                                  {formatTimelineTime(timelineEntry.started_at, timelineEntry.time_label)}
-                                </span>
-                                <span className="changelogSectionNode" aria-hidden="true" />
-                              </div>
+                              <span className="changelogSectionTime">
+                                {formatTimelineTime(timelineEntry.started_at, timelineEntry.time_label)}
+                              </span>
                               <div className="changelogSectionContent">
                                 <div className="changelogSectionHeader">
                                   <h3 className="changelogSectionTitle">{timelineEntry.title}</h3>
@@ -142,7 +117,7 @@ export default async function ChangelogPage(): Promise<React.ReactNode> {
                         )}
                       </div>
                     </article>
-                  )})}
+                  ))}
                 </div>
               </div>
             ) : (
