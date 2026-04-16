@@ -17,6 +17,18 @@ function getCommitUrl(repo: string, sha: string): string {
   return `https://github.com/cypher-asi/${repo}/commit/${sha}`;
 }
 
+function formatTimelineTime(value: string, fallbackLabel: string): string {
+  const parsed = new Date(value);
+  if (Number.isNaN(parsed.getTime())) {
+    return fallbackLabel;
+  }
+
+  return new Intl.DateTimeFormat('en-US', {
+    hour: 'numeric',
+    minute: '2-digit',
+  }).format(parsed);
+}
+
 export const metadata = {
   title: 'Changelog',
   description: 'Daily release notes and product updates for Aura.',
@@ -59,7 +71,13 @@ export default async function ChangelogPage(): Promise<React.ReactNode> {
                         <div className="changelogSections">
                           {entry.rendered.entries.map((timelineEntry) => (
                             <section key={`${entry.date}-${timelineEntry.started_at}-${timelineEntry.title}`} className="changelogSection">
-                              <h3 className="changelogSectionTitle">{timelineEntry.title}</h3>
+                              <div className="changelogSectionHeader">
+                                <span className="changelogSectionTime">
+                                  {formatTimelineTime(timelineEntry.started_at, timelineEntry.time_label)}
+                                </span>
+                                <h3 className="changelogSectionTitle">{timelineEntry.title}</h3>
+                              </div>
+                              <p className="changelogSectionSummary">{timelineEntry.summary}</p>
                               {timelineEntry.items.length > 0 ? (
                                 <ul className="changelogSectionList">
                                   {timelineEntry.items.map((item) => (
