@@ -1,4 +1,4 @@
-import { type ReactNode } from 'react';
+import { Suspense, type ReactNode } from 'react';
 import { Inter } from 'next/font/google';
 import { type Metadata, type Viewport } from 'next';
 import { Providers } from './providers';
@@ -42,7 +42,9 @@ export default function RootLayout({ children }: RootLayoutProps): ReactNode {
       </head>
       <body>
         <Providers>
-          <RouteTransitionManager />
+          <Suspense fallback={null}>
+            <RouteTransitionManager />
+          </Suspense>
           {children}
         </Providers>
       </body>
