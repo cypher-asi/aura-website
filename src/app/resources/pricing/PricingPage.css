@@ -12,7 +12,7 @@
 
 .pricingPageContent {
   width: 100%;
-  max-width: 960px;
+  max-width: 1200px;
   margin: auto;
   display: flex;
   flex-direction: column;
@@ -79,12 +79,6 @@
   gap: 14px;
 }
 
-.pricingPlansStack {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
 .pricingPlansLabel {
   margin: 0;
   font-size: 14px;
@@ -94,7 +88,7 @@
 
 .pricingPlansGrid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 8px;
 }
 
@@ -116,46 +110,6 @@
 
 .pricingPlanCardRecommended {
   background: rgba(255, 255, 255, 0.03);
-}
-
-.pricingPlanCardFullWidth {
-  min-height: 0;
-  flex-direction: row;
-  align-items: center;
-  gap: 24px;
-  padding: 18px 20px;
-}
-
-.pricingPlanCardFullWidth .pricingPlanBody {
-  flex: 1;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  gap: 24px;
-}
-
-.pricingPlanCardFullWidth .pricingPlanHeading {
-  min-width: 180px;
-}
-
-.pricingPlanIncludesBlock {
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 10px;
-}
-
-.pricingPlanFeatureListInline {
-  flex: 1;
-  flex-direction: row;
-  flex-wrap: wrap;
-  gap: 12px 24px;
-}
-
-.pricingPlanCardFullWidth .pricingPlanButton {
-  align-self: center;
-  flex-shrink: 0;
 }
 
 .pricingPlanBody {
@@ -282,15 +236,6 @@
   .pricingPlansGrid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
-
-  .pricingPlanCardFullWidth {
-    align-items: flex-start;
-  }
-
-  .pricingPlanCardFullWidth .pricingPlanBody {
-    flex-direction: column;
-    align-items: flex-start;
-  }
 }
 
 @media (max-width: 768px) {
@@ -312,28 +257,6 @@
 
   .pricingPlanCard {
     min-height: 0;
-  }
-
-  .pricingPlanCardFullWidth {
-    flex-direction: column;
-    align-items: flex-start;
-    padding: 18px 20px 16px;
-  }
-
-  .pricingPlanCardFullWidth .pricingPlanBody {
-    width: 100%;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 16px;
-  }
-
-  .pricingPlanIncludesBlock {
-    width: 100%;
-  }
-
-  .pricingPlanFeatureListInline {
-    flex-direction: column;
-    gap: 10px;
   }
 }
 

@@ -27,7 +27,7 @@ const PLANS: readonly Plan[] = [
     name: 'Mortal',
     monthlyPrice: 'Free',
     yearlyPrice: 'Free',
-    description: 'Includes:',
+    description: 'Get started for free:',
     features: [
       'No credit card required',
       'Local open source models',
@@ -77,7 +77,6 @@ const PLANS: readonly Plan[] = [
 export default function PricingPage(): ReactNode {
   const [billingCycle, setBillingCycle] = useState<BillingCycle>('monthly');
   const cadenceLabel = billingCycle === 'monthly' ? '/mo.' : '/yr.';
-  const [freePlan, ...paidPlans] = PLANS;
 
   return (
     <>
@@ -111,77 +110,46 @@ export default function PricingPage(): ReactNode {
 
             <div className="pricingPlansSection">
               <p className="pricingPlansLabel">Individual Plans</p>
-              <div className="pricingPlansStack">
-                <article className="pricingPlanCard pricingPlanCardFullWidth">
-                  <div className="pricingPlanBody">
-                    <div className="pricingPlanHeading">
-                      <div className="pricingPlanTitleRow">
-                        <h2 className="pricingPlanTitle">{freePlan.name}</h2>
-                      </div>
-                      <p className="pricingPlanPrice">
-                        <span className="pricingPlanPriceValue">{freePlan.monthlyPrice}</span>
-                      </p>
-                    </div>
+              <div className="pricingPlansGrid">
+                {PLANS.map((plan) => {
+                  const price = billingCycle === 'monthly' ? plan.monthlyPrice : plan.yearlyPrice;
 
-                    <div className="pricingPlanIncludesBlock">
-                      <p className="pricingPlanDescription">{freePlan.description}</p>
-                      <ul className="pricingPlanFeatureList pricingPlanFeatureListInline">
-                        {freePlan.features.map((feature, index) => (
-                          <li key={`${freePlan.name}-${index}`} className="pricingPlanFeature">
-                            <Check size={15} strokeWidth={2} className="pricingPlanFeatureIcon" />
-                            <span>{feature}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  </div>
-
-                  <AppLink href={freePlan.href} className="pricingPlanButton">
-                    {freePlan.ctaLabel}
-                  </AppLink>
-                </article>
-
-                <div className="pricingPlansGrid">
-                  {paidPlans.map((plan) => {
-                    const price = billingCycle === 'monthly' ? plan.monthlyPrice : plan.yearlyPrice;
-
-                    return (
-                      <article
-                        key={plan.name}
-                        className={`pricingPlanCard${plan.recommended ? ' pricingPlanCardRecommended' : ''}`}
-                      >
-                        <div className="pricingPlanBody">
-                          <div className="pricingPlanHeading">
-                            <div className="pricingPlanTitleRow">
-                              <h2 className="pricingPlanTitle">{plan.name}</h2>
-                            </div>
-                            <p className="pricingPlanPrice">
-                              <span className="pricingPlanPriceValue">{price}</span>
-                              {price !== 'Free' && <span className="pricingPlanPriceCadence">{cadenceLabel}</span>}
-                            </p>
-                            <p className="pricingPlanDescription">{plan.description}</p>
+                  return (
+                    <article
+                      key={plan.name}
+                      className={`pricingPlanCard${plan.recommended ? ' pricingPlanCardRecommended' : ''}`}
+                    >
+                      <div className="pricingPlanBody">
+                        <div className="pricingPlanHeading">
+                          <div className="pricingPlanTitleRow">
+                            <h2 className="pricingPlanTitle">{plan.name}</h2>
                           </div>
-
-                          <ul className="pricingPlanFeatureList">
-                            {plan.features.map((feature, index) => (
-                              <li key={`${plan.name}-${index}`} className="pricingPlanFeature">
-                                <Check size={15} strokeWidth={2} className="pricingPlanFeatureIcon" />
-                                <span>{feature}</span>
-                              </li>
-                            ))}
-                          </ul>
+                          <p className="pricingPlanPrice">
+                            <span className="pricingPlanPriceValue">{price}</span>
+                            {price !== 'Free' && <span className="pricingPlanPriceCadence">{cadenceLabel}</span>}
+                          </p>
+                          <p className="pricingPlanDescription">{plan.description}</p>
                         </div>
 
-                        <AppLink
-                          href={plan.href}
-                          className={`pricingPlanButton${plan.recommended ? ' pricingPlanButtonPrimary' : ''}`}
-                        >
-                          {plan.ctaLabel}
-                        </AppLink>
-                      </article>
-                    );
-                  })}
-                </div>
+                        <ul className="pricingPlanFeatureList">
+                          {plan.features.map((feature, index) => (
+                            <li key={`${plan.name}-${index}`} className="pricingPlanFeature">
+                              <Check size={15} strokeWidth={2} className="pricingPlanFeatureIcon" />
+                              <span>{feature}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+
+                      <AppLink
+                        href={plan.href}
+                        className={`pricingPlanButton${plan.recommended ? ' pricingPlanButtonPrimary' : ''}`}
+                      >
+                        {plan.ctaLabel}
+                      </AppLink>
+                    </article>
+                  );
+                })}
               </div>
             </div>
           </div>
