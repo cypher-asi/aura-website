@@ -56,13 +56,10 @@ export default async function ChangelogPage(): Promise<React.ReactNode> {
                         <header className="changelogEntryMetaRow">
                           <div className="changelogEntryMeta">
                             <span className="changelogMetaItem">{entry.channel}</span>
-                            {entry.version && <span className="changelogMetaItem">{entry.version}</span>}
+                            <span className="changelogMetaItem">
+                              {entry.rendered.entries.length} update{entry.rendered.entries.length === 1 ? '' : 's'}
+                            </span>
                             <span className="changelogMetaItem">{entry.filteredCommitCount ?? entry.rawCommitCount} commits</span>
-                            {entry.releaseUrl && (
-                              <a href={entry.releaseUrl} target="_blank" rel="noopener noreferrer" className="changelogReleaseLink">
-                                View release
-                              </a>
-                            )}
                           </div>
                         </header>
 
@@ -76,7 +73,7 @@ export default async function ChangelogPage(): Promise<React.ReactNode> {
                               </div>
                               <div className="changelogSectionContent">
                                 <div className="changelogSectionHeader">
-                                <h3 className="changelogSectionTitle">{timelineEntry.title}</h3>
+                                  <h3 className="changelogSectionTitle">{timelineEntry.title}</h3>
                                 </div>
                                 <p className="changelogSectionSummary">{timelineEntry.summary}</p>
                                 {timelineEntry.items.length > 0 ? (
