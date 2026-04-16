@@ -53,9 +53,7 @@ export default async function ChangelogPage(): Promise<React.ReactNode> {
                       </div>
 
                       <div className="changelogEntryBody">
-                        <header className="changelogEntryHeader">
-                          <h2 className="changelogEntryTitle">{entry.rendered.title}</h2>
-                          <p className="changelogEntryIntro">{entry.rendered.intro}</p>
+                        <header className="changelogEntryMetaRow">
                           <div className="changelogEntryMeta">
                             <span className="changelogMetaItem">{entry.channel}</span>
                             {entry.version && <span className="changelogMetaItem">{entry.version}</span>}
@@ -71,41 +69,43 @@ export default async function ChangelogPage(): Promise<React.ReactNode> {
                         <div className="changelogSections">
                           {entry.rendered.entries.map((timelineEntry) => (
                             <section key={`${entry.date}-${timelineEntry.started_at}-${timelineEntry.title}`} className="changelogSection">
-                              <div className="changelogSectionHeader">
+                              <div className="changelogSectionRail">
                                 <span className="changelogSectionTime">
                                   {formatTimelineTime(timelineEntry.started_at, timelineEntry.time_label)}
                                 </span>
-                                <h3 className="changelogSectionTitle">{timelineEntry.title}</h3>
                               </div>
-                              <p className="changelogSectionSummary">{timelineEntry.summary}</p>
-                              {timelineEntry.items.length > 0 ? (
-                                <ul className="changelogSectionList">
-                                  {timelineEntry.items.map((item) => (
-                                    <li key={`${timelineEntry.title}-${item.text}`} className="changelogSectionItem">
-                                      <span>
-                                        {item.text}
-                                        {item.commit_shas.length > 0 && ' '}
-                                        {item.commit_shas.map((sha, index) => (
-                                          <span key={sha}>
-                                            {index === 0 ? '(' : ', '}
-                                            <a
-                                              href={getCommitUrl(entry.repo, sha)}
-                                              target="_blank"
-                                              rel="noopener noreferrer"
-                                              className="changelogSectionCommitLink"
-                                            >
-                                              {sha.slice(0, 7)}
-                                            </a>
-                                            {index === item.commit_shas.length - 1 ? ')' : ''}
-                                          </span>
-                                        ))}
-                                      </span>
-                                    </li>
-                                  ))}
-                                </ul>
-                              ) : (
+                              <div className="changelogSectionContent">
+                                <div className="changelogSectionHeader">
+                                <h3 className="changelogSectionTitle">{timelineEntry.title}</h3>
+                                </div>
                                 <p className="changelogSectionSummary">{timelineEntry.summary}</p>
-                              )}
+                                {timelineEntry.items.length > 0 ? (
+                                  <ul className="changelogSectionList">
+                                    {timelineEntry.items.map((item) => (
+                                      <li key={`${timelineEntry.title}-${item.text}`} className="changelogSectionItem">
+                                        <span>
+                                          {item.text}
+                                          {item.commit_shas.length > 0 && ' '}
+                                          {item.commit_shas.map((sha, index) => (
+                                            <span key={sha}>
+                                              {index === 0 ? '(' : ', '}
+                                              <a
+                                                href={getCommitUrl(entry.repo, sha)}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="changelogSectionCommitLink"
+                                              >
+                                                {sha.slice(0, 7)}
+                                              </a>
+                                              {index === item.commit_shas.length - 1 ? ')' : ''}
+                                            </span>
+                                          ))}
+                                        </span>
+                                      </li>
+                                    ))}
+                                  </ul>
+                                ) : null}
+                              </div>
                             </section>
                           ))}
                         </div>
