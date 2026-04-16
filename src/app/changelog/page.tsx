@@ -32,6 +32,18 @@ function getCommitUrl(repo: string, sha: string): string {
   return `https://github.com/cypher-asi/${repo}/commit/${sha}`;
 }
 
+function formatTimelineTime(value: string, fallbackLabel: string): string {
+  const parsed = new Date(value);
+  if (Number.isNaN(parsed.getTime())) {
+    return fallbackLabel;
+  }
+
+  return new Intl.DateTimeFormat('en-US', {
+    hour: 'numeric',
+    minute: '2-digit',
+  }).format(parsed);
+}
+
 export const metadata = {
   title: 'AURA Changelog',
   description: 'Daily release notes and product updates for Aura.',
@@ -79,8 +91,6 @@ export default async function ChangelogPage(): Promise<React.ReactNode> {
                             {entry.version && <span className="changelogVersion">{entry.version}</span>}
                             <span className="changelogCommitCount">{entry.rawCommitCount} commits</span>
                           </div>
-                          <h2 className="changelogCardTitle">{entry.rendered.title}</h2>
-                          <p className="changelogCardIntro">{entry.rendered.intro}</p>
                           <div className="changelogCardSubmeta">
                             <span>{formatDateLabel(entry.date)}</span>
                             {entry.releaseUrl && (
@@ -91,33 +101,46 @@ export default async function ChangelogPage(): Promise<React.ReactNode> {
                           </div>
                         </div>
 
-                        <div className="changelogSections">
-                          {entry.rendered.sections.map((section) => (
-                            <section key={section.title} className="changelogSection">
-                              <h3 className="changelogSectionTitle">{section.title}</h3>
-                              <ul className="changelogSectionList">
-                                {section.items.map((item) => (
-                                  <li key={`${section.title}-${item.text}`} className="changelogSectionItem">
-                                    <span>{item.text}</span>
-                                    {item.commit_shas.length > 0 && (
-                                      <span className="changelogSectionShas">
-                                        {item.commit_shas.map((sha) => (
-                                          <a
-                                            key={sha}
-                                            href={getCommitUrl(entry.repo, sha)}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className="changelogCommitLink"
-                                            aria-label={`View commit ${sha.slice(0, 7)} on GitHub`}
-                                          >
-                                            <code>{sha.slice(0, 7)}</code>
-                                          </a>
-                                        ))}
-                                      </span>
-                                    )}
-                                  </li>
-                                ))}
-                              </ul>
+                        <div className="changelogEntryTimeline">
+                          {entry.rendered.entries.map((timelineEntry) => (
+                            <section
+                              key={`${entry.date}-${timelineEntry.started_at}-${timelineEntry.title}`}
+                              className="changelogTimelineEntry"
+                            >
+                              <div className="changelogTimelineEntryRail">
+                                <span className="changelogTimelineTime">
+                                  {formatTimelineTime(timelineEntry.started_at, timelineEntry.time_label)}
+                                </span>
+                              </div>
+                              <div className="changelogTimelineEntryCard">
+                                <div className="changelogTimelineEntryHeader">
+                                  <h2 className="changelogTimelineEntryTitle">{timelineEntry.title}</h2>
+                                  <p className="changelogTimelineEntrySummary">{timelineEntry.summary}</p>
+                                </div>
+                                <ul className="changelogSectionList">
+                                  {timelineEntry.items.map((item) => (
+                                    <li key={`${timelineEntry.title}-${item.text}`} className="changelogSectionItem">
+                                      <span>{item.text}</span>
+                                      {item.commit_shas.length > 0 && (
+                                        <span className="changelogSectionShas">
+                                          {item.commit_shas.map((sha) => (
+                                            <a
+                                              key={sha}
+                                              href={getCommitUrl(entry.repo, sha)}
+                                              target="_blank"
+                                              rel="noopener noreferrer"
+                                              className="changelogCommitLink"
+                                              aria-label={`View commit ${sha.slice(0, 7)} on GitHub`}
+                                            >
+                                              <code>{sha.slice(0, 7)}</code>
+                                            </a>
+                                          ))}
+                                        </span>
+                                      )}
+                                    </li>
+                                  ))}
+                                </ul>
+                              </div>
                             </section>
                           ))}
                         </div>

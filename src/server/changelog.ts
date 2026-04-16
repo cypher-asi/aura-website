@@ -4,6 +4,7 @@ interface ChangelogIndexEntry {
   readonly version: string | null;
   readonly title: string;
   readonly intro: string;
+  readonly entryCount?: number;
   readonly highlights: readonly string[];
   readonly rawCommitCount: number;
   readonly generatedAt: string;
@@ -22,11 +23,27 @@ interface ChangelogSection {
   readonly items: readonly ChangelogSectionItem[];
 }
 
+interface ChangelogTimelineItem {
+  readonly text: string;
+  readonly commit_shas: readonly string[];
+  readonly confidence: 'high' | 'medium';
+}
+
+interface ChangelogTimelineEntry {
+  readonly time_label: string;
+  readonly started_at: string;
+  readonly ended_at: string;
+  readonly title: string;
+  readonly summary: string;
+  readonly items: readonly ChangelogTimelineItem[];
+}
+
 interface ChangelogRendered {
   readonly title: string;
   readonly intro: string;
   readonly highlights: readonly string[];
-  readonly sections: readonly ChangelogSection[];
+  readonly sections?: readonly ChangelogSection[];
+  readonly entries?: readonly ChangelogTimelineEntry[];
 }
 
 export interface ChangelogEntry {
@@ -37,7 +54,12 @@ export interface ChangelogEntry {
   readonly generatedAt: string;
   readonly releaseUrl: string | null;
   readonly rawCommitCount: number;
-  readonly rendered: ChangelogRendered;
+  readonly rendered: {
+    readonly title: string;
+    readonly intro: string;
+    readonly highlights: readonly string[];
+    readonly entries: readonly ChangelogTimelineEntry[];
+  };
 }
 
 const DEFAULT_CHANGELOG_INDEX_URL = 'https://cypher-asi.github.io/aura-os/changelog/nightly/index.json';
@@ -69,6 +91,29 @@ function toEntryUrl(indexUrl: string, entryPath: string): string {
   return new URL(entryPath, indexUrl).toString();
 }
 
+function normalizeEntry(entry: ChangelogEntry & { rendered: ChangelogRendered }): ChangelogEntry {
+  const timelineEntries = Array.isArray(entry.rendered.entries) && entry.rendered.entries.length > 0
+    ? entry.rendered.entries
+    : (entry.rendered.sections || []).map((section, index) => ({
+        time_label: index === 0 ? 'All day' : `Update ${index + 1}`,
+        started_at: entry.generatedAt,
+        ended_at: entry.generatedAt,
+        title: section.title,
+        summary: section.items[0]?.text || entry.rendered.intro,
+        items: section.items,
+      }));
+
+  return {
+    ...entry,
+    rendered: {
+      title: entry.rendered.title,
+      intro: entry.rendered.intro,
+      highlights: entry.rendered.highlights,
+      entries: timelineEntries,
+    },
+  };
+}
+
 export async function getChangelogEntries(): Promise<readonly ChangelogEntry[]> {
   const indexUrl = getChangelogIndexUrl();
   const index = await fetchJson<readonly ChangelogIndexEntry[]>(indexUrl);
@@ -84,5 +129,7 @@ export async function getChangelogEntries(): Promise<readonly ChangelogEntry[]> 
     }),
   );
 
-  return resolved.filter((entry): entry is ChangelogEntry => Boolean(entry));
+  return resolved
+    .filter((entry): entry is ChangelogEntry & { rendered: ChangelogRendered } => Boolean(entry))
+    .map(normalizeEntry);
 }
