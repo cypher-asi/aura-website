@@ -108,7 +108,7 @@ function normalizeEntry(
   entry: ChangelogSourceEntry,
   fallbackFilteredCommitCount?: number,
 ): ChangelogEntry {
-  const timelineEntries = Array.isArray(entry.rendered.entries) && entry.rendered.entries.length > 0
+  const timelineEntries = (Array.isArray(entry.rendered.entries) && entry.rendered.entries.length > 0
     ? entry.rendered.entries
     : (entry.rendered.sections || []).map((section, index) => ({
         time_label: index === 0 ? 'All day' : `Update ${index + 1}`,
@@ -117,7 +117,19 @@ function normalizeEntry(
         title: section.title,
         summary: section.items[0]?.text || entry.rendered.intro,
         items: section.items,
-      }));
+      })))
+    .map((timelineEntry, index) => ({ timelineEntry, index }))
+    .sort((left, right) => {
+      const leftTime = new Date(left.timelineEntry.started_at).getTime();
+      const rightTime = new Date(right.timelineEntry.started_at).getTime();
+
+      if (Number.isNaN(leftTime) || Number.isNaN(rightTime) || leftTime === rightTime) {
+        return left.index - right.index;
+      }
+
+      return rightTime - leftTime;
+    })
+    .map(({ timelineEntry }) => timelineEntry);
 
   return {
     ...entry,
