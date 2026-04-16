@@ -2,6 +2,7 @@ import { Navbar } from '@/components/Navbar/Navbar';
 import { SocialLinks } from '@/components/SocialLinks/SocialLinks';
 import { Taskbar } from '@/components/Taskbar/Taskbar';
 import { getChangelogEntries } from '@/server/changelog';
+import { ChangelogStickyDate } from './ChangelogStickyDate';
 import './ChangelogPage.css';
 
 function formatDateLabel(value: string): string {
@@ -46,8 +47,18 @@ export default async function ChangelogPage(): Promise<React.ReactNode> {
             {entries.length > 0 ? (
               <div className="changelogPageContent">
                 <div className="changelogEntries" aria-label="Aura changelog entries">
-                  {entries.map((entry) => (
-                    <article key={`${entry.date}-${entry.version ?? entry.generatedAt}`} className="changelogEntry">
+                  <ChangelogStickyDate
+                    items={entries.map((entry) => ({
+                      id: `${entry.date}-${entry.version ?? entry.generatedAt}`,
+                      label: formatDateLabel(entry.date),
+                    }))}
+                  />
+                  {entries.map((entry, index) => (
+                    <article
+                      key={`${entry.date}-${entry.version ?? entry.generatedAt}`}
+                      className="changelogEntry"
+                      data-changelog-entry-index={index}
+                    >
                       <div className="changelogEntryDateColumn">
                         <p className="changelogEntryDate">{formatDateLabel(entry.date)}</p>
                       </div>

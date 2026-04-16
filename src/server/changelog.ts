@@ -143,6 +143,40 @@ function normalizeEntry(
   };
 }
 
+function shiftIsoDate(iso: string, daysBack: number): string {
+  const parsed = new Date(`${iso}T12:00:00Z`);
+  if (Number.isNaN(parsed.getTime())) return iso;
+  parsed.setUTCDate(parsed.getUTCDate() - daysBack);
+  return parsed.toISOString().slice(0, 10);
+}
+
+function shiftTimestamp(iso: string, daysBack: number): string {
+  const parsed = new Date(iso);
+  if (Number.isNaN(parsed.getTime())) return iso;
+  parsed.setUTCDate(parsed.getUTCDate() - daysBack);
+  return parsed.toISOString();
+}
+
+function buildDevMockEntries(seed: ChangelogEntry): readonly ChangelogEntry[] {
+  const copies: ChangelogEntry[] = [seed];
+  for (let i = 1; i <= 5; i += 1) {
+    copies.push({
+      ...seed,
+      date: shiftIsoDate(seed.date, i),
+      generatedAt: shiftTimestamp(seed.generatedAt, i),
+      rendered: {
+        ...seed.rendered,
+        entries: seed.rendered.entries.map((entry) => ({
+          ...entry,
+          started_at: shiftTimestamp(entry.started_at, i),
+          ended_at: shiftTimestamp(entry.ended_at, i),
+        })),
+      },
+    });
+  }
+  return copies;
+}
+
 export async function getChangelogEntries(): Promise<readonly ChangelogEntry[]> {
   const indexUrl = getChangelogIndexUrl();
   const index = await fetchJson<readonly ChangelogIndexEntry[]>(indexUrl);
@@ -159,7 +193,7 @@ export async function getChangelogEntries(): Promise<readonly ChangelogEntry[]> 
     }),
   );
 
-  return resolved
+  const entries = resolved
     .filter((result): result is { entry: ChangelogSourceEntry; indexItem: ChangelogIndexEntry } => Boolean(result))
     .map(({ entry, indexItem }) => normalizeEntry(entry, indexItem.entryCount))
     .sort((left, right) => {
@@ -170,4 +204,10 @@ export async function getChangelogEntries(): Promise<readonly ChangelogEntry[]> 
 
       return new Date(right.generatedAt).getTime() - new Date(left.generatedAt).getTime();
     });
+
+  if (process.env.NODE_ENV !== 'production' && entries.length > 0 && entries.length < 3) {
+    return buildDevMockEntries(entries[0]);
+  }
+
+  return entries;
 }
