@@ -104,6 +104,21 @@ function toEntryUrl(indexUrl: string, entryPath: string): string {
   return new URL(entryPath, indexUrl).toString();
 }
 
+const PST_DATE_FORMATTER = new Intl.DateTimeFormat('en-CA', {
+  timeZone: 'America/Los_Angeles',
+  year: 'numeric',
+  month: '2-digit',
+  day: '2-digit',
+});
+
+function toPstCalendarDate(iso: string | undefined, fallback: string): string {
+  if (!iso) return fallback;
+  const parsed = new Date(iso);
+  if (Number.isNaN(parsed.getTime())) return fallback;
+  // en-CA formats as YYYY-MM-DD, matching the existing ISO date shape.
+  return PST_DATE_FORMATTER.format(parsed);
+}
+
 function normalizeEntry(
   entry: ChangelogSourceEntry,
   fallbackFilteredCommitCount?: number,
@@ -131,8 +146,18 @@ function normalizeEntry(
     })
     .map(({ timelineEntry }) => timelineEntry);
 
+  const earliestStartedAt = timelineEntries.reduce<string | undefined>((acc, timelineEntry) => {
+    const candidate = timelineEntry.started_at;
+    if (!candidate) return acc;
+    if (!acc) return candidate;
+    return new Date(candidate).getTime() < new Date(acc).getTime() ? candidate : acc;
+  }, undefined);
+
+  const pstDate = toPstCalendarDate(entry.generatedAt ?? earliestStartedAt, entry.date);
+
   return {
     ...entry,
+    date: pstDate,
     filteredCommitCount: entry.rendered.raw_commit_count ?? fallbackFilteredCommitCount ?? null,
     rendered: {
       title: entry.rendered.title,
