@@ -14,7 +14,7 @@
   content: '';
   position: absolute;
   inset: 0;
-  background: rgba(var(--color-bg-rgb, 9, 9, 11), 0.7);
+  background: rgba(var(--color-bg-rgb, 9, 9, 11), 0.55);
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
@@ -26,11 +26,29 @@
   z-index: -1;
 }
 
-.navbarScrolled::before {
+.navbar::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to right,
+    rgba(var(--color-bg-rgb, 9, 9, 11), 1) 0%,
+    rgba(var(--color-bg-rgb, 9, 9, 11), 1) 20%,
+    rgba(var(--color-bg-rgb, 9, 9, 11), 0) 50%
+  );
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--transition-normal, 150ms ease);
+  z-index: -1;
+}
+
+.navbarScrolled::before,
+.navbarScrolled::after {
   opacity: 1;
 }
 
-.navbarMenuOpen::before {
+.navbarMenuOpen::before,
+.navbarMenuOpen::after {
   opacity: 0;
 }
 
@@ -89,6 +107,14 @@
 
 .navLink:hover {
   color: var(--color-text-primary);
+}
+
+.navLinkActive {
+  color: #ffffff;
+}
+
+.navLinkActive:hover {
+  color: #ffffff;
 }
 
 .navActions {
@@ -253,6 +279,10 @@ body.mobileMenuOpen {
 
   .mobileNavLink:hover {
     background: var(--color-overlay-light);
+  }
+
+  .mobileNavLinkActive {
+    color: #ffffff;
   }
 
   body.mobileMenuOpen .navbar .logoLink,
