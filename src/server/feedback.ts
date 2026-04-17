@@ -235,7 +235,7 @@ export async function listFeedback(
       COALESCE(v.upvotes, 0) - COALESCE(v.downvotes, 0) AS vote_score,
       COALESCE(cc.comment_count, 0) AS comment_count,
       p.display_name AS author_name,
-      p.avatar_url   AS author_avatar
+      p.avatar       AS author_avatar
     FROM activity_events ae
     LEFT JOIN profiles p ON p.id = ae.profile_id
     LEFT JOIN LATERAL (
