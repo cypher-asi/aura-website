@@ -26,10 +26,22 @@
 }
 
 .changelogEntry {
+  position: relative;
   display: flex;
   align-items: flex-start;
   gap: 48px;
   scroll-margin-top: 110px;
+}
+
+.changelogEntry + .changelogEntry::before {
+  content: '';
+  position: absolute;
+  top: -32px;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.08);
+  pointer-events: none;
 }
 
 .changelogEntryDateColumn {
@@ -359,6 +371,10 @@
   .changelogEntry {
     flex-direction: column;
     gap: 16px;
+  }
+
+  .changelogEntry + .changelogEntry::before {
+    top: -24px;
   }
 
   .changelogEntryDateColumn {

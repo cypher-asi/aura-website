@@ -68,7 +68,7 @@ export default async function ChangelogPage(): Promise<React.ReactNode> {
                           <div className="changelogEntryMeta">
                             <span className="changelogMetaItem">{entry.channel}</span>
                             <span className="changelogMetaItem">
-                              {entry.rendered.entries.length} update{entry.rendered.entries.length === 1 ? '' : 's'}
+                              {entry.rendered.entries.length} release{entry.rendered.entries.length === 1 ? '' : 's'}
                             </span>
                             <span className="changelogMetaItem">{entry.filteredCommitCount ?? entry.rawCommitCount} commits</span>
                           </div>
