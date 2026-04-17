@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 
-import { normalizeMacDownloadVariant } from '@/config/downloadTargets';
-import { getMacDownloadEnvKeys, getMacDownloadRedirectUrl } from '@/server/downloadUrls';
+import { getDownloadPath, normalizeMacDownloadVariant } from '@/config/downloadTargets';
+import { getMacDownloadRedirectUrl } from '@/server/downloadUrls';
 import { resolveRedirectUrl } from '@/server/redirectUrl';
 
 interface MacDownloadVariantRouteContext {
@@ -28,14 +28,7 @@ export async function GET(request: Request, context: MacDownloadVariantRouteCont
   const destination = await getMacDownloadRedirectUrl(normalizedVariant);
 
   if (!destination) {
-    return NextResponse.json(
-      {
-        error: 'Download URL is not configured.',
-        requestedVariant: normalizedVariant,
-        expectedEnv: getMacDownloadEnvKeys(normalizedVariant),
-      },
-      { status: 503 },
-    );
+    return NextResponse.redirect(resolveRedirectUrl(request, getDownloadPath('mac')));
   }
 
   return NextResponse.redirect(resolveRedirectUrl(request, destination));
