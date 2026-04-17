@@ -14,6 +14,7 @@ import './Navbar.css';
 const ALL_NAV_LINKS = [
   { label: 'Product', href: '/product', flag: ENABLE_PRODUCT_PAGE },
   { label: 'Changelog', href: '/changelog', flag: true },
+  { label: 'Feedback', href: '/feedback', flag: true },
   { label: 'Pricing', href: '/pricing', flag: true },
 ] as const;
 
