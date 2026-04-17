@@ -18,9 +18,11 @@
 }
 
 .changelogEntry {
-  display: flex;
+  display: grid;
+  grid-template-columns: 160px minmax(0, 600px);
+  column-gap: 48px;
+  row-gap: 40px;
   align-items: baseline;
-  gap: 48px;
 }
 
 .changelogEntry + .changelogEntry {
@@ -29,17 +31,16 @@
 }
 
 .changelogEntryDate {
-  flex: 0 0 160px;
   font-size: 13px;
   font-weight: 500;
   letter-spacing: 0.02em;
   color: rgba(255, 255, 255, 0.72);
+  user-select: none;
+  -webkit-user-select: none;
 }
 
-.changelogEntryBody {
-  flex: 1 1 auto;
+.changelogEntryHead {
   min-width: 0;
-  max-width: 600px;
   display: flex;
   flex-direction: column;
   gap: 32px;
@@ -56,13 +57,8 @@
   color: rgba(255, 255, 255, 0.32);
 }
 
-.changelogSections {
-  display: flex;
-  flex-direction: column;
-  gap: 40px;
-}
-
 .changelogSection {
+  min-width: 0;
   display: flex;
   flex-direction: column;
   gap: 14px;
@@ -203,20 +199,17 @@
   }
 
   .changelogEntry {
-    flex-direction: column;
-    gap: 16px;
+    grid-template-columns: 1fr;
+    column-gap: 0;
+    row-gap: 16px;
   }
 
   .changelogEntry + .changelogEntry {
     padding-top: 48px;
   }
 
-  .changelogEntryDate {
-    flex: 0 0 auto;
-  }
-
-  .changelogSections {
-    gap: 32px;
+  .changelogSectionTime {
+    margin-top: 16px;
   }
 }
 

@@ -1,3 +1,4 @@
+import { Fragment } from 'react';
 import { Navbar } from '@/components/Navbar/Navbar';
 import { SocialLinks } from '@/components/SocialLinks/SocialLinks';
 import { Taskbar } from '@/components/Taskbar/Taskbar';
@@ -60,7 +61,7 @@ export default async function ChangelogPage(): Promise<React.ReactNode> {
                         {formatDateLabel(entry.date)}
                       </time>
 
-                      <div className="changelogEntryBody">
+                      <div className="changelogEntryHead">
                         <div className="changelogEntryMeta">
                           <span>{entry.channel}</span>
                           <span>
@@ -82,47 +83,44 @@ export default async function ChangelogPage(): Promise<React.ReactNode> {
                             </ol>
                           </section>
                         )}
-
-                        <div className="changelogSections">
-                          {entry.rendered.entries.map((timelineEntry, timelineIndex) => (
-                            <section
-                              key={`${entryKey}-${timelineIndex}-${timelineEntry.started_at}`}
-                              className="changelogSection"
-                            >
-                              <span className="changelogSectionTime">
-                                {formatTimelineTime(timelineEntry.started_at, timelineEntry.time_label)}
-                              </span>
-                              <h3 className="changelogSectionTitle">{timelineEntry.title}</h3>
-                              <p className="changelogSectionSummary">{timelineEntry.summary}</p>
-                              {timelineEntry.items.length > 0 && (
-                                <ul className="changelogSectionList">
-                                  {timelineEntry.items.map((item, itemIndex) => (
-                                    <li key={`${timelineEntry.title}-${itemIndex}`} className="changelogSectionItem">
-                                      <p>{item.text}</p>
-                                      {item.commit_shas.length > 0 && (
-                                        <div className="changelogSectionSources">
-                                          <span className="changelogSectionSourcesLabel">Sources</span>
-                                          {item.commit_shas.map((sha) => (
-                                            <a
-                                              key={sha}
-                                              href={getCommitUrl(entry.repo, sha)}
-                                              target="_blank"
-                                              rel="noopener noreferrer"
-                                              className="changelogSectionCommitLink"
-                                            >
-                                              {sha.slice(0, 7)}
-                                            </a>
-                                          ))}
-                                        </div>
-                                      )}
-                                    </li>
-                                  ))}
-                                </ul>
-                              )}
-                            </section>
-                          ))}
-                        </div>
                       </div>
+
+                      {entry.rendered.entries.map((timelineEntry, timelineIndex) => (
+                        <Fragment key={`${entryKey}-${timelineIndex}-${timelineEntry.started_at}`}>
+                          <span className="changelogSectionTime">
+                            {formatTimelineTime(timelineEntry.started_at, timelineEntry.time_label)}
+                          </span>
+                          <section className="changelogSection">
+                            <h3 className="changelogSectionTitle">{timelineEntry.title}</h3>
+                            <p className="changelogSectionSummary">{timelineEntry.summary}</p>
+                            {timelineEntry.items.length > 0 && (
+                              <ul className="changelogSectionList">
+                                {timelineEntry.items.map((item, itemIndex) => (
+                                  <li key={`${timelineEntry.title}-${itemIndex}`} className="changelogSectionItem">
+                                    <p>{item.text}</p>
+                                    {item.commit_shas.length > 0 && (
+                                      <div className="changelogSectionSources">
+                                        <span className="changelogSectionSourcesLabel">Sources</span>
+                                        {item.commit_shas.map((sha) => (
+                                          <a
+                                            key={sha}
+                                            href={getCommitUrl(entry.repo, sha)}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="changelogSectionCommitLink"
+                                          >
+                                            {sha.slice(0, 7)}
+                                          </a>
+                                        ))}
+                                      </div>
+                                    )}
+                                  </li>
+                                ))}
+                              </ul>
+                            )}
+                          </section>
+                        </Fragment>
+                      ))}
                     </article>
                   );
                 })}
