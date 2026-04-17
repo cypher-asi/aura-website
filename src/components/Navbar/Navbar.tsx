@@ -6,19 +6,16 @@ import { Menu, X } from 'lucide-react';
 
 import { AppLink } from '@/components/AppLink/AppLink';
 import { getDownloadPath } from '@/config/downloadTargets';
-import { ENABLE_PRODUCT_PAGE } from '@/config/features';
 import { ButtonFUI } from '../ButtonFUI/ButtonFUI';
 import { SocialLinks } from '../SocialLinks/SocialLinks';
 import './Navbar.css';
 
-const ALL_NAV_LINKS = [
-  { label: 'Product', href: '/product', flag: ENABLE_PRODUCT_PAGE },
-  { label: 'Changelog', href: '/changelog', flag: true },
-  { label: 'Feedback', href: '/feedback', flag: true },
-  { label: 'Pricing', href: '/pricing', flag: true },
+const NAV_LINKS = [
+  { label: 'Product', href: '/product' },
+  { label: 'Changelog', href: '/changelog' },
+  { label: 'Feedback', href: '/feedback' },
+  { label: 'Pricing', href: '/pricing' },
 ] as const;
-
-const NAV_LINKS = ALL_NAV_LINKS.filter(({ flag }) => flag);
 
 const MOBILE_NAV_ID = 'site-mobile-nav';
 
@@ -99,11 +96,20 @@ export function Navbar(): React.ReactNode {
           <img src="/aura-logo.png" alt="AURA" className="titleLogo" />
         </AppLink>
         <ul className="navLinks">
-          {NAV_LINKS.map(({ label, href }) => (
-            <li key={label}>
-              <AppLink href={href} className="navLink">{label}</AppLink>
-            </li>
-          ))}
+          {NAV_LINKS.map(({ label, href }) => {
+            const isActive = pathname === href || pathname.startsWith(`${href}/`);
+            return (
+              <li key={label}>
+                <AppLink
+                  href={href}
+                  className={`navLink ${isActive ? 'navLinkActive' : ''}`}
+                  aria-current={isActive ? 'page' : undefined}
+                >
+                  {label}
+                </AppLink>
+              </li>
+            );
+          })}
         </ul>
         <div className="navActions">
           <SocialLinks variant="navbar" />
@@ -138,11 +144,20 @@ export function Navbar(): React.ReactNode {
           <X size={20} strokeWidth={1.8} />
         </button>
         <div className="mobileNavPanelInner">
-          {NAV_LINKS.map(({ label, href }) => (
-            <AppLink key={label} href={href} className="mobileNavLink" onClick={() => closeMobileMenuAfterNavigation(href)}>
-              {label}
-            </AppLink>
-          ))}
+          {NAV_LINKS.map(({ label, href }) => {
+            const isActive = pathname === href || pathname.startsWith(`${href}/`);
+            return (
+              <AppLink
+                key={label}
+                href={href}
+                className={`mobileNavLink ${isActive ? 'mobileNavLinkActive' : ''}`}
+                aria-current={isActive ? 'page' : undefined}
+                onClick={() => closeMobileMenuAfterNavigation(href)}
+              >
+                {label}
+              </AppLink>
+            );
+          })}
         </div>
       </div>
     </header>

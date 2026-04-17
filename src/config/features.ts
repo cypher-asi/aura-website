@@ -9,4 +9,3 @@ function parsePublicFlag(value: string | undefined, defaultValue = false): boole
 }
 
 export const ENABLE_MAIN_IMAGE = parsePublicFlag(process.env.NEXT_PUBLIC_ENABLE_MAIN_IMAGE, false);
-export const ENABLE_PRODUCT_PAGE = parsePublicFlag(process.env.NEXT_PUBLIC_ENABLE_PRODUCT_PAGE, false);
