@@ -75,8 +75,8 @@ export default async function ChangelogPage(): Promise<React.ReactNode> {
                         </header>
 
                         <div className="changelogSections">
-                          {entry.rendered.entries.map((timelineEntry) => (
-                            <section key={`${entry.date}-${timelineEntry.started_at}-${timelineEntry.title}`} className="changelogSection">
+                          {entry.rendered.entries.map((timelineEntry, timelineIndex) => (
+                            <section key={`${entry.date}-${timelineIndex}-${timelineEntry.started_at}-${timelineEntry.title}`} className="changelogSection">
                               <span className="changelogSectionTime">
                                 {formatTimelineTime(timelineEntry.started_at, timelineEntry.time_label)}
                               </span>
@@ -87,8 +87,8 @@ export default async function ChangelogPage(): Promise<React.ReactNode> {
                                 <p className="changelogSectionSummary">{timelineEntry.summary}</p>
                                 {timelineEntry.items.length > 0 ? (
                                   <ul className="changelogSectionList">
-                                    {timelineEntry.items.map((item) => (
-                                      <li key={`${timelineEntry.title}-${item.text}`} className="changelogSectionItem">
+                                    {timelineEntry.items.map((item, itemIndex) => (
+                                      <li key={`${timelineEntry.title}-${itemIndex}-${item.text}`} className="changelogSectionItem">
                                         <p className="changelogSectionItemText">{item.text}</p>
                                         {item.commit_shas.length > 0 && (
                                           <div className="changelogSectionSources">
@@ -119,7 +119,7 @@ export default async function ChangelogPage(): Promise<React.ReactNode> {
 
                         {entry.rendered.highlights.length > 0 && (
                           <div className="changelogHighlights">
-                            {entry.rendered.highlights.map((highlight) => (
+                            {Array.from(new Set(entry.rendered.highlights)).map((highlight) => (
                               <span key={highlight} className="changelogHighlightPill">
                                 {highlight}
                               </span>
