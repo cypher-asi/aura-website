@@ -52,13 +52,6 @@ export default async function FeedbackPage({
       <main className="scrollPageMain">
         <section className="feedbackPage">
           <div className="feedbackPageShell">
-            <header className="feedbackPageHeader">
-              <h1 className="feedbackPageTitle">Feedback</h1>
-              <p className="feedbackPageSubtitle">
-                Feature requests, bugs, and ideas from the AURA community.
-              </p>
-            </header>
-
             <FeedbackFilters
               sort={sort}
               category={category}
