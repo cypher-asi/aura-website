@@ -98,12 +98,14 @@
 }
 
 .feedbackFilterRow {
+  position: relative;
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 6px 8px 6px 24px;
+  padding: 7px 12px 7px 22px;
   background: none;
   border: none;
+  border-radius: 8px;
   cursor: pointer;
   color: rgba(255, 255, 255, 0.68);
   font-size: 13px;
@@ -111,14 +113,32 @@
   transition: background var(--transition-fast), color var(--transition-fast);
 }
 
+.feedbackFilterRow::before {
+  content: '';
+  position: absolute;
+  left: 8px;
+  top: 50%;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--color-accent, #01f4cb);
+  transform: translateY(-50%) scale(0);
+  transition: transform var(--transition-fast);
+}
+
 .feedbackFilterRow:hover {
-  background: rgba(255, 255, 255, 0.04);
+  background: rgba(255, 255, 255, 0.06);
   color: #fff;
 }
 
-.feedbackFilterRowActive {
-  background: rgba(255, 255, 255, 0.08);
+.feedbackFilterRowActive,
+.feedbackFilterRowActive:hover {
+  background: #1a1a1d;
   color: #fff;
+}
+
+.feedbackFilterRowActive::before {
+  transform: translateY(-50%) scale(1);
 }
 
 .feedbackFilterRowIcon {
