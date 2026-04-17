@@ -25,6 +25,65 @@
   padding-right: 8px;
 }
 
+.feedbackSidebarBody {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* Mobile filter toggle — hidden on desktop */
+.feedbackMobileToggle {
+  display: none;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 10px 14px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  text-align: left;
+  transition: background var(--transition-fast), border-color var(--transition-fast);
+}
+
+.feedbackMobileToggle:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.16);
+}
+
+.feedbackMobileToggleLabel {
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.feedbackMobileToggleSummary {
+  flex: 1;
+  min-width: 0;
+  color: rgba(255, 255, 255, 0.56);
+  font-size: 12px;
+  font-weight: 400;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.feedbackMobileToggleChevron {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255, 255, 255, 0.56);
+  transition: transform var(--transition-fast);
+  flex-shrink: 0;
+  margin-left: auto;
+}
+
+.feedbackMobileToggleChevronOpen {
+  transform: rotate(180deg);
+}
+
 .feedbackFolder {
   display: flex;
   flex-direction: column;
@@ -190,6 +249,12 @@
   white-space: nowrap;
 }
 
+.feedbackCardCategoryGroup {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
 .feedbackCardHeaderSpacer {
   flex: 1;
 }
@@ -267,12 +332,27 @@
 @media (max-width: 900px) {
   .feedbackPageShell {
     grid-template-columns: 1fr;
-    gap: 32px;
+    gap: 16px;
   }
 
   .feedbackSidebar {
     position: static;
     top: auto;
+    padding-right: 0;
+    gap: 0;
+  }
+
+  .feedbackMobileToggle {
+    display: flex;
+  }
+
+  .feedbackSidebarBody {
+    display: none;
+    padding: 8px 4px 4px;
+  }
+
+  .feedbackSidebarOpen .feedbackSidebarBody {
+    display: flex;
   }
 }
 
@@ -280,10 +360,41 @@
   .feedbackPage {
     padding: 88px 20px 0;
   }
+
+  .feedbackCard {
+    gap: 12px;
+    padding: 14px 0;
+  }
+
+  .feedbackCardVotes {
+    min-width: 28px;
+  }
+
+  .feedbackCardHeader {
+    gap: 6px;
+    font-size: 11px;
+  }
+
+  .feedbackCardAuthor {
+    font-size: 12px;
+  }
+
+  .feedbackCardTitle {
+    font-size: 15px;
+  }
+
+  .feedbackCardStatus {
+    font-size: 10px;
+    padding: 1px 6px;
+  }
 }
 
 @media (max-width: 480px) {
   .feedbackPage {
-    padding: 76px 16px 0;
+    padding: 76px 14px 0;
+  }
+
+  .feedbackCardCategoryGroup {
+    display: none;
   }
 }

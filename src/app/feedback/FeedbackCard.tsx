@@ -50,10 +50,12 @@ export function FeedbackCard({ entry }: FeedbackCardProps): ReactNode {
             &middot;
           </span>
           <span className="feedbackCardTime">{timeAgo(entry.createdAt)}</span>
-          <span className="feedbackCardDot" aria-hidden>
-            &middot;
+          <span className="feedbackCardCategoryGroup">
+            <span className="feedbackCardDot" aria-hidden>
+              &middot;
+            </span>
+            <span className="feedbackCardCategory">{category}</span>
           </span>
-          <span className="feedbackCardCategory">{category}</span>
           <span className="feedbackCardHeaderSpacer" />
           <span
             className="feedbackCardStatus"

@@ -1,14 +1,16 @@
 'use client';
 
-import { useCallback, useState, type ReactNode } from 'react';
+import { useCallback, useMemo, useState, type ReactNode } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import {
   CheckCircle2,
+  ChevronDown,
   ChevronRight,
   CircleDashed,
   CircleDot,
   Clock,
   Eye,
+  Filter,
   Flame,
   Globe,
   HelpCircle,
@@ -25,13 +27,16 @@ import {
 } from 'lucide-react';
 
 import {
+  CATEGORY_LABELS,
   FEEDBACK_ALL_CATEGORY_OPTION,
   FEEDBACK_ALL_STATUS_OPTION,
   FEEDBACK_CATEGORY_FILTERS,
   FEEDBACK_SORT_FILTERS,
   FEEDBACK_STATUS_FILTERS,
+  STATUS_LABELS,
   type FeedbackFilterOption,
 } from './feedback-constants';
+import type { FeedbackCategory, FeedbackStatus } from '@/server/feedback';
 
 const ICONS: Record<string, LucideIcon> = {
   Clock,
@@ -141,6 +146,7 @@ export function FeedbackFilters({
     type: true,
     status: true,
   });
+  const [mobileOpen, setMobileOpen] = useState(false);
 
   const toggle = useCallback((id: SectionId) => {
     setExpanded((prev) => ({ ...prev, [id]: !prev[id] }));
@@ -162,8 +168,45 @@ export function FeedbackFilters({
     [pathname, router, searchParams],
   );
 
+  const summary = useMemo(() => {
+    const parts: string[] = [];
+    const sortLabel = FEEDBACK_SORT_FILTERS.find((s) => s.id === sort)?.label;
+    if (sortLabel) parts.push(sortLabel);
+    if (category) {
+      parts.push(CATEGORY_LABELS[category as FeedbackCategory] ?? category);
+    }
+    if (status) {
+      parts.push(STATUS_LABELS[status as FeedbackStatus] ?? status);
+    }
+    return parts.join(' · ');
+  }, [sort, category, status]);
+
   return (
-    <aside className="feedbackSidebar" aria-label="Feedback filters">
+    <aside
+      className={`feedbackSidebar ${mobileOpen ? 'feedbackSidebarOpen' : ''}`}
+      aria-label="Feedback filters"
+    >
+      <button
+        type="button"
+        className="feedbackMobileToggle"
+        aria-expanded={mobileOpen}
+        aria-controls="feedback-filters-body"
+        onClick={() => setMobileOpen((v) => !v)}
+      >
+        <Filter size={14} strokeWidth={1.75} />
+        <span className="feedbackMobileToggleLabel">Filters</span>
+        {summary ? (
+          <span className="feedbackMobileToggleSummary">{summary}</span>
+        ) : null}
+        <span
+          className={`feedbackMobileToggleChevron ${mobileOpen ? 'feedbackMobileToggleChevronOpen' : ''}`}
+          aria-hidden
+        >
+          <ChevronDown size={14} strokeWidth={1.75} />
+        </span>
+      </button>
+
+      <div id="feedback-filters-body" className="feedbackSidebarBody">
       <FolderSection
         label="Trending"
         expanded={expanded.trending}
@@ -218,6 +261,7 @@ export function FeedbackFilters({
           />
         ))}
       </FolderSection>
+      </div>
     </aside>
   );
 }
