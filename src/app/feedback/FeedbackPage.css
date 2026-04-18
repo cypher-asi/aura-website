@@ -158,6 +158,7 @@
 .feedbackFilterRowActive:hover {
   background: #1a1a1d;
   color: #fff;
+  border-radius: 3px;
 }
 
 .feedbackFilterRowIcon {
