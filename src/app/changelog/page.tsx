@@ -4,6 +4,8 @@ import { Taskbar } from '@/components/Taskbar/Taskbar';
 import { getChangelogEntries } from '@/server/changelog';
 import './ChangelogPage.css';
 
+const CHANGELOG_TIME_ZONE = 'America/Los_Angeles';
+
 function formatDateLabel(value: string): string {
   const parsed = new Date(`${value}T12:00:00Z`);
   return new Intl.DateTimeFormat('en-US', {
@@ -19,13 +21,21 @@ function formatTimelineTime(value: string, fallbackLabel: string): string {
     return fallbackLabel;
   }
 
-  const formatted = new Intl.DateTimeFormat('en-US', {
-    hour: 'numeric',
-    minute: '2-digit',
-    timeZone: 'America/Los_Angeles',
-  }).format(parsed);
-
-  return `${formatted} PST`;
+  try {
+    return new Intl.DateTimeFormat('en-US', {
+      timeZone: CHANGELOG_TIME_ZONE,
+      hour: 'numeric',
+      minute: '2-digit',
+      timeZoneName: 'shortGeneric',
+    }).format(parsed);
+  } catch {
+    return new Intl.DateTimeFormat('en-US', {
+      timeZone: CHANGELOG_TIME_ZONE,
+      hour: 'numeric',
+      minute: '2-digit',
+      timeZoneName: 'short',
+    }).format(parsed);
+  }
 }
 
 function getCommitUrl(repo: string, sha: string): string {
