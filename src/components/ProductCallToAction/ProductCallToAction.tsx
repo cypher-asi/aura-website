@@ -13,6 +13,16 @@ export function ProductCallToAction({
   return (
     <section className="productCtaSection" aria-label="Product call to action">
       <div className="productCtaPanel">
+        <video
+          className="productCtaVideo"
+          autoPlay
+          loop
+          muted
+          playsInline
+          aria-hidden="true"
+        >
+          <source src="/AURA_visual_loop.mp4" type="video/mp4" />
+        </video>
         <AppLink href={href} className="productCtaButton">
           {label}
         </AppLink>
