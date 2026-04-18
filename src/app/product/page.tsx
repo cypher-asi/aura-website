@@ -1,4 +1,10 @@
 import { ChangelogPreview } from '@/components/ChangelogPreview/ChangelogPreview';
+import {
+  CodeIcon,
+  FeaturePanel,
+  LockIcon,
+  ShieldIcon,
+} from '@/components/FeaturePanel/FeaturePanel';
 import { Navbar } from '@/components/Navbar/Navbar';
 import { ProductCallToAction } from '@/components/ProductCallToAction/ProductCallToAction';
 import { PageHero } from '@/components/PageHero/PageHero';
@@ -16,7 +22,7 @@ export default async function ProductPage(): Promise<React.ReactNode> {
       <main className="scrollPageMain">
         <PageHero
           headline="The Open Intelligence Network"
-          description="AURA enables you to deploy, train and hire agents to build fully autonomous companies."
+          description="AURA enables you to train, hire and deploy agents to build fully autonomous products and companies."
           preview={null}
         />
         <ProductScreenSection
@@ -49,11 +55,29 @@ export default async function ProductPage(): Promise<React.ReactNode> {
           imageSrc="/product-screens/aura-os-workspace.png"
           imageAlt="AURA OS workspace showing a chat panel, agent list, and terminal"
         />
-        <ProductScreenSection
-          headline="Private. Secure. Open Source."
-          description="Secure your intellectual property and knowledge without giving it away to the primary model companies."
-          centered
-          showMedia={false}
+        <FeaturePanel
+          label="PRIVACY"
+          headline="Private by Design."
+          features={[
+            {
+              icon: <LockIcon />,
+              title: 'Private',
+              description:
+                'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+            },
+            {
+              icon: <ShieldIcon />,
+              title: 'Secure',
+              description:
+                'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+            },
+            {
+              icon: <CodeIcon />,
+              title: 'Open Source',
+              description:
+                'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+            },
+          ]}
         />
         <ChangelogPreview />
         <ProductCallToAction href="/download" label="DOWNLOAD" />
