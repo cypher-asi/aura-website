@@ -56,15 +56,13 @@ export async function ChangelogPreview({
                 href={ctaHref}
                 className="changelogPreviewCard"
               >
-                <div className="changelogPreviewCardHead">
-                  {entry.version ? (
-                    <span className="changelogPreviewVersion">{entry.version}</span>
-                  ) : null}
-                  <time className="changelogPreviewDate" dateTime={entry.date}>
-                    {formatCardDate(entry.date)}
-                  </time>
-                </div>
+                <time className="changelogPreviewDate" dateTime={entry.date}>
+                  {formatCardDate(entry.date)}
+                </time>
                 <p className="changelogPreviewTitle">{title}</p>
+                {entry.version ? (
+                  <span className="changelogPreviewVersion">{entry.version}</span>
+                ) : null}
               </AppLink>
             );
           })}

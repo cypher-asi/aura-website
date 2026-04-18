@@ -26,6 +26,7 @@
 .changelogPreviewCard {
   display: flex;
   flex-direction: column;
+  align-items: flex-start;
   gap: 12px;
   min-height: 140px;
   padding: 20px;
@@ -45,16 +46,10 @@
   transform: translateY(-1px);
 }
 
-.changelogPreviewCardHead {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  flex-wrap: wrap;
-}
-
 .changelogPreviewVersion {
   display: inline-flex;
   align-items: center;
+  margin-top: auto;
   padding: 1px 8px;
   border: 1px solid rgba(255, 255, 255, 0.22);
   border-radius: 999px;
@@ -88,7 +83,7 @@
   align-items: center;
   gap: 6px;
   margin-top: 20px;
-  color: #ff6b3d;
+  color: rgba(255, 255, 255, 0.52);
   font-size: 14px;
   font-weight: 400;
   text-decoration: none;
@@ -96,7 +91,7 @@
 }
 
 .changelogPreviewCta:hover {
-  color: #ff855f;
+  color: rgba(255, 255, 255, 0.82);
 }
 
 .changelogPreviewCta span {
