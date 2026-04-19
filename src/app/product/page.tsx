@@ -56,7 +56,7 @@ export default async function ProductPage(): Promise<React.ReactNode> {
           imageAlt="AURA OS workspace showing a chat panel, agent list, and terminal"
         />
         <FeaturePanel
-          label="PRIVACY"
+          label="SOVEREIGN"
           headline="Private by Design."
           features={[
             {
