@@ -26,6 +26,22 @@
   color: #111;
   overflow: hidden;
   isolation: isolate;
+  -webkit-user-select: text;
+  user-select: text;
+}
+
+.featurePanelInner ::selection {
+  background: rgba(17, 17, 17, 0.18);
+  color: inherit;
+}
+
+.featurePanelLabel,
+.featurePanelHeadline,
+.featurePanelItemTitle,
+.featurePanelItemDesc {
+  -webkit-user-select: text;
+  user-select: text;
+  cursor: text;
 }
 
 .featurePanelLabel {
