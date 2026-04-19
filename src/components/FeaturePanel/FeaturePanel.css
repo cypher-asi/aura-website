@@ -16,7 +16,7 @@
   min-height: 440px;
   margin: 0 auto;
   padding: clamp(40px, 6vw, 72px) clamp(32px, 5vw, 64px);
-  border-radius: 24px;
+  border-radius: 0;
   background-color: #efeae2;
   background-image: repeating-linear-gradient(
     135deg,
@@ -148,7 +148,6 @@
 
   .featurePanelInner {
     padding: 36px 28px;
-    border-radius: 20px;
   }
 }
 
@@ -159,7 +158,6 @@
 
   .featurePanelInner {
     padding: 28px 22px;
-    border-radius: 16px;
   }
 
   .featurePanelHeadline {
