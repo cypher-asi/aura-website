@@ -38,7 +38,7 @@ export default async function ProductPage(): Promise<React.ReactNode> {
           imageAlt="AURA OS workspace showing a chat panel, agent list, and terminal"
         />
         <ProductScreenSection
-          headline="Command swarms of powerful agents from your palm."
+          headline="Command swarms of powerful agents from anywhere."
           placeholderLabel="AURA OS workspace overview"
           imageSrc="/product-screens/aura-os-workspace.png"
           imageAlt="AURA OS workspace showing a chat panel, agent list, and terminal"
