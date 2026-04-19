@@ -63,19 +63,19 @@ export default async function ProductPage(): Promise<React.ReactNode> {
               icon: <LockIcon />,
               title: 'Private',
               description:
-                'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+                'AURA does not view or train on your personal or corporate data. Data sent to frontier model providers is not directly identifiable, or you can use open source models.',
             },
             {
               icon: <ShieldIcon />,
               title: 'Secure',
               description:
-                'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+                'The AURA harness and kernel is built from the ground up with security, verification and policy enforcement as first class citizens.',
             },
             {
               icon: <CodeIcon />,
               title: 'Open Source',
               description:
-                'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+                'AURA is 100% open source under the MIT license. Fork it at anytime with zero vendor lock-in.',
             },
           ]}
         />
