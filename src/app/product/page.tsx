@@ -63,7 +63,7 @@ export default async function ProductPage(): Promise<React.ReactNode> {
               icon: <LockIcon />,
               title: 'Private',
               description:
-                'AURA does not view or train on your personal or corporate data. Data sent to frontier model providers is not directly identifiable, or you can use open source models.',
+                'AURA does not view or train on your personal or corporate data. Data sent to frontier model providers is not directly identifiable.',
             },
             {
               icon: <ShieldIcon />,
