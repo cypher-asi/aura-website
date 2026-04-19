@@ -4,7 +4,7 @@ import { Navbar } from '@/components/Navbar/Navbar';
 import { SocialLinks } from '@/components/SocialLinks/SocialLinks';
 import { Taskbar } from '@/components/Taskbar/Taskbar';
 import {
-  hasDatabaseUrl,
+  hasNetworkUrl,
   listFeedback,
   normalizeCategory,
   normalizeSort,
@@ -44,7 +44,7 @@ export default async function FeedbackPage({
   const status = normalizeStatus(firstParam(resolved, 'status'));
 
   const entries = await listFeedback({ sort, category, status });
-  const databaseConfigured = hasDatabaseUrl();
+  const networkConfigured = hasNetworkUrl();
 
   return (
     <>
@@ -67,7 +67,7 @@ export default async function FeedbackPage({
                 </div>
               ) : (
                 <div className="feedbackEmptyState">
-                  {databaseConfigured ? (
+                  {networkConfigured ? (
                     <>
                       <h2>No feedback yet.</h2>
                       <p>
@@ -78,8 +78,9 @@ export default async function FeedbackPage({
                     <>
                       <h2>Feedback unavailable.</h2>
                       <p>
-                        Set <code>DATABASE_URL</code> to the aura-network
-                        Postgres instance to load feedback.
+                        Set <code>AURA_NETWORK_URL</code> (e.g.{' '}
+                        <code>https://network.aura.ai</code>) to load
+                        feedback from the aura-network service.
                       </p>
                     </>
                   )}

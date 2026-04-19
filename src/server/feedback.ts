@@ -1,4 +1,8 @@
-import { Pool, type QueryResultRow } from 'pg';
+// Thin HTTP client against aura-network's public feedback endpoint. The
+// browser never talks to this module — it's invoked from the /roadmap
+// React Server Component at request time. We do the fetch here (instead of
+// querying Postgres directly as we used to) so this marketing site no
+// longer needs database credentials.
 
 export type FeedbackSort =
   | 'latest'
@@ -41,42 +45,6 @@ export interface ListFeedbackParams {
   readonly category?: FeedbackCategory | null;
   readonly status?: FeedbackStatus | null;
   readonly limit?: number;
-}
-
-// Singleton pool keyed off globalThis so Next.js dev hot-reloads don't leak
-// connections.
-type GlobalWithPool = typeof globalThis & {
-  __auraFeedbackPgPool?: Pool;
-};
-
-function getPool(): Pool | null {
-  const url = process.env.DATABASE_URL?.trim();
-  if (!url) {
-    return null;
-  }
-
-  const g = globalThis as GlobalWithPool;
-  if (g.__auraFeedbackPgPool) {
-    return g.__auraFeedbackPgPool;
-  }
-
-  const pool = new Pool({
-    connectionString: url,
-    max: 4,
-    idleTimeoutMillis: 30_000,
-    // Render/Heroku style managed Postgres almost always needs SSL. Local
-    // dev doesn't, but enabling a relaxed SSL mode on connection strings
-    // that request it is safe.
-    ssl: /sslmode=require/i.test(url) ? { rejectUnauthorized: false } : undefined,
-  });
-
-  pool.on('error', (err) => {
-    // eslint-disable-next-line no-console
-    console.error('[feedback] pg pool error', err);
-  });
-
-  g.__auraFeedbackPgPool = pool;
-  return pool;
 }
 
 const VALID_SORTS: readonly FeedbackSort[] = [
@@ -125,153 +93,96 @@ export function normalizeStatus(
     : null;
 }
 
-function orderBySql(sort: FeedbackSort): string {
-  switch (sort) {
-    case 'most_voted':
-      return 'vote_score DESC, ae.created_at DESC';
-    case 'least_voted':
-      return 'vote_score ASC, ae.created_at DESC';
-    case 'popular':
-      return '(COALESCE(v.upvotes,0) - COALESCE(v.downvotes,0) + COALESCE(cc.comment_count,0)) DESC, ae.created_at DESC';
-    case 'trending':
-      return '((COALESCE(v.upvotes,0) - COALESCE(v.downvotes,0) + COALESCE(cc.comment_count,0))::float8 / POW(EXTRACT(EPOCH FROM (NOW() - ae.created_at))/3600 + 2, 1.5)) DESC, ae.created_at DESC';
-    case 'latest':
-    default:
-      return 'ae.created_at DESC';
-  }
+function networkBaseUrl(): string | null {
+  const raw = process.env.AURA_NETWORK_URL?.trim();
+  if (!raw) return null;
+  // Strip a single trailing slash so URL construction is predictable
+  // whether operators set "https://network.aura.ai" or the same with a "/".
+  return raw.replace(/\/+$/, '');
 }
 
-const UUID_RE =
-  /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
-
-function stripUuidDisplayName(name: string | null | undefined): string | null {
-  if (!name) return null;
-  return UUID_RE.test(name) ? null : name;
+// Matches the response shape of GET /api/public/feedback on aura-network.
+// Kept narrow on purpose — anything that isn't part of `FeedbackEntry` is
+// dropped on the floor. If the server ever adds optional fields we want in
+// the UI, extend both sides explicitly.
+interface PublicFeedbackEntryResponse {
+  readonly id: string;
+  readonly title: string;
+  readonly body: string;
+  readonly category: string;
+  readonly status: string;
+  readonly upvotes: number;
+  readonly downvotes: number;
+  readonly voteScore: number;
+  readonly commentCount: number;
+  readonly createdAt: string;
+  readonly authorName: string | null;
+  readonly authorAvatar: string | null;
 }
 
-interface FeedbackRow extends QueryResultRow {
-  id: string;
-  title: string;
-  summary: string | null;
-  metadata: Record<string, unknown> | null;
-  created_at: Date | string;
-  upvotes: string | number | null;
-  downvotes: string | number | null;
-  vote_score: string | number | null;
-  comment_count: string | number | null;
-  author_name: string | null;
-  author_avatar: string | null;
-}
-
-function toNumber(value: string | number | null | undefined): number {
-  if (value == null) return 0;
-  const n = typeof value === 'number' ? value : Number(value);
-  return Number.isFinite(n) ? n : 0;
-}
-
-function metadataString(
-  metadata: Record<string, unknown> | null,
-  key: string,
-): string | undefined {
-  if (!metadata) return undefined;
-  const v = metadata[key];
-  return typeof v === 'string' ? v : undefined;
-}
-
-function rowToEntry(row: FeedbackRow): FeedbackEntry {
-  const metadata = row.metadata ?? null;
-  const category =
-    metadataString(metadata, 'feedbackCategory') ??
-    metadataString(metadata, 'feedback_category') ??
-    'feedback';
-  const status =
-    metadataString(metadata, 'feedbackStatus') ??
-    metadataString(metadata, 'feedback_status') ??
-    'not_started';
-  const body =
-    metadataString(metadata, 'body') ?? row.summary ?? '';
-
-  const createdAt =
-    row.created_at instanceof Date
-      ? row.created_at.toISOString()
-      : String(row.created_at);
-
+function coerceEntry(raw: PublicFeedbackEntryResponse): FeedbackEntry {
   return {
-    id: row.id,
-    title: row.title,
-    body,
-    category: category as FeedbackCategory,
-    status: status as FeedbackStatus,
-    upvotes: toNumber(row.upvotes),
-    downvotes: toNumber(row.downvotes),
-    voteScore: toNumber(row.vote_score),
-    commentCount: toNumber(row.comment_count),
-    createdAt,
-    authorName: stripUuidDisplayName(row.author_name),
-    authorAvatar: row.author_avatar ?? null,
+    id: raw.id,
+    title: raw.title,
+    body: raw.body ?? '',
+    // The server already normalizes missing metadata to 'feedback' and
+    // 'not_started', but we keep the narrow union on the client so unknown
+    // values surface as plain strings and still render (the label maps in
+    // feedback-constants.ts gracefully fall back).
+    category: (raw.category as FeedbackCategory) ?? 'feedback',
+    status: (raw.status as FeedbackStatus) ?? 'not_started',
+    upvotes: Number(raw.upvotes) || 0,
+    downvotes: Number(raw.downvotes) || 0,
+    voteScore: Number(raw.voteScore) || 0,
+    commentCount: Number(raw.commentCount) || 0,
+    createdAt: raw.createdAt,
+    authorName: raw.authorName,
+    authorAvatar: raw.authorAvatar,
   };
 }
 
 export async function listFeedback(
   params: ListFeedbackParams = {},
 ): Promise<readonly FeedbackEntry[]> {
-  const pool = getPool();
-  if (!pool) return [];
+  const base = networkBaseUrl();
+  if (!base) return [];
 
   const sort = normalizeSort(params.sort ?? null);
   const category = normalizeCategory(params.category ?? null);
   const status = normalizeStatus(params.status ?? null);
   const limit = Math.max(1, Math.min(params.limit ?? 100, 200));
 
-  const sql = `
-    SELECT
-      ae.id,
-      ae.title,
-      ae.summary,
-      ae.metadata,
-      ae.created_at,
-      COALESCE(v.upvotes, 0)   AS upvotes,
-      COALESCE(v.downvotes, 0) AS downvotes,
-      COALESCE(v.upvotes, 0) - COALESCE(v.downvotes, 0) AS vote_score,
-      COALESCE(cc.comment_count, 0) AS comment_count,
-      p.display_name AS author_name,
-      p.avatar       AS author_avatar
-    FROM activity_events ae
-    LEFT JOIN profiles p ON p.id = ae.profile_id
-    LEFT JOIN LATERAL (
-      SELECT
-        SUM(CASE WHEN vote =  1 THEN 1 ELSE 0 END)::BIGINT AS upvotes,
-        SUM(CASE WHEN vote = -1 THEN 1 ELSE 0 END)::BIGINT AS downvotes
-      FROM feedback_votes fv
-      WHERE fv.activity_event_id = ae.id
-    ) v ON TRUE
-    LEFT JOIN LATERAL (
-      SELECT COUNT(1)::BIGINT AS comment_count
-      FROM comments c
-      WHERE c.activity_event_id = ae.id
-    ) cc ON TRUE
-    WHERE ae.event_type = 'feedback'
-      AND COALESCE(ae.metadata->>'feedbackProduct', 'aura') = 'aura'
-      AND ($1::text IS NULL OR ae.metadata->>'feedbackCategory' = $1)
-      AND ($2::text IS NULL OR ae.metadata->>'feedbackStatus'   = $2)
-    ORDER BY ${orderBySql(sort)}
-    LIMIT $3
-  `;
+  const search = new URLSearchParams();
+  search.set('sort', sort);
+  search.set('limit', String(limit));
+  if (category) search.set('category', category);
+  if (status) search.set('status', status);
+
+  const url = `${base}/api/public/feedback?${search.toString()}`;
 
   try {
-    const { rows } = await pool.query<FeedbackRow>(sql, [
-      category,
-      status,
-      limit,
-    ]);
-    return rows.map(rowToEntry);
+    // Next.js caches fetches server-side; opting out keeps /roadmap fresh.
+    // `force-dynamic` on the page covers the top-level render, but this
+    // double-belt guards against accidental caching via the fetch layer.
+    const res = await fetch(url, { cache: 'no-store' });
+    if (!res.ok) {
+      console.error(
+        `[feedback] GET ${url} failed: ${res.status} ${res.statusText}`,
+      );
+      return [];
+    }
+    const json = (await res.json()) as PublicFeedbackEntryResponse[];
+    if (!Array.isArray(json)) {
+      console.error('[feedback] expected array response, got:', typeof json);
+      return [];
+    }
+    return json.map(coerceEntry);
   } catch (err) {
-    // eslint-disable-next-line no-console
     console.error('[feedback] listFeedback failed', err);
     return [];
   }
 }
 
-export function hasDatabaseUrl(): boolean {
-  return Boolean(process.env.DATABASE_URL?.trim());
+export function hasNetworkUrl(): boolean {
+  return networkBaseUrl() !== null;
 }
