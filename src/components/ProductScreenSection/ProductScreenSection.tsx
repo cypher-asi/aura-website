@@ -23,6 +23,9 @@ interface ImageRect {
 
 interface ProductScreenSectionProps {
   readonly headline: ReactNode;
+  readonly description?: ReactNode;
+  readonly centered?: boolean;
+  readonly showMedia?: boolean;
   readonly placeholderLabel?: string;
   readonly imageSrc?: string;
   readonly imageAlt?: string;
@@ -99,6 +102,9 @@ function buildTransform(originRect: ImageRect, targetRect: ImageRect): string {
 
 export function ProductScreenSection({
   headline,
+  description,
+  centered = false,
+  showMedia = true,
   placeholderLabel = 'Image placeholder',
   imageSrc,
   imageAlt,
@@ -410,37 +416,48 @@ export function ProductScreenSection({
       : null;
 
   return (
-    <section className="productScreenSection">
+    <section
+      className={`productScreenSection ${centered ? 'productScreenSectionCentered' : ''}`}
+    >
       <div className="productScreenSectionInner">
         <h2 className="productScreenSectionHeadline">{headline}</h2>
-        {imageSrc ? (
-          <>
-            <button
-              type="button"
-              className="productScreenSectionImageButton"
-              onClick={openFullscreen}
-              aria-label={`Open fullscreen image: ${imageAlt ?? placeholderLabel}`}
-            >
-              <div
-                className={`productScreenSectionImageFrame ${
-                  isLightboxVisible ? 'productScreenSectionImageFrameHidden' : ''
-                }`}
+        {description ? (
+          <p className="productScreenSectionDescription">{description}</p>
+        ) : null}
+        {showMedia ? (
+          imageSrc ? (
+            <>
+              <button
+                type="button"
+                className="productScreenSectionImageButton"
+                onClick={openFullscreen}
+                aria-label={`Open fullscreen image: ${imageAlt ?? placeholderLabel}`}
               >
-                <img
-                  ref={inlineImageRef}
-                  src={imageSrc}
-                  alt={imageAlt ?? placeholderLabel}
-                  className="productScreenSectionImage"
-                />
-              </div>
-            </button>
-            {lightbox}
-          </>
-        ) : (
-          <div className="productScreenSectionPlaceholder" aria-label={placeholderLabel} role="img">
-            <span>{placeholderLabel}</span>
-          </div>
-        )}
+                <div
+                  className={`productScreenSectionImageFrame ${
+                    isLightboxVisible ? 'productScreenSectionImageFrameHidden' : ''
+                  }`}
+                >
+                  <img
+                    ref={inlineImageRef}
+                    src={imageSrc}
+                    alt={imageAlt ?? placeholderLabel}
+                    className="productScreenSectionImage"
+                  />
+                </div>
+              </button>
+              {lightbox}
+            </>
+          ) : (
+            <div
+              className="productScreenSectionPlaceholder"
+              aria-label={placeholderLabel}
+              role="img"
+            >
+              <span>{placeholderLabel}</span>
+            </div>
+          )
+        ) : null}
       </div>
     </section>
   );

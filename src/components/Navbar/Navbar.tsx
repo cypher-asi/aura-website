@@ -13,7 +13,7 @@ import './Navbar.css';
 const NAV_LINKS = [
   { label: 'Product', href: '/product' },
   { label: 'Changelog', href: '/changelog' },
-  { label: 'Feedback', href: '/feedback' },
+  { label: 'Roadmap', href: '/roadmap' },
   { label: 'Pricing', href: '/pricing' },
 ] as const;
 

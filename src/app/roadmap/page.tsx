@@ -16,7 +16,7 @@ import { FeedbackFilters } from './FeedbackFilters';
 import './FeedbackPage.css';
 
 export const metadata = {
-  title: 'Feedback',
+  title: 'Roadmap',
   description: 'Feature requests, bugs, and feedback from the AURA community.',
 };
 
