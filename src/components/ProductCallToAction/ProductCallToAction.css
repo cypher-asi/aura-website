@@ -37,8 +37,8 @@
   align-items: center;
   justify-content: center;
   min-width: min(52vw, 360px);
-  min-height: 104px;
-  padding: 24px 40px;
+  min-height: 83px;
+  padding: 19px 40px;
   border-radius: 0;
   background: #fff;
   color: #111;
@@ -70,8 +70,8 @@
 
   .productCtaButton {
     min-width: min(72vw, 320px);
-    min-height: 84px;
-    padding: 20px 30px;
+    min-height: 67px;
+    padding: 16px 30px;
     border-radius: 22px;
     font-size: clamp(20px, 5.6vw, 30px);
   }
@@ -89,8 +89,8 @@
 
   .productCtaButton {
     min-width: min(78vw, 280px);
-    min-height: 70px;
-    padding: 18px 24px;
+    min-height: 56px;
+    padding: 14px 24px;
     border-radius: 0;
     font-size: clamp(18px, 6vw, 24px);
   }
