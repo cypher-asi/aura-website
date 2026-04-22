@@ -29,6 +29,23 @@ interface ChangelogTimelineItem {
   readonly confidence: 'high' | 'medium';
 }
 
+interface ChangelogTimelineMedia {
+  readonly requested?: boolean;
+  readonly status?: string;
+  readonly score?: number;
+  readonly reason?: string;
+  readonly reasons?: readonly string[];
+  readonly slotId?: string;
+  readonly slug?: string;
+  readonly alt?: string;
+  readonly files?: readonly string[];
+  readonly assetPath?: string;
+  readonly assetUrl?: string;
+  readonly screenshotSource?: string;
+  readonly updatedAt?: string;
+  readonly storyTitle?: string;
+}
+
 interface ChangelogTimelineEntry {
   readonly time_label: string;
   readonly started_at: string;
@@ -36,6 +53,7 @@ interface ChangelogTimelineEntry {
   readonly title: string;
   readonly summary: string;
   readonly items: readonly ChangelogTimelineItem[];
+  readonly media?: ChangelogTimelineMedia;
 }
 
 interface ChangelogRendered {
@@ -104,6 +122,35 @@ function toEntryUrl(indexUrl: string, entryPath: string): string {
   return new URL(entryPath, indexUrl).toString();
 }
 
+function toAssetUrl(indexUrl: string, assetPath: string | undefined): string | undefined {
+  if (!assetPath) {
+    return undefined;
+  }
+
+  if (/^https?:\/\//i.test(assetPath)) {
+    return assetPath;
+  }
+
+  const changelogRoot = new URL('../../', indexUrl);
+  const normalizedAssetPath = assetPath.replace(/^\.\//, '').replace(/^\/+/, '');
+
+  return new URL(normalizedAssetPath, changelogRoot).toString();
+}
+
+function normalizeTimelineMedia(
+  media: ChangelogTimelineMedia | undefined,
+  indexUrl: string,
+): ChangelogTimelineMedia | undefined {
+  if (!media) {
+    return undefined;
+  }
+
+  return {
+    ...media,
+    assetUrl: toAssetUrl(indexUrl, media.assetPath),
+  };
+}
+
 const PST_DATE_FORMATTER = new Intl.DateTimeFormat('en-CA', {
   timeZone: 'America/Los_Angeles',
   year: 'numeric',
@@ -121,6 +168,7 @@ function toPstCalendarDate(iso: string | undefined, fallback: string): string {
 
 function normalizeEntry(
   entry: ChangelogSourceEntry,
+  indexUrl: string,
   fallbackFilteredCommitCount?: number,
 ): ChangelogEntry {
   const timelineEntries = (Array.isArray(entry.rendered.entries) && entry.rendered.entries.length > 0
@@ -144,7 +192,10 @@ function normalizeEntry(
 
       return rightTime - leftTime;
     })
-    .map(({ timelineEntry }) => timelineEntry);
+    .map(({ timelineEntry }) => ({
+      ...timelineEntry,
+      media: normalizeTimelineMedia(timelineEntry.media, indexUrl),
+    }));
 
   const earliestStartedAt = timelineEntries.reduce<string | undefined>((acc, timelineEntry) => {
     const candidate = timelineEntry.started_at;
@@ -220,7 +271,7 @@ export async function getChangelogEntries(): Promise<readonly ChangelogEntry[]> 
 
   const entries = resolved
     .filter((result): result is { entry: ChangelogSourceEntry; indexItem: ChangelogIndexEntry } => Boolean(result))
-    .map(({ entry, indexItem }) => normalizeEntry(entry, indexItem.entryCount))
+    .map(({ entry, indexItem }) => normalizeEntry(entry, indexUrl, indexItem.entryCount))
     .sort((left, right) => {
       const dateDiff = new Date(right.date).getTime() - new Date(left.date).getTime();
       if (dateDiff !== 0) {

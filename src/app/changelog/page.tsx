@@ -43,6 +43,10 @@ function getCommitUrl(repo: string, sha: string): string {
   return `https://github.com/cypher-asi/${repo}/commit/${sha}`;
 }
 
+function getMediaAltText(title: string, alt: string | undefined): string {
+  return alt?.trim() || `${title} screenshot`;
+}
+
 export const metadata = {
   title: 'Changelog',
   description: 'Daily release notes and product updates for Aura.',
@@ -95,42 +99,72 @@ export default async function ChangelogPage(): Promise<React.ReactNode> {
                         )}
                       </div>
 
-                      {entry.rendered.entries.map((timelineEntry, timelineIndex) => (
-                        <Fragment key={`${entryKey}-${timelineIndex}-${timelineEntry.started_at}`}>
-                          <span className="changelogSectionTime">
-                            {formatTimelineTime(timelineEntry.started_at, timelineEntry.time_label)}
-                          </span>
-                          <section className="changelogSection">
-                            <h3 className="changelogSectionTitle">{timelineEntry.title}</h3>
-                            <p className="changelogSectionSummary">{timelineEntry.summary}</p>
-                            {timelineEntry.items.length > 0 && (
-                              <ul className="changelogSectionList">
-                                {timelineEntry.items.map((item, itemIndex) => (
-                                  <li key={`${timelineEntry.title}-${itemIndex}`} className="changelogSectionItem">
-                                    <p>{item.text}</p>
-                                    {item.commit_shas.length > 0 && (
-                                      <div className="changelogSectionSources">
-                                        <span className="changelogSectionSourcesLabel">Sources</span>
-                                        {item.commit_shas.map((sha) => (
-                                          <a
-                                            key={sha}
-                                            href={getCommitUrl(entry.repo, sha)}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className="changelogSectionCommitLink"
-                                          >
-                                            {sha.slice(0, 7)}
-                                          </a>
-                                        ))}
-                                      </div>
-                                    )}
-                                  </li>
-                                ))}
-                              </ul>
-                            )}
-                          </section>
-                        </Fragment>
-                      ))}
+                      {entry.rendered.entries.map((timelineEntry, timelineIndex) => {
+                        const media =
+                          timelineEntry.media?.status === 'published' && timelineEntry.media.assetUrl
+                            ? timelineEntry.media
+                            : undefined;
+
+                        return (
+                          <Fragment key={`${entryKey}-${timelineIndex}-${timelineEntry.started_at}`}>
+                            <span className="changelogSectionTime">
+                              {formatTimelineTime(timelineEntry.started_at, timelineEntry.time_label)}
+                            </span>
+                            <section className="changelogSection">
+                              <h3 className="changelogSectionTitle">{timelineEntry.title}</h3>
+                              <p className="changelogSectionSummary">{timelineEntry.summary}</p>
+                              {media && (
+                                <figure className="changelogSectionMedia">
+                                  <a
+                                    href={media.assetUrl}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="changelogSectionMediaLink"
+                                    aria-label={`Open screenshot for ${timelineEntry.title}`}
+                                  >
+                                    <img
+                                      src={media.assetUrl}
+                                      alt={getMediaAltText(timelineEntry.title, media.alt)}
+                                      className="changelogSectionMediaImage"
+                                      loading="lazy"
+                                      decoding="async"
+                                    />
+                                  </a>
+                                  <figcaption className="changelogSectionMediaCaption">
+                                    <span>Demo screenshot</span>
+                                    <span>Open full size</span>
+                                  </figcaption>
+                                </figure>
+                              )}
+                              {timelineEntry.items.length > 0 && (
+                                <ul className="changelogSectionList">
+                                  {timelineEntry.items.map((item, itemIndex) => (
+                                    <li key={`${timelineEntry.title}-${itemIndex}`} className="changelogSectionItem">
+                                      <p>{item.text}</p>
+                                      {item.commit_shas.length > 0 && (
+                                        <div className="changelogSectionSources">
+                                          <span className="changelogSectionSourcesLabel">Sources</span>
+                                          {item.commit_shas.map((sha) => (
+                                            <a
+                                              key={sha}
+                                              href={getCommitUrl(entry.repo, sha)}
+                                              target="_blank"
+                                              rel="noopener noreferrer"
+                                              className="changelogSectionCommitLink"
+                                            >
+                                              {sha.slice(0, 7)}
+                                            </a>
+                                          ))}
+                                        </div>
+                                      )}
+                                    </li>
+                                  ))}
+                                </ul>
+                              )}
+                            </section>
+                          </Fragment>
+                        );
+                      })}
                     </article>
                   );
                 })}
