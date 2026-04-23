@@ -17,12 +17,7 @@
   margin: 0 auto;
   padding: clamp(40px, 6vw, 72px) clamp(32px, 5vw, 64px);
   border-radius: 0;
-  background-color: #efeae2;
-  background-image: repeating-linear-gradient(
-    135deg,
-    rgba(0, 0, 0, 0.045) 0 1px,
-    transparent 1px 8px
-  );
+  background-color: #f8f5ef;
   color: #111;
   overflow: hidden;
   isolation: isolate;
