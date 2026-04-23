@@ -7,7 +7,7 @@
 
 .changelogPageShell {
   width: 100%;
-  max-width: 960px;
+  max-width: 1120px;
   margin: 0 auto;
 }
 
@@ -19,7 +19,7 @@
 
 .changelogEntry {
   display: grid;
-  grid-template-columns: 160px minmax(0, 600px);
+  grid-template-columns: 160px minmax(0, 760px);
   column-gap: 48px;
   row-gap: 40px;
   align-items: baseline;
