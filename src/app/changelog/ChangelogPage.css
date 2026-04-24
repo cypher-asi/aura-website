@@ -1,36 +1,38 @@
 .changelogPage {
   min-height: calc(100vh - var(--taskbar-safe-offset));
   min-height: calc(100dvh - var(--taskbar-safe-offset));
-  padding: 120px 32px 0;
+  padding: 120px clamp(20px, 5vw, 56px) 80px;
   background: #000;
 }
 
 .changelogPageShell {
   width: 100%;
-  max-width: 1560px;
+  max-width: 940px;
   margin: 0 auto;
 }
 
 .changelogEntries {
   display: flex;
   flex-direction: column;
-  gap: 64px;
+  gap: 72px;
 }
 
 .changelogEntry {
   display: grid;
-  grid-template-columns: 180px minmax(0, 1fr);
-  column-gap: 56px;
-  row-gap: 40px;
-  align-items: baseline;
+  grid-template-columns: 136px minmax(0, 640px);
+  column-gap: 52px;
+  align-items: start;
+  justify-content: center;
 }
 
 .changelogEntry + .changelogEntry {
-  padding-top: 64px;
+  padding-top: 72px;
   border-top: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .changelogEntryDate {
+  position: sticky;
+  top: 104px;
   font-size: 13px;
   font-weight: 500;
   letter-spacing: 0.02em;
@@ -39,11 +41,18 @@
   -webkit-user-select: none;
 }
 
+.changelogEntryBody {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 34px;
+}
+
 .changelogEntryHead {
   min-width: 0;
   display: flex;
   flex-direction: column;
-  gap: 32px;
+  gap: 20px;
 }
 
 .changelogEntryMeta {
@@ -57,11 +66,56 @@
   color: rgba(255, 255, 255, 0.32);
 }
 
+.changelogEntryTimeline {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 38px;
+  padding-left: 28px;
+}
+
+.changelogEntryTimeline::before {
+  content: '';
+  position: absolute;
+  top: 7px;
+  bottom: 6px;
+  left: 5px;
+  width: 1px;
+  background: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.22),
+    rgba(255, 255, 255, 0.08) 72%,
+    rgba(255, 255, 255, 0)
+  );
+}
+
+.changelogTimelineItem {
+  position: relative;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+}
+
+.changelogTimelineItem::before {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: -28px;
+  width: 11px;
+  height: 11px;
+  border-radius: 999px;
+  background: #fff;
+  box-shadow:
+    0 0 0 5px #000,
+    0 0 0 6px rgba(255, 255, 255, 0.1);
+}
+
 .changelogSection {
   min-width: 0;
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 13px;
 }
 
 .changelogSectionTime {
@@ -74,8 +128,8 @@
 
 .changelogSectionTitle {
   margin: 0;
-  font-size: clamp(24px, 3vw, 30px);
-  line-height: 1.06;
+  font-size: clamp(24px, 3.2vw, 31px);
+  line-height: 1.08;
   letter-spacing: -0.04em;
   font-weight: 400;
   color: #fff;
@@ -84,21 +138,22 @@
 .changelogSectionSummary {
   margin: 0;
   color: rgba(255, 255, 255, 0.76);
-  line-height: 1.75;
+  line-height: 1.68;
 }
 
 .changelogSectionMedia {
   display: flex;
   flex-direction: column;
   gap: 12px;
-  margin: 2px 0 6px;
-  width: min(100%, 1360px);
+  margin: 8px 0 6px;
+  width: 100%;
 }
 
 .changelogSectionMediaLink {
   display: block;
   overflow: hidden;
-  border-radius: 20px;
+  aspect-ratio: 16 / 9;
+  border-radius: 16px;
   border: 1px solid rgba(255, 255, 255, 0.12);
   background:
     radial-gradient(circle at top, rgba(255, 255, 255, 0.08), transparent 52%),
@@ -119,7 +174,8 @@
 .changelogSectionMediaImage {
   display: block;
   width: 100%;
-  height: auto;
+  height: 100%;
+  object-fit: contain;
   background: #050505;
 }
 
@@ -188,14 +244,21 @@
   display: flex;
   flex-direction: column;
   gap: 14px;
+  padding: 18px 20px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 18px;
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.02)),
+    rgba(255, 255, 255, 0.02);
 }
 
 .changelogTldrLabel {
   margin: 0;
-  font-size: clamp(24px, 3vw, 30px);
-  line-height: 1.06;
-  letter-spacing: -0.04em;
-  font-weight: 400;
+  font-size: 12px;
+  line-height: 1;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-weight: 700;
   color: #fff;
 }
 
@@ -239,7 +302,7 @@
 
 @media (max-width: 768px) {
   .changelogPage {
-    padding: 88px 20px 0;
+    padding: 88px 20px 64px;
   }
 
   .changelogEntries {
@@ -249,20 +312,42 @@
   .changelogEntry {
     grid-template-columns: 1fr;
     column-gap: 0;
-    row-gap: 16px;
+    row-gap: 22px;
+    justify-content: stretch;
   }
 
   .changelogEntry + .changelogEntry {
     padding-top: 48px;
   }
 
-  .changelogSectionTime {
-    margin-top: 16px;
+  .changelogEntryDate {
+    position: static;
+  }
+
+  .changelogEntryBody {
+    gap: 28px;
+  }
+
+  .changelogEntryTimeline {
+    gap: 32px;
+    padding-left: 24px;
+  }
+
+  .changelogTimelineItem::before {
+    left: -24px;
+  }
+
+  .changelogSectionTitle {
+    font-size: clamp(23px, 8vw, 29px);
+  }
+
+  .changelogTldr {
+    padding: 16px;
   }
 }
 
 @media (max-width: 480px) {
   .changelogPage {
-    padding: 76px 16px 0;
+    padding: 76px 16px 56px;
   }
 }
