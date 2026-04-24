@@ -134,10 +134,6 @@ export default async function ChangelogPage(): Promise<React.ReactNode> {
                                           decoding="async"
                                         />
                                       </a>
-                                      <figcaption className="changelogSectionMediaCaption">
-                                        <span>Demo screenshot</span>
-                                        <span>Open full size</span>
-                                      </figcaption>
                                     </figure>
                                   )}
                                   {timelineEntry.items.length > 0 && (
