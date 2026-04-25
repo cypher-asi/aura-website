@@ -21,33 +21,41 @@ export default async function ProductPage(): Promise<React.ReactNode> {
       <Navbar />
       <main className="scrollPageMain">
         <PageHero
-          headline="The Open Intelligence Network"
+          headline={
+            <>
+              the
+              <br />
+              open intelligence
+              <br />
+              network
+            </>
+          }
           description="AURA enables you to train, hire and deploy agents to build fully autonomous products and companies."
           preview={null}
         />
         <ProductScreenSection
+          headline="A secure operating system to manage agentic swarms."
+          placeholderLabel="AURA desktop interface"
+          imageSrc="/product-screens/aura-product-screen-desktop.png"
+          imageAlt="AURA desktop interface showing an operating system workspace"
+        />
+        <ProductScreenSection
           headline="Hire a team of agents that run your company while you sleep."
-          placeholderLabel="AURA OS workspace"
-          imageSrc="/product-screens/aura-os-workspace.png"
-          imageAlt="AURA OS workspace showing a chat panel, agent list, and terminal"
+          placeholderLabel="AURA agents interface"
+          imageSrc="/product-screens/aura-product-screen-superagent.png"
+          imageAlt="AURA agents interface showing autonomous agents"
         />
         <ProductScreenSection
-          headline="Ship complex software that improves itself 247."
-          placeholderLabel="AURA OS workspace detail"
-          imageSrc="/product-screens/aura-os-workspace.png"
-          imageAlt="AURA OS workspace showing a chat panel, agent list, and terminal"
+          headline="Ship complex software that improves autonomously."
+          placeholderLabel="AURA software automation interface"
+          imageSrc="/product-screens/aura-product-screen-automation.png"
+          imageAlt="AURA software automation interface showing autonomous development workflows"
         />
         <ProductScreenSection
-          headline="Command swarms of powerful agents from anywhere."
-          placeholderLabel="AURA OS workspace overview"
-          imageSrc="/product-screens/aura-os-workspace.png"
-          imageAlt="AURA OS workspace showing a chat panel, agent list, and terminal"
-        />
-        <ProductScreenSection
-          headline="Hire agents with expert knowledge in every domain."
-          placeholderLabel="AURA OS workspace overview"
-          imageSrc="/product-screens/aura-os-workspace.png"
-          imageAlt="AURA OS workspace showing a chat panel, agent list, and terminal"
+          headline="Spawn agentic processes for every workflow."
+          placeholderLabel="AURA process interface"
+          imageSrc="/product-screens/aura-product-screen-process.png"
+          imageAlt="AURA process interface showing agentic workflow processes"
         />
         <FeaturePanel
           label="SOVEREIGN"
