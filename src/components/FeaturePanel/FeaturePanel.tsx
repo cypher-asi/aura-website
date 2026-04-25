@@ -21,10 +21,7 @@ export function FeaturePanel({
   return (
     <section className="featurePanel">
       <div className="featurePanelInner">
-        <span className="featurePanelLabel">
-          <span className="featurePanelLabelDot" aria-hidden="true" />
-          {label}
-        </span>
+        <span className="featurePanelLabel">{label}</span>
         <h2 className="featurePanelHeadline">{headline}</h2>
         <ul className="featurePanelGrid" role="list">
           {features.map((feature, index) => (

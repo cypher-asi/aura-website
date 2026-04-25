@@ -40,7 +40,7 @@ export default async function ProductPage(): Promise<React.ReactNode> {
           imageAlt="AURA desktop interface showing an operating system workspace"
         />
         <ProductScreenSection
-          headline="Hire a team of agents that run your company while you sleep."
+          headline="Spawn a team of agents that run your company while you sleep."
           placeholderLabel="AURA agents interface"
           imageSrc="/product-screens/aura-product-screen-superagent.png"
           imageAlt="AURA agents interface showing autonomous agents"
@@ -52,7 +52,7 @@ export default async function ProductPage(): Promise<React.ReactNode> {
           imageAlt="AURA software automation interface showing autonomous development workflows"
         />
         <ProductScreenSection
-          headline="Spawn agentic processes for every workflow."
+          headline="Deploy agentic processes for every workflow."
           placeholderLabel="AURA process interface"
           imageSrc="/product-screens/aura-product-screen-process.png"
           imageAlt="AURA process interface showing agentic workflow processes"

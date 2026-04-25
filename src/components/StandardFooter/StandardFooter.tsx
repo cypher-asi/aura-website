@@ -1,5 +1,4 @@
 import { Github } from 'lucide-react';
-import { AppLink } from '@/components/AppLink/AppLink';
 import './StandardFooter.css';
 
 function XIcon(): React.ReactNode {
@@ -23,9 +22,9 @@ export function StandardFooter(): React.ReactNode {
         >
           A CYPHER PROJECT
         </a>
-        <AppLink href="/" className="standardFooterLogoLink" aria-label="AURA home">
+        <span className="standardFooterLogoLink" aria-label="AURA">
           <img src="/aura-logo.png" alt="AURA" className="standardFooterLogo" />
-        </AppLink>
+        </span>
         <div className="standardFooterLinks" aria-label="Social links">
           <a href="https://x.com/aura_asi" target="_blank" rel="noopener noreferrer" className="standardFooterLink" aria-label="X">
             <XIcon />

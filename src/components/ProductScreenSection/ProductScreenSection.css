@@ -21,25 +21,6 @@
   max-width: 640px;
 }
 
-.productScreenSectionDescription {
-  margin: 0;
-  font-size: clamp(16px, 1.5vw, 20px);
-  font-weight: 300;
-  line-height: 1.5;
-  color: var(--color-text-muted);
-  max-width: 640px;
-}
-
-.productScreenSectionCentered .productScreenSectionInner {
-  align-items: center;
-  text-align: center;
-}
-
-.productScreenSectionCentered .productScreenSectionHeadline,
-.productScreenSectionCentered .productScreenSectionDescription {
-  max-width: 720px;
-}
-
 .productScreenSectionPlaceholder {
   display: grid;
   place-items: center;
