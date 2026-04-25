@@ -23,11 +23,11 @@ export default async function ProductPage(): Promise<React.ReactNode> {
         <PageHero
           headline={
             <>
-              the
+              The
               <br />
-              open intelligence
+              Open Intelligence
               <br />
-              network
+              Network
             </>
           }
           description="AURA enables you to train, hire and deploy agents to build fully autonomous products and companies."
