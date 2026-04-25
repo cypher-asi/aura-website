@@ -94,6 +94,7 @@ export interface ChangelogEntry {
 }
 
 const DEFAULT_CHANGELOG_INDEX_URL = 'https://cypher-asi.github.io/aura-os/changelog/nightly/index.json';
+const CHANGELOG_FETCH_REVALIDATE_SECONDS = 60;
 
 function readUrl(envKey: string): string | undefined {
   const value = process.env[envKey]?.trim();
@@ -107,7 +108,7 @@ function getChangelogIndexUrl(): string {
 async function fetchJson<T>(url: string): Promise<T | undefined> {
   try {
     const response = await fetch(url, {
-      next: { revalidate: 300 },
+      next: { revalidate: CHANGELOG_FETCH_REVALIDATE_SECONDS },
     });
     if (!response.ok) {
       return undefined;
