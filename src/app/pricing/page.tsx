@@ -38,11 +38,11 @@ const PLANS: readonly Plan[] = [
   },
   {
     name: 'Pro',
-    monthlyPrice: '$20',
-    yearlyPrice: '$192',
+    monthlyPrice: '$10',
+    yearlyPrice: '$96',
     description: 'Everything in Mortal, plus:',
     features: [
-      '$20 worth of monthly credits',
+      '$10 worth of monthly credits',
       'Remote agents',
     ],
     ctaLabel: 'Download',
