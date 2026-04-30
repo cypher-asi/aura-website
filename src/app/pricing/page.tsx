@@ -20,6 +20,7 @@ type Plan = {
   readonly ctaLabel: string;
   readonly href: string;
   readonly recommended?: boolean;
+  readonly priceNote?: string;
 };
 
 const PLANS: readonly Plan[] = [
@@ -40,6 +41,7 @@ const PLANS: readonly Plan[] = [
     name: 'Pro',
     monthlyPrice: '$20',
     yearlyPrice: '$192',
+    priceNote: '$10/mo for Zero Pro OG subscribers',
     description: 'Everything in Mortal, plus:',
     features: [
       '$20 worth of monthly credits',
@@ -128,6 +130,7 @@ export default function PricingPage(): ReactNode {
                             <span className="pricingPlanPriceValue">{price}</span>
                             {price !== 'Free' && <span className="pricingPlanPriceCadence">{cadenceLabel}</span>}
                           </p>
+                          {plan.priceNote && <p className="pricingPlanPriceNote">{plan.priceNote}</p>}
                           <p className="pricingPlanDescription">{plan.description}</p>
                         </div>
 
