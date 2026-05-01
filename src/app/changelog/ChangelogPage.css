@@ -12,6 +12,32 @@
   margin: 0 auto;
 }
 
+.changelogPageHeader {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  align-items: baseline;
+  justify-content: center;
+  margin-bottom: 64px;
+}
+
+.changelogPageTitle {
+  margin: 0;
+  font-size: clamp(38px, 6vw, 64px);
+  line-height: 0.96;
+  letter-spacing: -0.06em;
+  font-weight: 400;
+  color: #fff;
+}
+
+.changelogPageVersion {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.42);
+}
+
 .changelogEntries {
   display: flex;
   flex-direction: column;
@@ -285,6 +311,11 @@
 
   .changelogEntries {
     gap: 48px;
+  }
+
+  .changelogPageHeader {
+    justify-content: flex-start;
+    margin-bottom: 48px;
   }
 
   .changelogEntry {

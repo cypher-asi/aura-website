@@ -53,6 +53,7 @@ export const metadata = {
 
 export default async function ChangelogPage(): Promise<React.ReactNode> {
   const entries = await getChangelogEntries();
+  const latestVersion = entries.find((entry) => entry.version)?.version;
 
   return (
     <>
@@ -60,6 +61,13 @@ export default async function ChangelogPage(): Promise<React.ReactNode> {
       <main className="scrollPageMain">
         <section className="changelogPage">
           <div className="changelogPageShell">
+            <header className="changelogPageHeader">
+              <h1 className="changelogPageTitle">Changelog</h1>
+              {latestVersion ? (
+                <span className="changelogPageVersion">Current version {latestVersion}</span>
+              ) : null}
+            </header>
+
             {entries.length > 0 ? (
               <div className="changelogEntries" aria-label="Aura changelog entries">
                 {entries.map((entry) => {
