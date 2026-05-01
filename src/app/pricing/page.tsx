@@ -2,6 +2,7 @@
 
 import { type ReactNode, useState } from 'react';
 import { Check } from 'lucide-react';
+import { trackEvent, type FathomEvent } from '@/lib/fathom';
 
 import { AppLink } from '@/components/AppLink/AppLink';
 import { Navbar } from '@/components/Navbar/Navbar';
@@ -21,6 +22,7 @@ type Plan = {
   readonly href: string;
   readonly recommended?: boolean;
   readonly priceNote?: string;
+  readonly trackAs: FathomEvent;
 };
 
 const PLANS: readonly Plan[] = [
@@ -36,6 +38,7 @@ const PLANS: readonly Plan[] = [
     ],
     ctaLabel: 'Download',
     href: '/download',
+    trackAs: 'pricing_cta_mortal',
   },
   {
     name: 'Pro',
@@ -49,6 +52,7 @@ const PLANS: readonly Plan[] = [
     ],
     ctaLabel: 'Download',
     href: '/download',
+    trackAs: 'pricing_cta_pro',
   },
   {
     name: 'Crusader',
@@ -61,6 +65,7 @@ const PLANS: readonly Plan[] = [
     ctaLabel: 'Download',
     href: '/download',
     recommended: true,
+    trackAs: 'pricing_cta_crusader',
   },
   {
     name: 'Sage',
@@ -73,6 +78,7 @@ const PLANS: readonly Plan[] = [
     ],
     ctaLabel: 'Download',
     href: '/download',
+    trackAs: 'pricing_cta_sage',
   },
 ] as const;
 
@@ -147,6 +153,7 @@ export default function PricingPage(): ReactNode {
                       <AppLink
                         href={plan.href}
                         className={`pricingPlanButton${plan.recommended ? ' pricingPlanButtonPrimary' : ''}`}
+                        onClick={() => trackEvent(plan.trackAs)}
                       >
                         {plan.ctaLabel}
                       </AppLink>

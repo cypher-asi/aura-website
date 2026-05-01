@@ -3,6 +3,7 @@ import { Inter } from 'next/font/google';
 import { type Metadata, type Viewport } from 'next';
 import { Providers } from './providers';
 import { RouteTransitionManager } from '@/components/RouteTransition/RouteTransitionManager';
+import { FathomAnalytics } from '@/components/Analytics/FathomAnalytics';
 
 import '@/styles/tokens.css';
 import '@/styles/themes.css';
@@ -47,6 +48,7 @@ export default function RootLayout({ children }: RootLayoutProps): ReactNode {
           </Suspense>
           {children}
         </Providers>
+        <FathomAnalytics />
       </body>
     </html>
   );

@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { AppLink } from '@/components/AppLink/AppLink';
 import { type DownloadTarget, getMacDownloadPath } from '@/config/downloadTargets';
+import { trackEvent, type FathomEvent } from '@/lib/fathom';
 
 type DownloadPlatform = DownloadTarget | 'unknown';
 
@@ -15,6 +16,7 @@ interface DownloadCard {
   readonly href: string;
   readonly cta: string;
   readonly meta: string;
+  readonly trackAs: FathomEvent;
 }
 
 const DOWNLOAD_CARDS: readonly DownloadCard[] = [
@@ -27,6 +29,7 @@ const DOWNLOAD_CARDS: readonly DownloadCard[] = [
     href: getMacDownloadPath('apple-silicon'),
     cta: 'Download',
     meta: 'Recommended for most Macs',
+    trackAs: 'download_mac_apple_silicon',
   },
   {
     platform: 'mac',
@@ -37,6 +40,7 @@ const DOWNLOAD_CARDS: readonly DownloadCard[] = [
     href: getMacDownloadPath('intel'),
     cta: 'Download',
     meta: 'Only for pre-Apple Silicon Macs',
+    trackAs: 'download_mac_intel',
   },
   {
     platform: 'windows',
@@ -47,6 +51,7 @@ const DOWNLOAD_CARDS: readonly DownloadCard[] = [
     href: '/download/windows',
     cta: 'Download',
     meta: 'x64 installer',
+    trackAs: 'download_windows',
   },
   {
     platform: 'linux',
@@ -57,6 +62,7 @@ const DOWNLOAD_CARDS: readonly DownloadCard[] = [
     href: '/download/linux',
     cta: 'Download',
     meta: 'x86_64 AppImage',
+    trackAs: 'download_linux',
   },
 ];
 
@@ -128,6 +134,7 @@ export function DownloadCards(): React.ReactNode {
               <AppLink
                 href={card.href}
                 className={`downloadCardButton${isPrimary ? ' downloadCardButtonPrimary' : ''}`}
+                onClick={() => trackEvent(card.trackAs)}
               >
                 {card.cta}
               </AppLink>
